@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/home"
+        android:icon="@drawable/ic_baseline_home_24"
+        android:title="홈"/>
+
+    <item
+        android:id="@+id/record"
+        android:icon="@drawable/ic_baseline_sticky_note_2_24"
+        android:title="기록하기"/>
+
+    <item
+        android:id="@+id/placeholder"
+        android:title=""
+        android:enabled="false"/>
+
+    <item
+        android:id="@+id/statics"
+        android:icon="@drawable/ic_baseline_calendar_month_24"
+        android:title="통계"/>
+
+    <item
+        android:id="@+id/pedometer"
+        android:icon="@drawable/ic_baseline_directions_run_24"
+        android:title="만보기"/>
+</menu>
