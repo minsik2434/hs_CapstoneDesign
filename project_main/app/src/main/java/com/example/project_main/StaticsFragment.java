@@ -25,7 +25,7 @@ public class StaticsFragment extends Fragment {
     MaterialCalendarView materialCalendarView;
     TextView choice_date;
     ListView schedule_list;
-    private ListViewAdapter adapter;
+
 
     String[] date;
     int[] todayKcal;
@@ -46,7 +46,6 @@ public class StaticsFragment extends Fragment {
         materialCalendarView = view.findViewById(R.id.calendarView);
         choice_date = view.findViewById(R.id.choice_date);
         schedule_list = view.findViewById(R.id.schedule_list);
-        adapter = new ListViewAdapter();
 
         currentDate = new Date(now);
         format = new SimpleDateFormat("음력 MM월 dd일");
