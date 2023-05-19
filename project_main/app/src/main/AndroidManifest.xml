@@ -27,7 +27,6 @@
         <activity android:name=".init_setup3" android:label="init_setup3"/>
         <activity android:name=".init_setup4" android:label="init_setup4"/>
         <activity android:name=".init_setup5" android:label="init_setup5"/>
-        <activity android:name=".PedometerActivity" android:label="PedometerActivity Activity"/>
     </application>
 
 </manifest>
