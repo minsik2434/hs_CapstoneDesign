@@ -34,57 +34,25 @@
         android:orientation="vertical"
         >
 
-        <RadioGroup
-            android:id="@+id/rGroup4"
+        <Spinner
+            android:id="@+id/exerciseSpinner"
+            android:layout_width="wrap_content"
+            android:layout_height="30dp"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:textAlignment="center"
+            android:layout_marginTop="30dp"
+            />
+
+        <TextView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            >
+            android:layout_height="match_parent"
+            android:text="SpinnerText"
+            android:textSize="40dp"
+            android:gravity="center"
+            android:layout_marginBottom="40dp"
+            />
 
-            <RadioButton
-                android:id="@+id/btnMin"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="운동 거의 안함"
-                android:layout_margin="20dp"
-                android:layout_gravity="center"
-                />
-            <RadioButton
-                android:id="@+id/btnLess"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="가벼운 활동(주 1~3회)"
-                android:layout_margin="20dp"
-                android:layout_gravity="center"
-                />
-
-            <RadioButton
-                android:id="@+id/btnGeneral"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="보통 수준(주 3~5회)"
-                android:layout_margin="20dp"
-                android:layout_gravity="center"
-                />
-
-            <RadioButton
-                android:id="@+id/btnActive"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="적극적으로 운동(주 6~7회)"
-                android:layout_margin="20dp"
-                android:layout_gravity="center"
-                />
-
-            <RadioButton
-                android:id="@+id/btnMax"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="매우 적극적으로 운동(주 6~7회)"
-                android:layout_margin="20dp"
-                android:layout_gravity="center"
-                />
-        </RadioGroup>
 
     </LinearLayout>
 
