@@ -1,0 +1,230 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity"
+    android:orientation="vertical"
+    android:background="@drawable/temp_img">
+
+    <TextView
+        android:id="@+id/mainText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="left"
+        android:paddingTop="20dp"
+        android:paddingLeft="20dp"
+        android:textColor="#ffffff"
+        android:text="2023년 2월 13일"
+        android:textSize="20dp" />
+
+    <!-- 통계 화면 -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:orientation="horizontal"
+        android:layout_margin="30dp"
+        android:background="@drawable/layout_style"
+        android:elevation="15dp">
+
+        <!-- 칼로리, 원형 그래프 -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:gravity="center">
+
+
+            <!-- 칼로리 -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="1600 / 2200"
+                android:textSize="15dp"
+                android:textColor="#000000" />
+            <!-- 원형 그래프 -->
+
+
+
+
+
+
+        </LinearLayout>
+
+        <!-- 탄단지 기록 -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:gravity="center">
+
+            <!-- 탄수화물 -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="탄수화물"
+                android:textColor="#000000"
+                android:textSize="15dp" />
+            <ProgressBar
+                android:layout_width="130dp"
+                android:layout_height="wrap_content"
+                style="?android:attr/progressBarStyleHorizontal"
+                android:progressTint="#FF5D5D"
+                android:progressBackgroundTint="#AEAEAE"
+                android:max="100"
+                android:progress="20"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="20 / 100 g"
+                android:textColor="#000000"
+                android:textSize="10dp" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
+            <!-- 단백질 -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="단백질"
+                android:textColor="#000000"
+                android:textSize="15dp" />
+            <ProgressBar
+                android:layout_width="130dp"
+                android:layout_height="wrap_content"
+                style="?android:attr/progressBarStyleHorizontal"
+                android:progressTint="#FFCE39"
+                android:progressBackgroundTint="#AEAEAE"
+                android:max="100"
+                android:progress="20"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="20 / 100 g"
+                android:textColor="#000000"
+                android:textSize="10dp" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
+            <!-- 지방 -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="지방"
+                android:textColor="#000000"
+                android:textSize="15dp" />
+            <ProgressBar
+                android:layout_width="130dp"
+                android:layout_height="wrap_content"
+                style="?android:attr/progressBarStyleHorizontal"
+                android:progressTint="#5AFF14"
+                android:progressBackgroundTint="#AEAEAE"
+                android:max="50"
+                android:progress="20"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="20 / 50 g"
+                android:textColor="#000000"
+                android:textSize="10dp"/>
+
+        </LinearLayout>
+    </LinearLayout>
+
+    <!-- 먹은 음식 기록-->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="230dp"
+        android:orientation="vertical"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
+        android:background="@drawable/layout_style"
+        android:elevation="15dp">
+
+        <TabHost
+            android:id="@+id/tabhost"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <TabWidget
+                    android:id="@android:id/tabs"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+
+                <FrameLayout
+                    android:id="@android:id/tabcontent"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <LinearLayout
+                        android:id="@+id/tab1"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical">
+
+                        <!-- 아침 리스트-->
+
+
+
+
+
+
+
+
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/tab2"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical">
+
+                        <!-- 점심 리스트-->
+
+
+
+
+
+
+
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/tab3"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical">
+
+                        <!-- 저녁 리스트-->
+
+
+
+
+
+
+
+
+
+
+                    </LinearLayout>
+                </FrameLayout>
+            </LinearLayout>
+        </TabHost>
+
+
+    </LinearLayout>
+
+</LinearLayout>
