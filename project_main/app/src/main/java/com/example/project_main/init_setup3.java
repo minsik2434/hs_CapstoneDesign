@@ -34,13 +34,19 @@ public class init_setup3 extends Activity {
         for(int i=0; i<integer.length;i++){
             check[i] = findViewById(integer[i]);
         }
+        String age, weight, height, sex, nickname;
+        Intent information = getIntent();
+        age = information.getStringExtra("age");
+        weight = information.getStringExtra("weight");
+        height = information.getStringExtra("height");
+        sex = information.getStringExtra("sex");
+        nickname = information.getStringExtra("nickname");
 
         // 이전 버튼을 눌렀을 때
         btnPre3.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(getApplicationContext(), init_setup2.class);
-
                 startActivity(intent);
             }
         });
@@ -50,10 +56,25 @@ public class init_setup3 extends Activity {
             @Override
             public void onClick(View view) {
 
-                Intent intent = new Intent(getApplicationContext(), init_setup4.class);
-                startActivity(intent);
-            }
+                for(int i=0;i<integer.length;i++){
+                    if(check[i].isChecked()==true){
+                        list.add(check[i].getText().toString());
+                    }
+                }
 
+
+                Intent intent = new Intent(getApplicationContext(), init_setup4.class);
+                Bundle bnd = new Bundle();
+                bnd.putStringArrayList("allergy", list);
+                intent.putExtras(bnd);
+                intent.putExtra("age",age);
+                intent.putExtra("weight",weight);
+                intent.putExtra("height",height);
+                intent.putExtra("sex", sex);
+                intent.putExtra("nickname", nickname);
+                startActivity(intent);
+                finish();
+            }
         });
 
 

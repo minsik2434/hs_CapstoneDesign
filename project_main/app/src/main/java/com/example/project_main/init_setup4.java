@@ -4,12 +4,9 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
-import android.widget.Spinner;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
@@ -20,8 +17,9 @@ public class init_setup4 extends Activity {
 
 
     Button btnPre4, btnNext4;
-
-    private Spinner exerciseSpinner;
+    RadioGroup rGroup4;
+    Integer[] rbtnId = {R.id.btnMin, R.id.btnLess, R.id.btnGeneral, R.id.btnActive, R.id.btnMax};
+    RadioButton[] rBtn = new RadioButton[rbtnId.length];
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -30,24 +28,22 @@ public class init_setup4 extends Activity {
 
         btnPre4 = findViewById(R.id.btnPre4);
         btnNext4 = findViewById(R.id.btnNext4);
-        exerciseSpinner = findViewById(R.id.exerciseSpinner);
 
-        ArrayAdapter<CharSequence> exerciseAdapter = ArrayAdapter.createFromResource(this, R.array.exerciselist
-                , android.R.layout.simple_spinner_item);
-        exerciseAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        exerciseSpinner.setAdapter(exerciseAdapter);
+        rGroup4 = findViewById(R.id.rGroup4);
 
-        exerciseSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                String exerciseAtPosition = parent.getItemAtPosition(position).toString();
-            }
+        for(int i=0; i<rbtnId.length;i++){
+            rBtn[i] = (RadioButton) findViewById(rbtnId[i]);
+        }
 
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-        });
+        Bundle bnd = this.getIntent().getExtras();
+        ArrayList<String> list = bnd.getStringArrayList("allergy");
+        String age, weight, height, sex, nickname;
+        Intent information = getIntent();
+        age = information.getStringExtra("age");
+        weight = information.getStringExtra("weight");
+        height = information.getStringExtra("height");
+        sex = information.getStringExtra("sex");
+        nickname = information.getStringExtra("nickname");
 
 
 
@@ -61,12 +57,89 @@ public class init_setup4 extends Activity {
 
         btnNext4.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), init_setup5.class);
-                startActivity(intent);
+            public void onClick(View view) {
+
+                String min, less, general, active, max;
+                min = rBtn[0].getText().toString();
+                less = rBtn[1].getText().toString();
+                general = rBtn[2].getText().toString();
+                active = rBtn[3].getText().toString();
+                max = rBtn[4].getText().toString();
+
+                switch (rGroup4.getCheckedRadioButtonId()){
+                    case R.id.btnMin:{
+                        Intent intent = new Intent(getApplicationContext(), init_setup5.class);
+                        bnd.putStringArrayList("allergy",list);
+                        intent.putExtras(bnd);
+                        intent.putExtra("age", age);
+                        intent.putExtra("height", height);
+                        intent.putExtra("weight", weight);
+                        intent.putExtra("sex", sex);
+                        intent.putExtra("exercise", min);
+                        intent.putExtra("nickname", nickname);
+                        startActivity(intent);
+                        finish();
+                        break;
+                    }
+                    case R.id.btnLess:{
+                        Intent intent = new Intent(getApplicationContext(), init_setup5.class);
+                        bnd.putStringArrayList("allergy",list);
+                        intent.putExtras(bnd);
+                        intent.putExtra("age", age);
+                        intent.putExtra("height", height);
+                        intent.putExtra("weight", weight);
+                        intent.putExtra("sex", sex);
+                        intent.putExtra("exercise", less);
+                        intent.putExtra("nickname", nickname);
+                        startActivity(intent);
+                        break;
+                    }
+                    case R.id.btnGeneral:{
+                        Intent intent = new Intent(getApplicationContext(), init_setup5.class);
+                        bnd.putStringArrayList("allergy",list);
+                        intent.putExtras(bnd);
+                        intent.putExtra("age", age);
+                        intent.putExtra("height", height);
+                        intent.putExtra("weight", weight);
+                        intent.putExtra("sex", sex);
+                        intent.putExtra("exercise", general);
+                        intent.putExtra("nickname", nickname);
+                        startActivity(intent);
+                        break;
+                    }
+                    case R.id.btnActive:{
+                        Intent intent = new Intent(getApplicationContext(), init_setup5.class);
+                        bnd.putStringArrayList("allergy",list);
+                        intent.putExtras(bnd);
+                        intent.putExtra("age", age);
+                        intent.putExtra("height", height);
+                        intent.putExtra("weight", weight);
+                        intent.putExtra("sex", sex);
+                        intent.putExtra("exercise", active);
+                        intent.putExtra("nickname", nickname);
+                        startActivity(intent);
+                        break;
+                    }
+                    case R.id.btnMax:{
+                        Intent intent = new Intent(getApplicationContext(), init_setup5.class);
+                        bnd.putStringArrayList("allergy",list);
+                        intent.putExtras(bnd);
+                        intent.putExtra("age", age);
+                        intent.putExtra("height", height);
+                        intent.putExtra("weight", weight);
+                        intent.putExtra("sex", sex);
+                        intent.putExtra("exercise", max);
+                        intent.putExtra("nickname", nickname);
+                        startActivity(intent);
+                        break;
+                    }
+                    default:
+                        Toast.makeText(getApplicationContext(), "먼저 선택하세요.", Toast.LENGTH_SHORT).show();
+
+                }
+
             }
         });
-
 
     }
 
