@@ -15,7 +15,7 @@ public class MainActivity extends AppCompatActivity {
 
     MainFragment fragment_main;
     RecordFragment fragment_record;
-    StaticsFragment fragment_statics;
+    StatisticsTabFragment fragment_statistics;
     PedometerFragment fragment_pedometer;
 
 
@@ -29,7 +29,7 @@ public class MainActivity extends AppCompatActivity {
         //fragment 추가
         fragment_main = new MainFragment();
         fragment_record = new RecordFragment();
-        fragment_statics = new StaticsFragment();
+        fragment_statistics = new StatisticsTabFragment();
         fragment_pedometer = new PedometerFragment();
 
         getSupportFragmentManager().beginTransaction().replace(R.id.container, fragment_main).commit();
@@ -49,7 +49,7 @@ public class MainActivity extends AppCompatActivity {
                                 getSupportFragmentManager().beginTransaction().replace(R.id.container, fragment_record).commit();
                                 return true;
                             case R.id.statics:
-                                getSupportFragmentManager().beginTransaction().replace(R.id.container, fragment_statics).commit();
+                                getSupportFragmentManager().beginTransaction().replace(R.id.container, fragment_statistics).commit();
                                 return true;
                             case R.id.pedometer:
                                 getSupportFragmentManager().beginTransaction().replace(R.id.container, fragment_pedometer).commit();
