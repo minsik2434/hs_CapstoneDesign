@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".NutritionFirst">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="300dp"
+        android:orientation="vertical">
+
+    <!-- 통계 화면 -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <!-- 칼로리, 원형 그래프 -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:gravity="center">
+
+
+            <!-- 칼로리 -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="1600 / 2200"
+                android:textSize="15dp"
+                android:textColor="#000000" />
+            <!-- 원형 그래프 -->
+
+
+
+
+
+
+        </LinearLayout>
+
+        <!-- 탄단지 기록 -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:gravity="center">
+
+            <!-- 탄수화물 -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="탄수화물"
+                android:textColor="#000000"
+                android:textSize="15dp" />
+            <ProgressBar
+                android:layout_width="130dp"
+                android:layout_height="wrap_content"
+                style="?android:attr/progressBarStyleHorizontal"
+                android:progressTint="#FF5D5D"
+                android:progressBackgroundTint="#AEAEAE"
+                android:max="100"
+                android:progress="20"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="20 / 100 g"
+                android:textColor="#000000"
+                android:textSize="10dp" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="5dp"/>
+
+            <!-- 단백질 -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="단백질"
+                android:textColor="#000000"
+                android:textSize="15dp" />
+            <ProgressBar
+                android:layout_width="130dp"
+                android:layout_height="wrap_content"
+                style="?android:attr/progressBarStyleHorizontal"
+                android:progressTint="#FFCE39"
+                android:progressBackgroundTint="#AEAEAE"
+                android:max="100"
+                android:progress="20"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="20 / 100 g"
+                android:textColor="#000000"
+                android:textSize="10dp" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="5dp"/>
+
+            <!-- 지방 -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="지방"
+                android:textColor="#000000"
+                android:textSize="15dp" />
+            <ProgressBar
+                android:layout_width="130dp"
+                android:layout_height="wrap_content"
+                style="?android:attr/progressBarStyleHorizontal"
+                android:progressTint="#5AFF14"
+                android:progressBackgroundTint="#AEAEAE"
+                android:max="50"
+                android:progress="20"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="20 / 50 g"
+                android:textColor="#000000"
+                android:textSize="10dp"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="5dp"/>
+
+        </LinearLayout>
+    </LinearLayout>
+
+        <TextView
+            android:layout_gravity="center"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="~kcal 더 먹을 수 있음"/>
+
+    </LinearLayout>
+</LinearLayout>
