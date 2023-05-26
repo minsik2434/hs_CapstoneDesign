@@ -21,7 +21,6 @@ public class ListItemAdapter extends BaseAdapter {
     public Object getItem(int position) {
         return items.get(position);
     }
-
     @Override
     public long getItemId(int position) {
         return position;

@@ -31,15 +31,14 @@ public class MainActivity extends AppCompatActivity {
     PedometerFragment fragment_pedometer;
     NutritionFirst fragment_nutri1;
     NutritionSecond fragment_nutri2;
-<<<<<<< HEAD
+
     StateBreakfast fragment_state_breakfast;
-=======
     BottomAppBar barcodeBar;
 
     private static final int CAMERA_PERMISSION_REQUEST_CODE = 200;
 
     private Button scanButton;
->>>>>>> Yun
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
