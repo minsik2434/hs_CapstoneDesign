@@ -25,6 +25,7 @@
                 android:id="@+id/searchbtn"
                 android:gravity="left"/>
             <Button
+                android:id="@+id/barcodeBtn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:drawableLeft="@drawable/barcodebtn"
