@@ -27,45 +27,15 @@ public class MainFragment extends Fragment {
         view.findViewById(R.id.nutriChangeBtn).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                FragmentView(change);
+                NutriFragmentView(change);
             }
         });
-
-        // 탭호스트 연결
-        TabHost tabhost = view.findViewById(R.id.tabhost);
-
-        // 탭호스트 설정
-        tabhost.setup();
-
-        // 탭호스트에 탭1 추가
-        TabHost.TabSpec spec = tabhost.newTabSpec("breakfast");
-        spec.setContent(R.id.tab1);
-
-        // 탭1 이름 변경 및 추가
-        spec.setIndicator("아침");
-        tabhost.addTab(spec);
-
-        // 탭호스트에 탭2 추가
-        spec = tabhost.newTabSpec("lunch");
-        spec.setContent(R.id.tab2);
-
-        // 탭2 이름 변경 및 추가
-        spec.setIndicator("점심");
-        tabhost.addTab(spec);
-
-        // 탭호스트에 탭3 추가
-        spec = tabhost.newTabSpec("dinner");
-        spec.setContent(R.id.tab3);
-
-        // 탭3 이름 변경 및 추가
-        spec.setIndicator("저녁");
-        tabhost.addTab(spec);
 
         return view;
     }
 
     //프래그먼트 호출
-    private void FragmentView(int fragment){
+    private void NutriFragmentView(int fragment){
 
         FragmentManager fragmentManager = getFragmentManager();
         FragmentTransaction transaction = fragmentManager.beginTransaction();
@@ -89,6 +59,4 @@ public class MainFragment extends Fragment {
         }
 
     }
-
-
 }

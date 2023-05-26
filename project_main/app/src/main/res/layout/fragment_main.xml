@@ -12,19 +12,24 @@
         android:id="@+id/mainText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:textStyle="bold"
         android:gravity="left"
-        android:paddingTop="20dp"
+        android:paddingTop="10dp"
         android:paddingLeft="20dp"
         android:textColor="#ffffff"
-        android:text="2023년 2월 13일"
+        android:text="2023년 5월 26일"
         android:textSize="20dp" />
 
     <!-- 통계 화면 -->
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="350dp"
+        android:layout_height="300dp"
         android:orientation="vertical"
-        android:layout_margin="30dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginRight="30dp"
+        android:layout_marginBottom="20dp"
+        android:layout_marginLeft="30dp"
+
         android:background="@drawable/layout_style"
         android:elevation="15dp">
 
@@ -33,14 +38,14 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <Button
+            <ImageButton
                 android:id="@+id/nutriChangeBtn"
-                android:layout_gravity="right"
-                android:layout_marginRight="10dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="변경"
-                android:drawable="@drawable/ic_baseline_change_circle_24"/>
+                android:layout_gravity="right"
+                android:layout_marginTop="10dp"
+                android:layout_marginRight="20dp"
+                android:background="@drawable/ic_baseline_change_circle_24"/>
 
             <!-- 프레임 레이아웃-->
             <FrameLayout
@@ -56,91 +61,74 @@
     <!-- 먹은 음식 기록-->
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="230dp"
+        android:layout_height="220dp"
         android:orientation="vertical"
         android:layout_marginLeft="30dp"
         android:layout_marginRight="30dp"
         android:background="@drawable/layout_style"
         android:elevation="15dp">
 
-        <TabHost
-            android:id="@+id/tabhost"
+        <!-- 상단 -->
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_gravity="center">
+
+            <TextView
+                android:id="@+id/time_state"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:layout_marginLeft="30dp"
+                android:layout_marginBottom="10dp"
+                android:text="아침"
+                android:textStyle="bold"
+                android:textColor="#000000"
+                android:textSize="25dp"/>
 
             <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical">
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginLeft="130dp">
 
-                <TabWidget
-                    android:id="@android:id/tabs"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"/>
+                <ImageButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/breakfast_icon"
+                    android:layout_marginRight="14dp"/>
 
-                <FrameLayout
-                    android:id="@android:id/tabcontent"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent">
+                <ImageButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/lunch_icon"
+                    android:layout_marginRight="14dp"
+                    android:backgroundTint="#B8B8B8"/>
 
-                    <LinearLayout
-                        android:id="@+id/tab1"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:orientation="vertical">
+                <ImageButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/dinner_icon"
+                    android:backgroundTint="#B8B8B8"/>
+                </LinearLayout>
 
-                        <!-- 아침 리스트-->
+        </LinearLayout>
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:background="#000000"
+            android:layout_marginRight="20dp"
+            android:layout_marginLeft="20dp"/>
 
+        <!-- 하단(프레임레이아웃) -->
 
+        <FrameLayout
+            android:id="@+id/time_state_frame"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
 
-
-
-
-
-
-
-
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:id="@+id/tab2"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:orientation="vertical">
-
-                        <!-- 점심 리스트-->
-
-
-
-
-
-
-
-
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:id="@+id/tab3"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:orientation="vertical">
-
-                        <!-- 저녁 리스트-->
-
-
-
-
-
-
-
-
-
-
-                    </LinearLayout>
-                </FrameLayout>
-            </LinearLayout>
-        </TabHost>
 
 
     </LinearLayout>
