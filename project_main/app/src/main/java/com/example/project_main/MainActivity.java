@@ -21,6 +21,7 @@ public class MainActivity extends AppCompatActivity {
     PedometerFragment fragment_pedometer;
     NutritionFirst fragment_nutri1;
     NutritionSecond fragment_nutri2;
+    StateBreakfast fragment_state_breakfast;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,12 +39,22 @@ public class MainActivity extends AppCompatActivity {
         //영양성분
         fragment_nutri1 = new NutritionFirst();
         fragment_nutri2 = new NutritionSecond();
+        //아침리스트뷰
+        fragment_state_breakfast = new StateBreakfast();
+
+
+
 
         //메인화면에 fragment_main 프래그먼트 교체
         getSupportFragmentManager().beginTransaction().replace(R.id.container, fragment_main).commit();
 
         //영양소1 화면교체
         getSupportFragmentManager().beginTransaction().replace(R.id.nutri_content, fragment_nutri1).commit();
+
+        //아침 리스트뷰 프래그먼트
+        getSupportFragmentManager().beginTransaction().replace(R.id.time_state_frame, fragment_state_breakfast).commit();
+
+
 
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavigationView);
         bottomNavigationView.setBackground(null);

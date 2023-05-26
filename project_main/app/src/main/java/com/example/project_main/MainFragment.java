@@ -1,8 +1,13 @@
 package com.example.project_main;
 
+import android.content.res.ColorStateList;
+import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 
 import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
+import androidx.core.graphics.drawable.DrawableCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentStatePagerAdapter;
@@ -12,7 +17,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TabHost;
+import android.widget.TextView;
 import android.widget.Toast;
 
 public class MainFragment extends Fragment {
@@ -24,48 +31,87 @@ public class MainFragment extends Fragment {
 
         View view = inflater.inflate(R.layout.fragment_main, container, false);
 
+        ImageButton breakfast_btn = view.findViewById(R.id.breakfast_btn);
+        ImageButton lunch_btn = view.findViewById(R.id.lunch_btn);
+        ImageButton dinner_btn = view.findViewById(R.id.dinner_btn);
+
+        TextView timeState= view.findViewById(R.id.time_state);
+
+        //아이콘 색 변경 drawable 변수
+        Drawable changeBreakfastIconColor = DrawableCompat.wrap(getResources().getDrawable(R.drawable.breakfast_icon)).mutate();
+        Drawable changeLunchIconColor = DrawableCompat.wrap(getResources().getDrawable(R.drawable.lunch_icon)).mutate();
+        Drawable changeDinnerIconColor = DrawableCompat.wrap(getResources().getDrawable(R.drawable.dinner_icon)).mutate();
+
+        //영양성분 전환 버튼
         view.findViewById(R.id.nutriChangeBtn).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                FragmentView(change);
+                NutriFragmentView(change);
             }
         });
 
-        // 탭호스트 연결
-        TabHost tabhost = view.findViewById(R.id.tabhost);
+        //아침 버튼 이벤트
+        view.findViewById(R.id.breakfast_btn).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //아이콘 색상변경
+                DrawableCompat.setTint(changeBreakfastIconColor, ContextCompat.getColor(getContext(), R.color.black));
+                DrawableCompat.setTint(changeLunchIconColor, ContextCompat.getColor(getContext(), R.color.grayColor));
+                DrawableCompat.setTint(changeDinnerIconColor, ContextCompat.getColor(getContext(), R.color.grayColor));
 
-        // 탭호스트 설정
-        tabhost.setup();
+                breakfast_btn.setImageDrawable(changeBreakfastIconColor);
+                lunch_btn.setImageDrawable(changeLunchIconColor);
+                dinner_btn.setImageDrawable(changeDinnerIconColor);
 
-        // 탭호스트에 탭1 추가
-        TabHost.TabSpec spec = tabhost.newTabSpec("breakfast");
-        spec.setContent(R.id.tab1);
+                //텍스트 변경
+                timeState.setText("아침");
 
-        // 탭1 이름 변경 및 추가
-        spec.setIndicator("아침");
-        tabhost.addTab(spec);
 
-        // 탭호스트에 탭2 추가
-        spec = tabhost.newTabSpec("lunch");
-        spec.setContent(R.id.tab2);
+            }
+        });
+        //점심 버튼 이벤트
+        view.findViewById(R.id.lunch_btn).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //아이콘 색상변경
+                DrawableCompat.setTint(changeBreakfastIconColor, ContextCompat.getColor(getContext(), R.color.grayColor));
+                DrawableCompat.setTint(changeLunchIconColor, ContextCompat.getColor(getContext(), R.color.black));
+                DrawableCompat.setTint(changeDinnerIconColor, ContextCompat.getColor(getContext(), R.color.grayColor));
 
-        // 탭2 이름 변경 및 추가
-        spec.setIndicator("점심");
-        tabhost.addTab(spec);
+                breakfast_btn.setImageDrawable(changeBreakfastIconColor);
+                lunch_btn.setImageDrawable(changeLunchIconColor);
+                dinner_btn.setImageDrawable(changeDinnerIconColor);
 
-        // 탭호스트에 탭3 추가
-        spec = tabhost.newTabSpec("dinner");
-        spec.setContent(R.id.tab3);
+                //텍스트 변경
+                timeState.setText("점심");
 
-        // 탭3 이름 변경 및 추가
-        spec.setIndicator("저녁");
-        tabhost.addTab(spec);
+            }
+        });
+        //저녁 버튼 이벤트
+        view.findViewById(R.id.dinner_btn).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //아이콘 색상변경
+                DrawableCompat.setTint(changeBreakfastIconColor, ContextCompat.getColor(getContext(), R.color.grayColor));
+                DrawableCompat.setTint(changeLunchIconColor, ContextCompat.getColor(getContext(), R.color.grayColor));
+                DrawableCompat.setTint(changeDinnerIconColor, ContextCompat.getColor(getContext(), R.color.black));
+
+                breakfast_btn.setImageDrawable(changeBreakfastIconColor);
+                lunch_btn.setImageDrawable(changeLunchIconColor);
+                dinner_btn.setImageDrawable(changeDinnerIconColor);
+
+                //텍스트 변경
+                timeState.setText("저녁");
+
+            }
+        });
+
 
         return view;
     }
 
-    //프래그먼트 호출
-    private void FragmentView(int fragment){
+    //프래그먼트 호출(영양성분)
+    private void NutriFragmentView(int fragment){
 
         FragmentManager fragmentManager = getFragmentManager();
         FragmentTransaction transaction = fragmentManager.beginTransaction();
@@ -89,6 +135,4 @@ public class MainFragment extends Fragment {
         }
 
     }
-
-
 }
