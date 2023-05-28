@@ -5,7 +5,7 @@
     android:padding="10dp">
 
     <ImageView
-        android:id="@+id/image"
+        android:id="@+id/foodImage"
         android:layout_width="100dp"
         android:layout_height="70dp"
         android:layout_marginRight="10dp"
@@ -13,22 +13,42 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:orientation="vertical"
         android:gravity="center_vertical">
 
-        <TextView
-            android:id="@+id/foodName"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="이름"
-            android:textSize="16sp"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="5dp">
+
+            <TextView
+                android:id="@+id/foodName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="이름"
+                android:textSize="20dp"/>
+
+            <TextView
+                android:id="@+id/foodKcal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="kcal"
+                android:layout_marginLeft="10dp"/>
+
+        </LinearLayout>
 
         <TextView
-            android:id="@+id/kcal"
+            android:id="@+id/foodInfo"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="kcal"/>
+            android:text="탄단지"
+            android:textSize="15dp"/>
+
+
+
     </LinearLayout>
 </LinearLayout>
 

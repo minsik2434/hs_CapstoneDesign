@@ -66,6 +66,12 @@ public class MainFragment extends Fragment {
                 //텍스트 변경
                 timeState.setText("아침");
 
+                //아침 리스트 불러오기
+                FragmentManager fragmentManager = getFragmentManager();
+                FragmentTransaction transaction = fragmentManager.beginTransaction();
+                StateBreakfast breakfast = new StateBreakfast();
+                transaction.replace(R.id.time_state_frame, breakfast);
+                transaction.commit();
 
             }
         });

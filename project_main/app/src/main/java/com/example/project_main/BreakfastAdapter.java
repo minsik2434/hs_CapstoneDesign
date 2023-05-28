@@ -46,14 +46,14 @@ public class BreakfastAdapter extends ArrayAdapter implements AdapterView.OnItem
         final ViewHolder viewHolder;
         if (convertView == null){
             LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
-            convertView = layoutInflater.inflate(R.layout.listview_item,parent,false); //listview_item 임시 가져옴(커스텀 리스트뷰)
+            convertView = layoutInflater.inflate(R.layout.listview_custom,parent,false); //listview_item 임시 가져옴(커스텀 리스트뷰)
         }
 
         viewHolder = new ViewHolder();
-        viewHolder.breakfast_img = convertView.findViewById(R.id.img);
-        viewHolder.breakfast_name = convertView.findViewById(R.id.name);
-        viewHolder.breakfast_kcal = convertView.findViewById(R.id.kcal);
-        viewHolder.breakfast_info = convertView.findViewById(R.id.info);
+        viewHolder.breakfast_img = convertView.findViewById(R.id.foodImage);
+        viewHolder.breakfast_name = convertView.findViewById(R.id.foodName);
+        viewHolder.breakfast_kcal = convertView.findViewById(R.id.foodKcal);
+        viewHolder.breakfast_info = convertView.findViewById(R.id.foodInfo);
 
         final BreakfastArray breakfastArray = (BreakfastArray) list.get(position);
         viewHolder.breakfast_img.setImageResource(breakfastArray.getImg());

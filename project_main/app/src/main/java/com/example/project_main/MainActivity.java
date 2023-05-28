@@ -28,7 +28,7 @@ public class MainActivity extends AppCompatActivity {
     MainFragment fragment_main;
     RecordFragment fragment_record;
     StatisticsTabFragment fragment_statistics;
-    PedometerFragment fragment_pedometer;
+    MypageFragment fragment_mypage;
     NutritionFirst fragment_nutri1;
     NutritionSecond fragment_nutri2;
 
@@ -52,7 +52,7 @@ public class MainActivity extends AppCompatActivity {
         fragment_main = new MainFragment();
         fragment_record = new RecordFragment();
         fragment_statistics = new StatisticsTabFragment();
-        fragment_pedometer = new PedometerFragment();
+        fragment_mypage = new MypageFragment();
         //영양성분
         fragment_nutri1 = new NutritionFirst();
         fragment_nutri2 = new NutritionSecond();
@@ -108,7 +108,7 @@ public class MainActivity extends AppCompatActivity {
                                 getSupportFragmentManager().beginTransaction().replace(R.id.container, fragment_statistics).commit();
                                 return true;
                             case R.id.mypage:
-                                getSupportFragmentManager().beginTransaction().replace(R.id.container, fragment_pedometer).commit();
+                                getSupportFragmentManager().beginTransaction().replace(R.id.container, fragment_mypage).commit();
                                 return true;
                         }
                         return false;

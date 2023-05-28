@@ -27,19 +27,19 @@ public class StateBreakfast extends Fragment {
 
         //리스트 아이템 추가 (아이콘, 이름, 칼로리, 탄단지당나콜포트)
         breakfastArray = new ArrayList<>();
-        breakfastArray.add(new BreakfastArray(R.drawable.lunch_icon,"콘푸로스트1","300kcal","탄단지1"));
-        breakfastArray.add(new BreakfastArray(R.drawable.lunch_icon,"콘푸로스트2","300kcal","탄단지2"));
-        breakfastArray.add(new BreakfastArray(R.drawable.lunch_icon,"콘푸로스트3","300kcal","탄단지3"));
+        breakfastArray.add(new BreakfastArray(R.drawable.breakfast_icon,"아침1","300kcal","탄단지1"));
+        breakfastArray.add(new BreakfastArray(R.drawable.breakfast_icon,"아침2","300kcal","탄단지2"));
+        breakfastArray.add(new BreakfastArray(R.drawable.breakfast_icon,"아침3","300kcal","탄단지3"));
 
         breakfastListView = breakfastView.findViewById(R.id.breakfast_list_custom);
         customBreakfastAdapter = new BreakfastAdapter(getContext(),breakfastArray);
         breakfastListView.setAdapter(customBreakfastAdapter);
-        
+
         //아이템 클릭 시 이벤트
         breakfastListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                String selectedItem = (String) view.findViewById(R.id.name).getTag().toString();
+                String selectedItem = (String) view.findViewById(R.id.foodName).getTag().toString();
                 Toast.makeText(getContext(),"선택됨: " + " " + selectedItem, Toast.LENGTH_LONG).show();
             }
         });
@@ -76,7 +76,6 @@ class BreakfastArray{
     public String getInfo(){
         return info;
     }
-
 
 }
 
