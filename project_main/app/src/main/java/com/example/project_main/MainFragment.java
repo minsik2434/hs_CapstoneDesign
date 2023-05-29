@@ -66,6 +66,12 @@ public class MainFragment extends Fragment {
                 //텍스트 변경
                 timeState.setText("아침");
 
+                //아침 리스트 불러오기
+                FragmentManager fragmentManager = getFragmentManager();
+                FragmentTransaction transaction = fragmentManager.beginTransaction();
+                StateBreakfast breakfast = new StateBreakfast();
+                transaction.replace(R.id.time_state_frame, breakfast);
+                transaction.commit();
 
             }
         });
@@ -85,6 +91,13 @@ public class MainFragment extends Fragment {
                 //텍스트 변경
                 timeState.setText("점심");
 
+                //점심 리스트 불러오기
+                FragmentManager fragmentManager = getFragmentManager();
+                FragmentTransaction transaction = fragmentManager.beginTransaction();
+                StateLunch lunch = new StateLunch();
+                transaction.replace(R.id.time_state_frame, lunch);
+                transaction.commit();
+
             }
         });
         //저녁 버튼 이벤트
@@ -103,9 +116,28 @@ public class MainFragment extends Fragment {
                 //텍스트 변경
                 timeState.setText("저녁");
 
+                //저녁 리스트 불러오기
+                FragmentManager fragmentManager = getFragmentManager();
+                FragmentTransaction transaction = fragmentManager.beginTransaction();
+                StateDinner dinner = new StateDinner();
+                transaction.replace(R.id.time_state_frame, dinner);
+                transaction.commit();
+
             }
         });
 
+        //트랜잭션 실행
+        FragmentManager fragmentManager = getFragmentManager();
+        FragmentTransaction transaction = fragmentManager.beginTransaction();
+
+        //영양성분(탄단지)
+        NutritionFirst nutri1 = new NutritionFirst();
+        transaction.replace(R.id.nutri_content, nutri1);
+        //섭취음식정보(아침)
+        StateBreakfast breakfast = new StateBreakfast();
+        transaction.replace(R.id.time_state_frame, breakfast);
+
+        transaction.commit();
 
         return view;
     }

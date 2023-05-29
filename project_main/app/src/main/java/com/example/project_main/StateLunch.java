@@ -14,29 +14,29 @@ import android.widget.Toast;
 import java.util.ArrayList;
 
 
-public class StateBreakfast extends Fragment {
+public class StateLunch extends Fragment {
 
-    ArrayList<BreakfastArray> breakfastArray;
-    ListView breakfastListView;
-    private static BreakfastAdapter customBreakfastAdapter;
+    ArrayList<LunchArray> lunchArray;
+    ListView lunchListView;
+    private static LunchAdapter customLunchAdapter;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View breakfastView = inflater.inflate(R.layout.fragment_state_breakfast, container, false);
+        View lunchView = inflater.inflate(R.layout.fragment_state_lunch, container, false);
 
         //리스트 아이템 추가 (아이콘, 이름, 칼로리, 탄단지당나콜포트)
-        breakfastArray = new ArrayList<>();
-        breakfastArray.add(new BreakfastArray(R.drawable.breakfast_icon,"아침1","300kcal","탄단지1"));
-        breakfastArray.add(new BreakfastArray(R.drawable.breakfast_icon,"아침2","300kcal","탄단지2"));
-        breakfastArray.add(new BreakfastArray(R.drawable.breakfast_icon,"아침3","300kcal","탄단지3"));
+        lunchArray = new ArrayList<>();
+        lunchArray.add(new LunchArray(R.drawable.lunch_icon,"점심1","300kcal","탄단지1"));
+        lunchArray.add(new LunchArray(R.drawable.lunch_icon,"점심2","300kcal","탄단지2"));
+        lunchArray.add(new LunchArray(R.drawable.lunch_icon,"점심3","300kcal","탄단지3"));
 
-        breakfastListView = breakfastView.findViewById(R.id.breakfast_list_custom);
-        customBreakfastAdapter = new BreakfastAdapter(getContext(),breakfastArray);
-        breakfastListView.setAdapter(customBreakfastAdapter);
+        lunchListView = lunchView.findViewById(R.id.lunch_list_custom);
+        customLunchAdapter = new LunchAdapter(getContext(),lunchArray);
+        lunchListView.setAdapter(customLunchAdapter);
 
         //아이템 클릭 시 이벤트
-        breakfastListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        lunchListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 String selectedItem = (String) view.findViewById(R.id.foodName).getTag().toString();
@@ -44,17 +44,17 @@ public class StateBreakfast extends Fragment {
             }
         });
 
-        return breakfastView;
+        return lunchView;
     }
 }
 
-class BreakfastArray{
+class LunchArray{
     private int img;
     private String name;
     private String kcal;
     private String info;
 
-    public BreakfastArray(int img, String name, String kcal, String info){
+    public LunchArray(int img, String name, String kcal, String info){
         this.img = img;
         this.name = name;
         this.kcal = kcal;

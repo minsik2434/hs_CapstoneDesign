@@ -5,12 +5,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
 
 public class ListItemAdapter extends BaseAdapter {
-    ArrayList<ListItem> items = new ArrayList<ListItem>();
+    ArrayList<ListViewItem> items = new ArrayList<ListViewItem>();
     Context context;
     @Override
     public int getCount() {
@@ -29,24 +30,27 @@ public class ListItemAdapter extends BaseAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         context = parent.getContext();
-        ListItem listItem = items.get(position);
+        ListViewItem listViewItem = items.get(position);
 
         if(convertView == null){
             LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            convertView = inflater.inflate(R.layout.listview_item,parent,false);
+            convertView = inflater.inflate(R.layout.listview_custom,parent,false);
         }
 
-        TextView nameText = convertView.findViewById(R.id.name);
-        TextView kcalText = convertView.findViewById(R.id.kcal);
-        TextView infoText = convertView.findViewById(R.id.info);
+        ImageView imgView = convertView.findViewById(R.id.foodImage);
+        TextView nameText = convertView.findViewById(R.id.foodName);
+        TextView kcalText = convertView.findViewById(R.id.foodKcal);
+        TextView infoText = convertView.findViewById(R.id.foodInfo);
 
-        nameText.setText(listItem.getName());
-        kcalText.setText(listItem.getKcal());
-        infoText.setText(listItem.getInfo());
+        imgView.setImageResource(listViewItem.getFoodImage());
+        nameText.setText(listViewItem.getFoodName());
+        kcalText.setText(listViewItem.getFoodKcal());
+        infoText.setText(listViewItem.getFoodInfo());
+
 
         return convertView;
     }
-    public void addItem(ListItem item){
+    public void addItem(ListViewItem item){
         items.add(item);
     }
 }

@@ -22,11 +22,10 @@ public class SearchActivity extends Activity {
         listView = findViewById(R.id.foodlist);
         adapter = new ListItemAdapter();
 
-
-        adapter.addItem(new ListItem("콘푸라이트","12kcal","당1g 염분1g"));
-        adapter.addItem(new ListItem("사과","12kcal","당1g 염분1g"));
-        adapter.addItem(new ListItem("김치","12kcal","당1g 염분1g"));
-        adapter.addItem(new ListItem("부대찌개","12kcal","당1g 염분1g"));
+        adapter.addItem(new ListViewItem(R.mipmap.ic_launcher,"사과","12kcal","당1g 염분1g"));
+        adapter.addItem(new ListViewItem(R.mipmap.ic_launcher,"사과","12kcal","당1g 염분1g"));
+        adapter.addItem(new ListViewItem(R.mipmap.ic_launcher,"김치","12kcal","당1g 염분1g"));
+        adapter.addItem(new ListViewItem(R.mipmap.ic_launcher,"부대찌개","12kcal","당1g 염분1g"));
         listView.setAdapter(adapter);
 
         xbtn.setOnClickListener(new View.OnClickListener() {

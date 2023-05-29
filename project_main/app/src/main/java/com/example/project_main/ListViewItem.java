@@ -3,14 +3,22 @@ package com.example.project_main;
 import android.graphics.drawable.Drawable;
 
 public class ListViewItem {
-    private int image;
+
+    private int foodImage;
     private String foodName;
-    private int kcal;
+    private String foodKcal;
+    private String foodInfo;
 
+    ListViewItem(int image, String name,String kcal, String info){
+        this.foodImage = image;
+        this.foodName = name;
+        this.foodKcal = kcal;
+        this.foodInfo = info;
+    }
 
-    public int getImage()
+    public int getFoodImage()
     {
-        return this.image;
+        return this.foodImage;
     }
 
     public String getFoodName()
@@ -18,19 +26,26 @@ public class ListViewItem {
         return this.foodName;
     }
 
-    public int getKcal()
+    public String getFoodKcal()
     {
-        return this.kcal;
+        return this.foodKcal;
     }
 
-    public void setImage(int image) {
-        this.image = image;
+    public String getFoodInfo() {
+        return this.foodInfo;
     }
-    public void setFoodName(String foodName) {
-        this.foodName = foodName;
+
+    public void setFoodImage(int image) {
+        this.foodImage = image;
     }
-    public void setKcal(int kcal) {
-        this.kcal = kcal;
+    public void setFoodName(String name) {
+        this.foodName = name;
+    }
+    public void setFoodKcal(String kcal) {
+        this.foodKcal = kcal;
+    }
+    public void setFoodInfo(String info){
+        this.foodInfo = info;
     }
 
 }

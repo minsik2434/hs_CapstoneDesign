@@ -17,7 +17,7 @@ import com.bumptech.glide.request.RequestOptions;
 import java.util.ArrayList;
 import java.util.List;
 
-public class BreakfastAdapter extends ArrayAdapter implements AdapterView.OnItemClickListener {
+public class LunchAdapter extends ArrayAdapter implements AdapterView.OnItemClickListener {
 
     private Context context;
     private List list;
@@ -29,13 +29,13 @@ public class BreakfastAdapter extends ArrayAdapter implements AdapterView.OnItem
     }
 
     class ViewHolder{
-        public ImageView breakfast_img;
-        public TextView breakfast_name;
-        public TextView breakfast_kcal;
-        public TextView breakfast_info;
+        public ImageView lunch_img;
+        public TextView lunch_name;
+        public TextView lunch_kcal;
+        public TextView lunch_info;
     }
 
-    public BreakfastAdapter(Context context, ArrayList list){
+    public LunchAdapter(Context context, ArrayList list){
         super(context,0,list);
         this.context = context;
         this.list = list;
@@ -50,23 +50,23 @@ public class BreakfastAdapter extends ArrayAdapter implements AdapterView.OnItem
         }
 
         viewHolder = new ViewHolder();
-        viewHolder.breakfast_img = convertView.findViewById(R.id.foodImage);
-        viewHolder.breakfast_name = convertView.findViewById(R.id.foodName);
-        viewHolder.breakfast_kcal = convertView.findViewById(R.id.foodKcal);
-        viewHolder.breakfast_info = convertView.findViewById(R.id.foodInfo);
+        viewHolder.lunch_img = convertView.findViewById(R.id.foodImage);
+        viewHolder.lunch_name = convertView.findViewById(R.id.foodName);
+        viewHolder.lunch_kcal = convertView.findViewById(R.id.foodKcal);
+        viewHolder.lunch_info = convertView.findViewById(R.id.foodInfo);
 
-        final BreakfastArray breakfastArray = (BreakfastArray) list.get(position);
-        viewHolder.breakfast_img.setImageResource(breakfastArray.getImg());
-        viewHolder.breakfast_name.setText(breakfastArray.getName());
-        viewHolder.breakfast_kcal.setText(breakfastArray.getKcal());
-        viewHolder.breakfast_info.setText(breakfastArray.getInfo());
+        final LunchArray lunchArray = (LunchArray) list.get(position);
+        viewHolder.lunch_img.setImageResource(lunchArray.getImg());
+        viewHolder.lunch_name.setText(lunchArray.getName());
+        viewHolder.lunch_kcal.setText(lunchArray.getKcal());
+        viewHolder.lunch_info.setText(lunchArray.getInfo());
         Glide
                 .with(context)
-                .load(breakfastArray.getImg())
+                .load(lunchArray.getImg())
                 .centerCrop()
                 .apply(new RequestOptions().override(250, 350))
-                .into(viewHolder.breakfast_img);
-        viewHolder.breakfast_name.setTag(breakfastArray.getName());
+                .into(viewHolder.lunch_img);
+        viewHolder.lunch_name.setTag(lunchArray.getName());
 
 
         return convertView;

@@ -1,7 +1,6 @@
 package com.example.project_main;
 
 import android.content.Context;
-import android.text.Layout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,11 +16,10 @@ import com.bumptech.glide.request.RequestOptions;
 import java.util.ArrayList;
 import java.util.List;
 
-public class BreakfastAdapter extends ArrayAdapter implements AdapterView.OnItemClickListener {
+public class DinnerAdapter extends ArrayAdapter implements AdapterView.OnItemClickListener{
 
     private Context context;
     private List list;
-
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -29,13 +27,13 @@ public class BreakfastAdapter extends ArrayAdapter implements AdapterView.OnItem
     }
 
     class ViewHolder{
-        public ImageView breakfast_img;
-        public TextView breakfast_name;
-        public TextView breakfast_kcal;
-        public TextView breakfast_info;
+        public ImageView dinner_img;
+        public TextView dinner_name;
+        public TextView dinner_kcal;
+        public TextView dinner_info;
     }
 
-    public BreakfastAdapter(Context context, ArrayList list){
+    public DinnerAdapter(Context context, ArrayList list){
         super(context,0,list);
         this.context = context;
         this.list = list;
@@ -43,32 +41,33 @@ public class BreakfastAdapter extends ArrayAdapter implements AdapterView.OnItem
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent){
-        final ViewHolder viewHolder;
+        final DinnerAdapter.ViewHolder viewHolder;
         if (convertView == null){
             LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
             convertView = layoutInflater.inflate(R.layout.listview_custom,parent,false); //listview_item 임시 가져옴(커스텀 리스트뷰)
         }
 
-        viewHolder = new ViewHolder();
-        viewHolder.breakfast_img = convertView.findViewById(R.id.foodImage);
-        viewHolder.breakfast_name = convertView.findViewById(R.id.foodName);
-        viewHolder.breakfast_kcal = convertView.findViewById(R.id.foodKcal);
-        viewHolder.breakfast_info = convertView.findViewById(R.id.foodInfo);
+        viewHolder = new DinnerAdapter.ViewHolder();
+        viewHolder.dinner_img = convertView.findViewById(R.id.foodImage);
+        viewHolder.dinner_name = convertView.findViewById(R.id.foodName);
+        viewHolder.dinner_kcal = convertView.findViewById(R.id.foodKcal);
+        viewHolder.dinner_info = convertView.findViewById(R.id.foodInfo);
 
-        final BreakfastArray breakfastArray = (BreakfastArray) list.get(position);
-        viewHolder.breakfast_img.setImageResource(breakfastArray.getImg());
-        viewHolder.breakfast_name.setText(breakfastArray.getName());
-        viewHolder.breakfast_kcal.setText(breakfastArray.getKcal());
-        viewHolder.breakfast_info.setText(breakfastArray.getInfo());
+        final DinnerArray dinnerArray = (DinnerArray) list.get(position);
+        viewHolder.dinner_img.setImageResource(dinnerArray.getImg());
+        viewHolder.dinner_name.setText(dinnerArray.getName());
+        viewHolder.dinner_kcal.setText(dinnerArray.getKcal());
+        viewHolder.dinner_info.setText(dinnerArray.getInfo());
         Glide
                 .with(context)
-                .load(breakfastArray.getImg())
+                .load(dinnerArray.getImg())
                 .centerCrop()
                 .apply(new RequestOptions().override(250, 350))
-                .into(viewHolder.breakfast_img);
-        viewHolder.breakfast_name.setTag(breakfastArray.getName());
+                .into(viewHolder.dinner_img);
+        viewHolder.dinner_name.setTag(dinnerArray.getName());
 
 
         return convertView;
     }
+
 }
