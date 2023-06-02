@@ -7,13 +7,13 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="300dp"
+        android:layout_height="wrap_content"
         android:orientation="vertical">
 
     <!-- 통계 화면 -->
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="200dp"
+        android:layout_height="160dp"
         android:orientation="horizontal">
 
         <!-- 칼로리, 원형 그래프 -->
@@ -73,7 +73,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="5dp"/>
+                android:textSize="3dp"/>
 
             <!-- 단백질 -->
             <TextView
@@ -99,7 +99,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="5dp"/>
+                android:textSize="3dp"/>
 
             <!-- 지방 -->
             <TextView
@@ -123,19 +123,24 @@
                 android:text="20 / 50 g"
                 android:textColor="#000000"
                 android:textSize="10dp"/>
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="5dp"/>
 
         </LinearLayout>
     </LinearLayout>
 
         <TextView
-            android:layout_gravity="center"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="~kcal 더 먹을 수 있음"/>
+            android:layout_marginTop="20dp"
+            android:gravity="center"
+            android:layout_gravity="center"
+            android:textColor="#ffffff"
+            android:textStyle="bold"
+            android:textSize="18dp"
+            android:text="남은 칼로리는 600kcal 입니다"
+            android:background="@drawable/main_food_alert"/>
 
     </LinearLayout>
+
+
+
 </LinearLayout>

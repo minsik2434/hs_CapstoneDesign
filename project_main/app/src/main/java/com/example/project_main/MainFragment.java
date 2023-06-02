@@ -35,7 +35,7 @@ public class MainFragment extends Fragment {
         ImageButton lunch_btn = view.findViewById(R.id.lunch_btn);
         ImageButton dinner_btn = view.findViewById(R.id.dinner_btn);
 
-        TextView timeState= view.findViewById(R.id.time_state);
+        TextView timeState_now = view.findViewById(R.id.time_state_now);
 
         //아이콘 색 변경 drawable 변수
         Drawable changeBreakfastIconColor = DrawableCompat.wrap(getResources().getDrawable(R.drawable.breakfast_icon)).mutate();
@@ -64,8 +64,18 @@ public class MainFragment extends Fragment {
                 dinner_btn.setImageDrawable(changeDinnerIconColor);
 
                 //텍스트 변경
-                timeState.setText("아침");
+                timeState_now.setText("아침");
 
+                //아침 리스트 불러오기
+                FragmentManager fragmentManager = getFragmentManager();
+                FragmentTransaction transaction = fragmentManager.beginTransaction();
+                TimeState breakfast = new TimeState();
+
+                //상태 아침으로 변경
+                breakfast.timeStateStr = "morning";
+
+                transaction.replace(R.id.time_state_frame, breakfast);
+                transaction.commit();
 
             }
         });
@@ -83,7 +93,16 @@ public class MainFragment extends Fragment {
                 dinner_btn.setImageDrawable(changeDinnerIconColor);
 
                 //텍스트 변경
-                timeState.setText("점심");
+                timeState_now.setText("점심");
+
+                //점심 리스트 불러오기
+                FragmentManager fragmentManager = getFragmentManager();
+                FragmentTransaction transaction = fragmentManager.beginTransaction();
+                TimeState lunch = new TimeState();
+                //상태 점심으로 변경
+                lunch.timeStateStr = "lunch";
+                transaction.replace(R.id.time_state_frame, lunch);
+                transaction.commit();
 
             }
         });
@@ -101,11 +120,32 @@ public class MainFragment extends Fragment {
                 dinner_btn.setImageDrawable(changeDinnerIconColor);
 
                 //텍스트 변경
-                timeState.setText("저녁");
+                timeState_now.setText("저녁");
+
+                //저녁 리스트 불러오기
+                FragmentManager fragmentManager = getFragmentManager();
+                FragmentTransaction transaction = fragmentManager.beginTransaction();
+                TimeState dinner = new TimeState();
+                //상태 저녁으로 변경
+                dinner.timeStateStr = "dinner";
+                transaction.replace(R.id.time_state_frame, dinner);
+                transaction.commit();
 
             }
         });
 
+        //트랜잭션 실행(fragment 변경 시 실행됨)
+        FragmentManager fragmentManager = getFragmentManager();
+        FragmentTransaction transaction = fragmentManager.beginTransaction();
+
+        //영양성분(탄단지)
+        NutritionFirst nutri1 = new NutritionFirst();
+        transaction.replace(R.id.nutri_content, nutri1);
+        //섭취음식정보(아침)
+        TimeState breakfast = new TimeState();
+        transaction.replace(R.id.time_state_frame, breakfast);
+
+        transaction.commit();
 
         return view;
     }

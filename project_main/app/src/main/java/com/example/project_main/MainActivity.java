@@ -5,6 +5,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import android.Manifest;
 import android.content.Intent;
@@ -28,17 +30,16 @@ public class MainActivity extends AppCompatActivity {
     MainFragment fragment_main;
     RecordFragment fragment_record;
     StatisticsTabFragment fragment_statistics;
-    PedometerFragment fragment_pedometer;
+    MypageFragment fragment_mypage;
     NutritionFirst fragment_nutri1;
     NutritionSecond fragment_nutri2;
 
-    StateBreakfast fragment_state_breakfast;
+    TimeState fragment_state_breakfast;
     BottomAppBar barcodeBar;
 
     private static final int CAMERA_PERMISSION_REQUEST_CODE = 200;
 
     private Button scanButton;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,15 +53,12 @@ public class MainActivity extends AppCompatActivity {
         fragment_main = new MainFragment();
         fragment_record = new RecordFragment();
         fragment_statistics = new StatisticsTabFragment();
-        fragment_pedometer = new PedometerFragment();
+        fragment_mypage = new MypageFragment();
         //영양성분
         fragment_nutri1 = new NutritionFirst();
         fragment_nutri2 = new NutritionSecond();
         //아침리스트뷰
-        fragment_state_breakfast = new StateBreakfast();
-
-
-
+        fragment_state_breakfast = new TimeState();
 
         //바코드
         barcodeBar = findViewById(R.id.bottomAppBar);
@@ -108,7 +106,7 @@ public class MainActivity extends AppCompatActivity {
                                 getSupportFragmentManager().beginTransaction().replace(R.id.container, fragment_statistics).commit();
                                 return true;
                             case R.id.mypage:
-                                getSupportFragmentManager().beginTransaction().replace(R.id.container, fragment_pedometer).commit();
+                                getSupportFragmentManager().beginTransaction().replace(R.id.container, fragment_mypage).commit();
                                 return true;
                         }
                         return false;

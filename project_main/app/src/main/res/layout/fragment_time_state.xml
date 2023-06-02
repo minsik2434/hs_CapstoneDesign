@@ -3,12 +3,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".PedometerFragment">
+    tools:context=".TimeState">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <ListView
+        android:id="@+id/time_list_custom"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="pedometer" />
+        android:layout_height="wrap_content"/>
 
 </FrameLayout>

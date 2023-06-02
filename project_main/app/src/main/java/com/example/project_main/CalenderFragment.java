@@ -79,7 +79,6 @@ public class CalenderFragment extends Fragment {
             }
         }
 
-
         materialCalendarView.setOnDateChangedListener(new OnDateSelectedListener() {
             @Override
             public void onDateSelected(MaterialCalendarView widget, CalendarDay date, boolean selected) {
@@ -90,7 +89,7 @@ public class CalenderFragment extends Fragment {
                 //어뎁터 초기화
                 listViewAdapter.clearItem();
                 //어뎁터에 아이템 추가
-                listViewAdapter.addItem(R.drawable.ic_launcher_background,"라면",200);
+                listViewAdapter.addItem(R.drawable.ic_launcher_background,"라면","200","탄단지");
                 //리스트뷰에 어뎁터 set
                 schedule_list.setAdapter(listViewAdapter);
 
