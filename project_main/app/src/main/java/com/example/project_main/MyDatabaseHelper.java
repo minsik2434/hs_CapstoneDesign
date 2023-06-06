@@ -4,8 +4,10 @@ package com.example.project_main;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.os.Debug;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
@@ -51,6 +53,8 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
     private static final String NUTRITION_TABLE_COLUMN_CHOLESTEROL = "cholesterol";
     private static final String NUTRITION_TABLE_COLUMN_TRANS_FAT = "trans_fat";
     private static final String NUTRITION_TABLE_COLUMN_SATURATED_FAT = "saturated_fat";
+    private static final String NUTRITION_TABLE_COLUMN_SUGARS = "sugars";
+    private static final String NUTRITION_TABLE_COLUMN_SALT = "salt";
     //intake_table column
     private static final String INTAKE_TABLE_COLUMN_INTAKEID = "intakeID";
     private static final String INTAKE_TABLE_COLUMN_NICKNAME = "nickname";
@@ -169,8 +173,72 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
         long result = db.insert(DISEASE_USER_TABLE_NAME, null, cv);
 
     }
+    void addFood(String foodname, String raw_matarial, String allergy, String barcode, String food_image)
+    {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues cv = new ContentValues();
 
+        cv.put(FOOD_TABLE_COLUMN_FOODNAME, foodname);
+        cv.put(FOOD_TABLE_COLUMN_RAW_MATERIAL, raw_matarial);
+        cv.put(FOOD_TABLE_COLUMN_ALLERGY, allergy);
+        cv.put(FOOD_TABLE_COLUMN_BARCODE, barcode);
+        cv.put(FOOD_TABLE_COLUMN_FOOD_IMAGE, food_image);
 
+        long result = db.insert(FOOD_TABLE_NAME, null, cv);
+
+        if (result == -1)
+        {
+            System.out.println("addFood Failed");
+        }
+        else
+        {
+            System.out.println("addFood 데이터 추가 성공");
+        }
+
+        db.close();
+    }
+
+    void addNutrition(int foodID, double kcal, double carbohydrate, double protein, double province, double trans_fat, double cholesterol, double saturated_fat, double sugars, double salt)
+    {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues cv = new ContentValues();
+
+        cv.put(NUTRITION_TABLE_COLUMN_FOODID, foodID);
+        cv.put(NUTRITION_TABLE_COLUMN_KCAL, kcal);
+        cv.put(NUTRITION_TABLE_COLUMN_CARBOHYDRATE, carbohydrate);
+        cv.put(NUTRITION_TABLE_COLUMN_PROTEIN, protein);
+        cv.put(NUTRITION_TABLE_COLUMN_PROVINCE, province);
+        cv.put(NUTRITION_TABLE_COLUMN_TRANS_FAT, trans_fat);
+        cv.put(NUTRITION_TABLE_COLUMN_CHOLESTEROL, cholesterol);
+        cv.put(NUTRITION_TABLE_COLUMN_SATURATED_FAT, saturated_fat);
+        cv.put(NUTRITION_TABLE_COLUMN_SUGARS, sugars);
+        cv.put(NUTRITION_TABLE_COLUMN_SALT, salt);
+
+        long result = db.insert(NUTRITION_TABLE_NAME, null, cv);
+
+        if (result == -1)
+        {
+            System.out.println("addNutrition Failed");
+        }
+        else
+        {
+            System.out.println("addNutrition 데이터 추가 성공");
+        }
+
+        db.close();
+    }
+
+    int selectFoodID(){
+        SQLiteDatabase db = this.getReadableDatabase();
+        String sql = "select foodID from food_table;";
+        Cursor cursor = db.rawQuery(sql,null);
+        cursor.moveToLast();
+        int result = cursor.getInt(0);
+        cursor.close();
+        db.close();
+
+        return result;
+    }
 
     private static void createTable_user_table(SQLiteDatabase db){
         try {
@@ -219,13 +287,15 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
                 String query = "CREATE TABLE IF NOT EXISTS " + NUTRITION_TABLE_NAME
                         + " (" + NUTRITION_TABLE_COLUMN_NUTRITIONID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
                         + NUTRITION_TABLE_COLUMN_FOODID + " INTEGER, "
-                        + NUTRITION_TABLE_COLUMN_KCAL + " INTEGER, "
-                        + NUTRITION_TABLE_COLUMN_CARBOHYDRATE + " INTEGER, "
-                        + NUTRITION_TABLE_COLUMN_PROTEIN + " INTEGER, "
-                        + NUTRITION_TABLE_COLUMN_PROVINCE + " INTEGER, "
-                        + NUTRITION_TABLE_COLUMN_CHOLESTEROL + " INTEGER, "
-                        + NUTRITION_TABLE_COLUMN_TRANS_FAT + " INTEGER, "
-                        + NUTRITION_TABLE_COLUMN_SATURATED_FAT + " INTEGER, FOREIGN KEY(foodID) REFERENCES food_table(foodID) ON UPDATE CASCADE); ";
+                        + NUTRITION_TABLE_COLUMN_KCAL + " REAL, "
+                        + NUTRITION_TABLE_COLUMN_CARBOHYDRATE + " REAL, "
+                        + NUTRITION_TABLE_COLUMN_PROTEIN + " REAL, "
+                        + NUTRITION_TABLE_COLUMN_PROVINCE + " REAL, "
+                        + NUTRITION_TABLE_COLUMN_TRANS_FAT + " REAL, "
+                        + NUTRITION_TABLE_COLUMN_CHOLESTEROL + " REAL, "
+                        + NUTRITION_TABLE_COLUMN_SATURATED_FAT + " REAL, "
+                        + NUTRITION_TABLE_COLUMN_SUGARS + " REAL, "
+                        + NUTRITION_TABLE_COLUMN_SALT + " REAL, FOREIGN KEY(foodID) REFERENCES food_table(foodID) ON UPDATE CASCADE); ";
 
                 db.execSQL(query);
             }
