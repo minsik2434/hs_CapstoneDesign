@@ -14,6 +14,9 @@ public class init_setup1 extends AppCompatActivity {
     Button btnNext1;
     EditText editNickname;
 
+    MyDatabaseHelper dbHelper;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -23,6 +26,15 @@ public class init_setup1 extends AppCompatActivity {
         editNickname = findViewById(R.id.editNickname);
 
         String nickname = editNickname.getText().toString();
+
+        dbHelper = new MyDatabaseHelper(this);
+
+//        // 테이블의 모든 값을 삭제
+//        dbHelper.deleteAllRows("user_table");
+//        dbHelper.deleteAllRows("allergy");
+//        dbHelper.deleteAllRows("allergy_user");
+//        dbHelper.deleteAllRows("disease");
+//        dbHelper.deleteAllRows("disease_user");
 
         // 다음 버튼을 눌렀을 때
         // 닉네임을 입력하지 않으면 트스트로 알려주고 다음으로 넘어가지 않음
@@ -38,12 +50,13 @@ public class init_setup1 extends AppCompatActivity {
                     Intent intent = new Intent(getApplicationContext(), init_setup2.class);
                     intent.putExtra("nickname", nickname);
                     startActivity(intent);
-                    finish();
                 }
-
             }
         });
-
+    }
+    @Override
+    public void onBackPressed() {
+        //super.onBackPressed();
     }
 
 

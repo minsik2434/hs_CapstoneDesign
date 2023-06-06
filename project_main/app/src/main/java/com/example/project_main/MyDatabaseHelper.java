@@ -164,6 +164,54 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
             Toast.makeText(mContext, "데이터 추가 성공", Toast.LENGTH_SHORT).show();
         }
     }
+    // 알러지 추가
+    void addAllergies(int allergyID, String allergyName) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues cv = new ContentValues();
+
+        cv.put(ALLERGY_TABLE_COLUMN_ALLERGYID, allergyID);
+        cv.put(ALLERGY_TABLE_COLUMN_ALLERGY_NAME, allergyName);
+
+        long result = db.insert(ALLERGY_TABLE_NAME, null, cv);
+
+    }
+
+
+    // 지병 추가
+    void addDiseases(int diseaseID, String disease_name) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues cv = new ContentValues();
+
+        cv.put(DISEASE_TABLE_COLUMN_DISEASEID, diseaseID);
+        cv.put(DISEASE_TABLE_COLUMN_DISEASE_NAME, disease_name);
+
+        long result = db.insert(DISEASE_TABLE_NAME, null, cv);
+
+    }
+
+    // 사용자 알러지 추가
+    void addUserAllergies(String nickname, int allergyID) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues cv = new ContentValues();
+
+        cv.put(ALLERGY_USER_TABLE_COLUMN_ALLERGYID, allergyID);
+        cv.put(ALLERGY_USER_TABLE_COLUMN_NICKNAME, nickname);
+
+        long result = db.insert(ALLERGY_USER_TABLE_NAME, null, cv);
+
+    }
+
+    // 사용자 지병 추가
+    void addUserDiseases(String nickname, int diseaseID) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues cv = new ContentValues();
+
+        cv.put(DISEASE_USER_TABLE_COLUMN_NICKNAME, nickname);
+        cv.put(DISEASE_USER_TABLE_COLUMN_DISEASEID, diseaseID);
+
+        long result = db.insert(DISEASE_USER_TABLE_NAME, null, cv);
+
+    }
 
     public String getResult(){
         SQLiteDatabase db = getReadableDatabase();
