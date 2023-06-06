@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment;
 
 import android.Manifest;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.util.Log;
@@ -45,8 +46,22 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-//        Intent intent = new Intent(getApplicationContext(), init_setup1.class);
-//        startActivity(intent);
+        // 앱의 진입점인 Mainactivity.java에서 실행 여부를 체크합니다.
+        SharedPreferences preferences = getSharedPreferences("my_preferences", MODE_PRIVATE);
+        boolean isFirstRun = preferences.getBoolean("first_run", true);
+
+//        // 테스트를 위해 값을 초기화
+//        SharedPreferences.Editor editor = preferences.edit();
+//        editor.putBoolean("first_run", true);
+//        editor.apply();
+
+        // 앱을 처음 실행했을 때
+        if (isFirstRun) {
+            // init_setup1.java로 이동하는 코드
+            Intent intent = new Intent(MainActivity.this, init_setup1.class);
+            startActivity(intent);
+        }
+
 
         //fragment 추가
         fragment_main = new MainFragment();

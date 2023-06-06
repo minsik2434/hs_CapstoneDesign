@@ -1,3 +1,5 @@
+
+
 package com.example.project_main;
 
 import android.content.ContentValues;
@@ -7,6 +9,8 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
+
+import java.util.List;
 
 public class MyDatabaseHelper extends SQLiteOpenHelper {
 
@@ -53,6 +57,7 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
     private static final String INTAKE_TABLE_COLUMN_FOODID = "foodID";
     private static final String INTAKE_TABLE_COLUMN_DATE = "date";
     private static final String INTAKE_TABLE_COLUMN_TIME = "time";
+
     //allergy_table column
     private static final String ALLERGY_TABLE_COLUMN_ALLERGYID = "allergyID";
     private static final String ALLERGY_TABLE_COLUMN_ALLERGY_NAME = "allergy_name";
@@ -65,6 +70,7 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
     //disease_user_table column
     private static final String DISEASE_USER_TABLE_COLUMN_NICKNAME = "nickname";
     private static final String DISEASE_USER_TABLE_COLUMN_DISEASEID = "diseaseID";
+
 
     public MyDatabaseHelper(@Nullable Context context)
     {
@@ -113,16 +119,58 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
         cv.put(USER_TABLE_COLUMN_ACTIVITY, activity);
 
         long result = db.insert(USER_TABLE_NAME, null, cv);
-
-        if (result == -1)
-        {
-            Toast.makeText(context, "Failed", Toast.LENGTH_SHORT).show();
-        }
-        else
-        {
-            Toast.makeText(context, "데이터 추가 성공", Toast.LENGTH_SHORT).show();
-        }
     }
+
+    // 알러지 추가
+    void addAllergies(int allergyID, String allergyName) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues cv = new ContentValues();
+
+        cv.put(ALLERGY_TABLE_COLUMN_ALLERGYID, allergyID);
+        cv.put(ALLERGY_TABLE_COLUMN_ALLERGY_NAME, allergyName);
+
+        long result = db.insert(ALLERGY_TABLE_NAME, null, cv);
+
+    }
+
+
+    // 지병 추가
+    void addDiseases(int diseaseID, String disease_name) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues cv = new ContentValues();
+
+        cv.put(DISEASE_TABLE_COLUMN_DISEASEID, diseaseID);
+        cv.put(DISEASE_TABLE_COLUMN_DISEASE_NAME, disease_name);
+
+        long result = db.insert(DISEASE_TABLE_NAME, null, cv);
+
+    }
+
+    // 사용자 알러지 추가
+    void addUserAllergies(String nickname, int allergyID) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues cv = new ContentValues();
+
+        cv.put(ALLERGY_USER_TABLE_COLUMN_ALLERGYID, allergyID);
+        cv.put(ALLERGY_USER_TABLE_COLUMN_NICKNAME, nickname);
+
+        long result = db.insert(ALLERGY_USER_TABLE_NAME, null, cv);
+
+    }
+
+    // 사용자 지병 추가
+    void addUserDiseases(String nickname, int diseaseID) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues cv = new ContentValues();
+
+        cv.put(DISEASE_USER_TABLE_COLUMN_NICKNAME, nickname);
+        cv.put(DISEASE_USER_TABLE_COLUMN_DISEASEID, diseaseID);
+
+        long result = db.insert(DISEASE_USER_TABLE_NAME, null, cv);
+
+    }
+
+
 
     private static void createTable_user_table(SQLiteDatabase db){
         try {
@@ -142,6 +190,8 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
             e.printStackTrace();
         }
     }
+
+
 
     private static void createTable_food_table(SQLiteDatabase db){
         try {
@@ -266,4 +316,13 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
             e.printStackTrace();
         }
     }
+
+    // 테이블의 모든 행 삭제
+    void deleteAllRows(String tableName) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.delete(tableName, null, null);
+        db.close();
+        Toast.makeText(context, tableName + " 테이블의 모든 행이 삭제되었습니다.", Toast.LENGTH_SHORT).show();
+    }
+
 }

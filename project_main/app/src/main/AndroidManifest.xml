@@ -17,6 +17,15 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Project_main"
         tools:targetApi="31">
+<!--        <activity-->
+<!--            android:name=".MainActivity"-->
+<!--            android:exported="true">-->
+<!--            <intent-filter>-->
+<!--                <action android:name="android.intent.action.MAIN" />-->
+
+<!--                <category android:name="android.intent.category.LAUNCHER" />-->
+<!--            </intent-filter>-->
+<!--        </activity>-->
         <activity
             android:name=".MainActivity"
             android:exported="true">
@@ -26,13 +35,13 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+<!--        <activity android:name=".MainActivity" android:label="MainActivity"/>-->
         <activity android:name=".init_setup1" android:label="init_setup1"/>
         <activity android:name=".init_setup2" android:label="init_setup2"/>
         <activity android:name=".init_setup3" android:label="init_setup3"/>
         <activity android:name=".init_setup4" android:label="init_setup4"/>
         <activity android:name=".init_setup5" android:label="init_setup5"/>
         <activity android:name=".SearchActivity" android:label="search"/>
-
 
        
     </application>
