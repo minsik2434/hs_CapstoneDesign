@@ -53,14 +53,6 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
     private static final String NUTRITION_TABLE_COLUMN_SATURATED_FAT = "saturated_fat";
     //intake_table column
     private static final String INTAKE_TABLE_COLUMN_INTAKEID = "intakeID";
-    private static final String INTAKE_TABLE_COLUMN_NICKNAME = "nickname";
-    private static final String INTAKE_TABLE_COLUMN_FOODID = "foodID";
-    private static final String INTAKE_TABLE_COLUMN_DATE = "date";
-    private static final String INTAKE_TABLE_COLUMN_TIME = "time";
-
-    //allergy_table column
-    private static final String ALLERGY_TABLE_COLUMN_ALLERGYID = "allergyID";
-    private static final String ALLERGY_TABLE_COLUMN_ALLERGY_NAME = "allergy_name";
     //allergy_user_table column
     private static final String ALLERGY_USER_TABLE_COLUMN_NICKNAME = "nickname";
     private static final String ALLERGY_USER_TABLE_COLUMN_ALLERGYID = "allergyID";
@@ -172,7 +164,15 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
 
 
 
-    private static void createTable_user_table(SQLiteDatabase db){
+    private static void
+    private static final String INTAKE_TABLE_COLUMN_NICKNAME = "nickname";
+    private static final String INTAKE_TABLE_COLUMN_FOODID = "foodID";
+    private static final String INTAKE_TABLE_COLUMN_DATE = "date";
+    private static final String INTAKE_TABLE_COLUMN_TIME = "time";
+
+    //allergy_table column
+    private static final String ALLERGY_TABLE_COLUMN_ALLERGYID = "allergyID";
+    private static final String ALLERGY_TABLE_COLUMN_ALLERGY_NAME = "allergy_name";createTable_user_table(SQLiteDatabase db){
         try {
             if(db != null)
             {
