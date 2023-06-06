@@ -9,7 +9,7 @@
     android:background="@drawable/temp_img">
 
     <TextView
-        android:id="@+id/mainText"
+        android:id="@+id/todayMainTextview"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textStyle="bold"
@@ -17,7 +17,7 @@
         android:paddingTop="10dp"
         android:paddingLeft="20dp"
         android:textColor="#ffffff"
-        android:text="2023년 5월 26일"
+        android:text="2023년 3월 1일"
         android:textSize="20dp" />
 
     <!-- 통계 화면 -->
@@ -76,7 +76,7 @@
             android:layout_gravity="center">
 
             <TextView
-                android:id="@+id/time_state"
+                android:id="@+id/time_state_now"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"

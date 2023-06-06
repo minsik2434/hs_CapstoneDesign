@@ -4,6 +4,8 @@ package com.example.project_main;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -15,16 +17,17 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
+import java.util.ArrayList;
+
 public class RecordFragment extends Fragment {
 
-
     private static final int CAMERA_PERMISSION_REQUEST_CODE = 200;
-
     Button barcodebtn;
 
     @Override
@@ -48,13 +51,13 @@ public class RecordFragment extends Fragment {
             }
         });
 
-
         btntest.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Toast.makeText(getActivity(), "test",Toast.LENGTH_LONG).show();
             }
         });
+
         searchbtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -62,6 +65,7 @@ public class RecordFragment extends Fragment {
                 startActivity(intent);
             }
         });
+
         return view;
     }
 
@@ -73,33 +77,4 @@ public class RecordFragment extends Fragment {
         integrator.setCameraId(0);
         integrator.initiateScan();
     }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
-        if (result != null) {
-            if (result.getContents() != null) {
-                String barcode = result.getContents();
-                Toast.makeText(requireActivity(), "Scanned: " + barcode, Toast.LENGTH_SHORT).show();
-            } else {
-                Toast.makeText(requireActivity(), "No barcode scanned", Toast.LENGTH_SHORT).show();
-            }
-        } else {
-            super.onActivityResult(requestCode, resultCode, data);
-        }
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        if (requestCode == CAMERA_PERMISSION_REQUEST_CODE) {
-            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                startBarcodeScanner();
-            } else {
-                Toast.makeText(requireActivity(), "Camera permission denied", Toast.LENGTH_SHORT).show();
-            }
-        } else {
-            super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        }
-    }
-
 }

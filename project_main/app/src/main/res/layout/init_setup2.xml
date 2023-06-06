@@ -20,8 +20,6 @@
             android:layout_gravity="center"
             android:layout_margin="50dp"
            />
-
-
     </LinearLayout>
 
 

@@ -63,6 +63,7 @@
                     android:layout_height="wrap_content"
                     android:orientation="horizontal">
                     <ImageView
+                        android:id="@+id/recordFoodImg"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:src="@mipmap/ic_launcher"
@@ -76,12 +77,14 @@
                             android:layout_height="wrap_content"
                             android:orientation="horizontal">
                             <TextView
+                                android:id="@+id/recordFoodName"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="콘푸로스트"
                                 android:textSize="23dp"
                                 android:textColor="@android:color/background_dark"/>
                             <TextView
+                                android:id="@+id/recordFoodKcal"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="200 kcal"
@@ -89,6 +92,7 @@
                                 android:textSize="13dp"/>
                         </LinearLayout>
                         <TextView
+                            android:id="@+id/recordFoodInfo"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="탄수화물100 , 단백질100 , 지방100 "

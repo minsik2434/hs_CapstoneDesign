@@ -3,17 +3,18 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".NutritionFirst">
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="300dp"
+        android:layout_height="wrap_content"
         android:orientation="vertical">
 
     <!-- 통계 화면 -->
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="200dp"
+        android:layout_height="160dp"
         android:orientation="horizontal">
 
         <!-- 칼로리, 원형 그래프 -->
@@ -24,19 +25,27 @@
             android:orientation="vertical"
             android:gravity="center">
 
-
             <!-- 칼로리 -->
             <TextView
+                android:id="@+id/kcalNutri1Text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="1600 / 2200"
+                android:text="0 / 0"
                 android:textSize="15dp"
                 android:textColor="#000000" />
+
             <!-- 원형 그래프 -->
 
-
-
-
+            <ProgressBar
+                android:id="@+id/mainCircleProgressbar"
+                android:layout_width="120dp"
+                android:layout_height="120dp"
+                android:background="@drawable/circle_progressbar_background"
+                android:progressDrawable="@drawable/circle_progressbar_foreground"
+                android:indeterminateOnly="false"
+                android:max="100"
+                android:progress="90"
+                android:layout_margin="5dp"/>
 
 
         </LinearLayout>
@@ -57,23 +66,25 @@
                 android:textColor="#000000"
                 android:textSize="15dp" />
             <ProgressBar
+                android:id="@+id/progressCarbohydrate"
                 android:layout_width="100dp"
                 android:layout_height="wrap_content"
                 style="?android:attr/progressBarStyleHorizontal"
                 android:progressTint="#FF5D5D"
                 android:progressBackgroundTint="#AEAEAE"
                 android:max="100"
-                android:progress="20"/>
+                android:progress="0"/>
             <TextView
+                android:id="@+id/carboNutri1Text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="20 / 100 g"
+                android:text="0 / 0 g"
                 android:textColor="#000000"
                 android:textSize="10dp" />
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="5dp"/>
+                android:textSize="3dp"/>
 
             <!-- 단백질 -->
             <TextView
@@ -83,23 +94,25 @@
                 android:textColor="#000000"
                 android:textSize="15dp" />
             <ProgressBar
+                android:id="@+id/progressProtein"
                 android:layout_width="100dp"
                 android:layout_height="wrap_content"
                 style="?android:attr/progressBarStyleHorizontal"
                 android:progressTint="#FFCE39"
                 android:progressBackgroundTint="#AEAEAE"
                 android:max="100"
-                android:progress="20"/>
+                android:progress="0"/>
             <TextView
+                android:id="@+id/proteinNutri1Text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="20 / 100 g"
+                android:text="0 / 0 g"
                 android:textColor="#000000"
                 android:textSize="10dp" />
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="5dp"/>
+                android:textSize="3dp"/>
 
             <!-- 지방 -->
             <TextView
@@ -109,33 +122,41 @@
                 android:textColor="#000000"
                 android:textSize="15dp" />
             <ProgressBar
+                android:id="@+id/progressProvince"
                 android:layout_width="100dp"
                 android:layout_height="wrap_content"
                 style="?android:attr/progressBarStyleHorizontal"
                 android:progressTint="#5AFF14"
                 android:progressBackgroundTint="#AEAEAE"
-                android:max="50"
-                android:progress="20"/>
+                android:max="100"
+                android:progress="0"/>
 
             <TextView
+                android:id="@+id/provinceNutri1Text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="20 / 50 g"
+                android:text="0 / 0 g"
                 android:textColor="#000000"
                 android:textSize="10dp"/>
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="5dp"/>
 
         </LinearLayout>
     </LinearLayout>
 
         <TextView
-            android:layout_gravity="center"
+            android:id="@+id/remainKcal"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="~kcal 더 먹을 수 있음"/>
+            android:layout_marginTop="20dp"
+            android:gravity="center"
+            android:layout_gravity="center"
+            android:textColor="#ffffff"
+            android:textStyle="bold"
+            android:textSize="18dp"
+            android:text="남은 칼로리는 600kcal 입니다"
+            android:background="@drawable/main_food_alert"/>
 
     </LinearLayout>
+
+
+
 </LinearLayout>

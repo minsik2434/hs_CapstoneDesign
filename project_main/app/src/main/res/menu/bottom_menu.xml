@@ -2,12 +2,12 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
-        android:id="@+id/home"
+        android:id="@+id/bottomHome"
         android:icon="@drawable/ic_baseline_home_24"
         android:title="홈"/>
 
     <item
-        android:id="@+id/record"
+        android:id="@+id/bottomRecord"
         android:icon="@drawable/ic_baseline_sticky_note_2_24"
         android:title="기록하기"/>
 
@@ -17,12 +17,12 @@
         android:enabled="false"/>
 
     <item
-        android:id="@+id/statics"
+        android:id="@+id/bottomStatics"
         android:icon="@drawable/ic_baseline_calendar_month_24"
         android:title="통계"/>
 
     <item
-        android:id="@+id/mypage"
+        android:id="@+id/bottomMypage"
         android:icon="@drawable/ic_baseline_person_24"
         android:title="마이페이지"/>
 </menu>
