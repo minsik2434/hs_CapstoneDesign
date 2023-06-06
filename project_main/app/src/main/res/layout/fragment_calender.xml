@@ -7,38 +7,37 @@
     android:orientation="vertical"
     tools:context=".CalenderFragment">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-        <com.prolificinteractive.materialcalendarview.MaterialCalendarView
-
-
-            android:id="@+id/calendarView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:mcv_selectionColor="#a9dbf0cb"
-            app:mcv_showOtherDates="defaults" />
-
-
-    </LinearLayout>
-
-    <LinearLayout
+    <ScrollView
+        android:id="@+id/scrollview_calender"
+        android:fillViewport="true"
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/choice_date"
-            android:text="음력 00월 00일"
-            android:padding="12dp"/>
-
-        <ListView
-            android:id="@+id/schedule_list"
+        <LinearLayout
+            android:orientation="vertical"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content">
+            <com.prolificinteractive.materialcalendarview.MaterialCalendarView
+                android:id="@+id/calendarView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:mcv_selectionColor="#a9dbf0cb"
+                app:mcv_showOtherDates="defaults" />
 
-    </LinearLayout>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/choice_date"
+                android:text="음력 00월 00일"
+                android:padding="12dp"/>
+
+            <ListView
+                android:id="@+id/schedule_list"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
+        </LinearLayout>
+    </ScrollView>
 
 </LinearLayout>

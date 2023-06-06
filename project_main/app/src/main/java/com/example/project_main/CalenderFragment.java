@@ -4,9 +4,11 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -30,6 +32,7 @@ public class CalenderFragment extends Fragment {
     TextView choice_date;
     private ListViewAdapter listViewAdapter;
     private ListView schedule_list;
+    ScrollView scrollview_calender;
 
     String[] date;
     int[] todayKcal;
@@ -65,6 +68,8 @@ public class CalenderFragment extends Fragment {
         //리스트뷰, 리스트뷰 어뎁터 초기화
         listViewAdapter = new ListViewAdapter();
         schedule_list = (ListView) view.findViewById(R.id.schedule_list);
+
+        scrollview_calender = (ScrollView) view.findViewById(R.id.scrollview_calender);
 
         //DB Connect
         dbHelper = new MyDatabaseHelper(getActivity().getApplicationContext());
@@ -136,6 +141,14 @@ public class CalenderFragment extends Fragment {
             }
         });
 
+        schedule_list.setOnTouchListener(new View.OnTouchListener() {
+
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                scrollview_calender.requestDisallowInterceptTouchEvent(true);
+                return false;
+            }
+        });
         return view;
     }
 
