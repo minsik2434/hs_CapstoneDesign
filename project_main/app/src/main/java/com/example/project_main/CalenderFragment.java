@@ -1,11 +1,14 @@
 package com.example.project_main;
 
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -17,10 +20,12 @@ import com.prolificinteractive.materialcalendarview.MaterialCalendarView;
 import com.prolificinteractive.materialcalendarview.OnDateSelectedListener;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
 public class CalenderFragment extends Fragment {
+
     MaterialCalendarView materialCalendarView;
     TextView choice_date;
     private ListViewAdapter listViewAdapter;
@@ -32,6 +37,17 @@ public class CalenderFragment extends Fragment {
     long now = System.currentTimeMillis();
     Date currentDate;
     SimpleDateFormat format;
+
+    private ArrayList<Integer> foodImg = new ArrayList<>();
+    private ArrayList<String> foodName = new ArrayList<>();
+    private ArrayList<Integer> foodKcal = new ArrayList<>();
+    private ArrayList<Float> foodCarbohydrate = new ArrayList<>();
+    private ArrayList<Float> foodProtein = new ArrayList<>();
+    private ArrayList<Float> foodProvince = new ArrayList<>();
+    private ArrayList<String> foodNutriInfo = new ArrayList<>();
+
+    MyDatabaseHelper dbHelper;
+    SQLiteDatabase database;
 
     @Nullable
     @Override
@@ -50,6 +66,12 @@ public class CalenderFragment extends Fragment {
         listViewAdapter = new ListViewAdapter();
         schedule_list = (ListView) view.findViewById(R.id.schedule_list);
 
+        //DB Connect
+        dbHelper = new MyDatabaseHelper(getActivity().getApplicationContext());
+        database = dbHelper.getWritableDatabase();
+
+        //DB Date format
+        SimpleDateFormat dbFormat = new SimpleDateFormat("yyyy-MM-dd");
 
 
         currentDate = new Date(now);
@@ -78,21 +100,38 @@ public class CalenderFragment extends Fragment {
                 materialCalendarView.addDecorators(new BGDecorator2(date[i]));
             }
         }
-
-
+        //일 선택 시
         materialCalendarView.setOnDateChangedListener(new OnDateSelectedListener() {
             @Override
             public void onDateSelected(MaterialCalendarView widget, CalendarDay date, boolean selected) {
                 SimpleDateFormat format = new SimpleDateFormat("음력 MM월 dd일");
                 String CalDate = format.format(date.getDate());
+                String dbDate = dbFormat.format(date.getDate());
                 choice_date.setText(CalDate);
 
+                //DB get data
+                executeQuery(dbDate);
+
+                //음식 탄단지 정보 저장
+                for (int i = 0; i < foodName.size(); i++) {
+                    foodNutriInfo.add("탄수화물 " + foodCarbohydrate.get(i) + "g" + " 단백질 " + foodProtein.get(i) + "g" + " 지방 " + foodProvince.get(i) + "g");
+                }
                 //어뎁터 초기화
                 listViewAdapter.clearItem();
-                //어뎁터에 아이템 추가
-                listViewAdapter.addItem(R.drawable.ic_launcher_background,"라면",200);
+                //어뎁터에 아이템 추가, 첫 번째 인자에 foodImg.get(i) 넣어야 함. DB에 데이터 없어서 작성하지 않음
+                for (int i = 0; i < foodName.size(); i++) {
+                    listViewAdapter.addItem(R.mipmap.ic_launcher, foodName.get(i), foodKcal.get(i) + " Kcal", foodNutriInfo.get(i));
+                }
                 //리스트뷰에 어뎁터 set
                 schedule_list.setAdapter(listViewAdapter);
+                //ArrayList 초기화
+                    foodImg.clear();
+                    foodName.clear();
+                    foodKcal.clear();
+                    foodCarbohydrate.clear();
+                    foodProtein.clear();
+                    foodProvince.clear();
+                    foodNutriInfo.clear();
 
             }
         });
@@ -103,6 +142,25 @@ public class CalenderFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
     }
+
+    private void executeQuery(String todayDate){
+        Cursor cursor = database.rawQuery("select food_image, foodname, kcal, carbohydrate, protein, province\n" +
+                "from food_table, nutrition, intake_table\n" +
+                "where food_table.foodID = nutrition.foodID\n" +
+                "and food_table.foodID = intake_table.foodID\n" +
+                "and intakeID in (select intakeID from intake_table where substr(date,1,10) = "+"'"+todayDate+"');",null);
+        int recordCount = cursor.getCount();
+        for (int i = 0; i < recordCount; i++){
+            cursor.moveToNext();
+            foodImg.add(cursor.getInt(0));
+            foodName.add(cursor.getString(1));
+            foodKcal.add(cursor.getInt(2));
+            foodCarbohydrate.add(cursor.getFloat(3));
+            foodProtein.add(cursor.getFloat(4));
+            foodProvince.add(cursor.getFloat(5));
+        }
+        cursor.close();
+    }
+
 }

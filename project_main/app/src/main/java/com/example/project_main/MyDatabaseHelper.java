@@ -235,6 +235,7 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
         }
     }
 
+
     private static void createTable_disease_table(SQLiteDatabase db){
         try {
             if(db != null)

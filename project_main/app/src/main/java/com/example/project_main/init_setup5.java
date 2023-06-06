@@ -37,7 +37,6 @@ public class init_setup5 extends Activity {
 
         textCal.setText(exercise);
 
-
         btnStart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

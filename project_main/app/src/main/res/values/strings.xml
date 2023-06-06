@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">project_main</string>
+    <string name="app_name">잘 먹고 살자</string>
 
     <string-array name="exerciselist">
         <item>운동 안함</item>

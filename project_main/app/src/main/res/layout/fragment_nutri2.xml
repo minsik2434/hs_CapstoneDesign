@@ -15,7 +15,7 @@
         <!-- 위-->
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="100dp"
+            android:layout_height="80dp"
             android:orientation="horizontal"
             android:layout_weight="1">
 
@@ -39,11 +39,11 @@
                     android:progressTint="#306BFF"
                     android:progressBackgroundTint="#AEAEAE"
                     android:max="100"
-                    android:progress="40"/>
+                    android:progress="0"/>
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="10 / 25 g"
+                    android:text="0 / 0 g"
                     android:textColor="#000000"
                     android:textSize="10dp" />
             </LinearLayout>
@@ -68,7 +68,7 @@
                     android:progressTint="#306BFF"
                     android:progressBackgroundTint="#AEAEAE"
                     android:max="100"
-                    android:progress="15"/>
+                    android:progress="0"/>
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -85,20 +85,23 @@
                 android:gravity="center"
                 android:layout_weight="1">
                 <TextView
+
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="콜레스테롤"
                     android:textColor="#000000"
                     android:textSize="15dp" />
                 <ProgressBar
+                    android:id="@+id/progressCholesterol"
                     android:layout_width="100dp"
                     android:layout_height="wrap_content"
                     style="?android:attr/progressBarStyleHorizontal"
                     android:progressTint="#306BFF"
                     android:progressBackgroundTint="#AEAEAE"
                     android:max="100"
-                    android:progress="50"/>
+                    android:progress="0"/>
                 <TextView
+                    android:id="@+id/cholNutri1Text"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="100 / 200 mg"
@@ -112,7 +115,7 @@
         <!-- 아래 -->
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="100dp"
+            android:layout_height="80dp"
             android:orientation="horizontal"
             android:layout_weight="1">
 
@@ -130,14 +133,16 @@
                     android:textColor="#000000"
                     android:textSize="15dp" />
                 <ProgressBar
+                    android:id="@+id/progressTransFat"
                     android:layout_width="100dp"
                     android:layout_height="wrap_content"
                     style="?android:attr/progressBarStyleHorizontal"
                     android:progressTint="#306BFF"
                     android:progressBackgroundTint="#AEAEAE"
                     android:max="100"
-                    android:progress="12"/>
+                    android:progress="0"/>
                 <TextView
+                    android:id="@+id/transFatNutri1Text"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="2 / 15 g"
@@ -159,14 +164,16 @@
                     android:textColor="#000000"
                     android:textSize="15dp" />
                 <ProgressBar
+                    android:id="@+id/progressSaturFat"
                     android:layout_width="100dp"
                     android:layout_height="wrap_content"
                     style="?android:attr/progressBarStyleHorizontal"
                     android:progressTint="#306BFF"
                     android:progressBackgroundTint="#AEAEAE"
                     android:max="100"
-                    android:progress="100"/>
+                    android:progress="0"/>
                 <TextView
+                    android:id="@+id/saturFatFatNutri1Text"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="2.6 / 2.3 g"
@@ -178,165 +185,18 @@
 
     </LinearLayout>
 
-
     <!-- 알림 창 -->
     <TextView
-       android:layout_gravity="center"
-       android:layout_width="wrap_content"
-       android:layout_height="wrap_content"
-       android:text="~초과하여 먹음. 주의 바람"/>
-
-
-<!--            &lt;!&ndash; 당류 나트륨 콜레스테롤 포화지방산 트랜스지방 기록 &ndash;&gt;-->
-<!--            <LinearLayout-->
-<!--                android:layout_width="match_parent"-->
-<!--                android:layout_height="match_parent"-->
-<!--                android:layout_weight="1"-->
-<!--                android:orientation="vertical"-->
-<!--                android:gravity="center">-->
-
-<!--                &lt;!&ndash; 당류 &ndash;&gt;-->
-<!--                <TextView-->
-<!--                    android:layout_width="wrap_content"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:text="당류"-->
-<!--                    android:textColor="#000000"-->
-<!--                    android:textSize="15dp" />-->
-<!--                <ProgressBar-->
-<!--                    android:layout_width="130dp"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    style="?android:attr/progressBarStyleHorizontal"-->
-<!--                    android:progressTint="#306BFF"-->
-<!--                    android:progressBackgroundTint="#AEAEAE"-->
-<!--                    android:max="100"-->
-<!--                    android:progress="20"/>-->
-<!--                <TextView-->
-<!--                    android:layout_width="wrap_content"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:text="20 / 100 g"-->
-<!--                    android:textColor="#000000"-->
-<!--                    android:textSize="10dp" />-->
-<!--                <TextView-->
-<!--                    android:layout_width="wrap_content"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:textSize="5dp"/>-->
-
-
-
-<!--                &lt;!&ndash; 나트륨 &ndash;&gt;-->
-<!--                <TextView-->
-<!--                    android:layout_width="wrap_content"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:text="나트륨"-->
-<!--                    android:textColor="#000000"-->
-<!--                    android:textSize="15dp" />-->
-<!--                <ProgressBar-->
-<!--                    android:layout_width="130dp"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    style="?android:attr/progressBarStyleHorizontal"-->
-<!--                    android:progressTint="#306BFF"-->
-<!--                    android:progressBackgroundTint="#AEAEAE"-->
-<!--                    android:max="100"-->
-<!--                    android:progress="20"/>-->
-<!--                <TextView-->
-<!--                    android:layout_width="wrap_content"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:text="20 / 100 g"-->
-<!--                    android:textColor="#000000"-->
-<!--                    android:textSize="10dp" />-->
-<!--                <TextView-->
-<!--                    android:layout_width="wrap_content"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:textSize="5dp"/>-->
-
-<!--                &lt;!&ndash; 콜레스테롤 &ndash;&gt;-->
-<!--                <TextView-->
-<!--                    android:layout_width="wrap_content"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:text="콜레스테롤"-->
-<!--                    android:textColor="#000000"-->
-<!--                    android:textSize="15dp" />-->
-<!--                <ProgressBar-->
-<!--                    android:layout_width="130dp"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    style="?android:attr/progressBarStyleHorizontal"-->
-<!--                    android:progressTint="#306BFF"-->
-<!--                    android:progressBackgroundTint="#AEAEAE"-->
-<!--                    android:max="50"-->
-<!--                    android:progress="20"/>-->
-
-<!--                <TextView-->
-<!--                    android:layout_width="wrap_content"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:text="20 / 50 g"-->
-<!--                    android:textColor="#000000"-->
-<!--                    android:textSize="10dp"/>-->
-<!--                <TextView-->
-<!--                    android:layout_width="wrap_content"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:textSize="5dp"/>-->
-
-
-
-<!--                &lt;!&ndash; 포화지방산 &ndash;&gt;-->
-<!--                <TextView-->
-<!--                    android:layout_width="wrap_content"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:text="포화지방산"-->
-<!--                    android:textColor="#000000"-->
-<!--                    android:textSize="15dp" />-->
-<!--                <ProgressBar-->
-<!--                    android:layout_width="130dp"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    style="?android:attr/progressBarStyleHorizontal"-->
-<!--                    android:progressTint="#306BFF"-->
-<!--                    android:progressBackgroundTint="#AEAEAE"-->
-<!--                    android:max="50"-->
-<!--                    android:progress="20"/>-->
-
-<!--                <TextView-->
-<!--                    android:layout_width="wrap_content"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:text="20 / 50 g"-->
-<!--                    android:textColor="#000000"-->
-<!--                    android:textSize="10dp"/>-->
-<!--                <TextView-->
-<!--                    android:layout_width="wrap_content"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:textSize="5dp"/>-->
-
-<!--                &lt;!&ndash; 트랜스지방 &ndash;&gt;-->
-<!--                <TextView-->
-<!--                    android:layout_width="wrap_content"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:text="트랜스지방"-->
-<!--                    android:textColor="#000000"-->
-<!--                    android:textSize="15dp" />-->
-<!--                <ProgressBar-->
-<!--                    android:layout_width="130dp"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    style="?android:attr/progressBarStyleHorizontal"-->
-<!--                    android:progressTint="#306BFF"-->
-<!--                    android:progressBackgroundTint="#AEAEAE"-->
-<!--                    android:max="50"-->
-<!--                    android:progress="20"/>-->
-
-<!--                <TextView-->
-<!--                    android:layout_width="wrap_content"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:text="20 / 50 g"-->
-<!--                    android:textColor="#000000"-->
-<!--                    android:textSize="10dp"/>-->
-<!--                <TextView-->
-<!--                    android:layout_width="wrap_content"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:textSize="5dp"/>-->
-
-<!--            </LinearLayout>-->
-
-
-
-
-
+        android:id="@+id/remainNutri2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:gravity="center"
+        android:layout_gravity="center"
+        android:textColor="#ffffff"
+        android:textStyle="bold"
+        android:textSize="16dp"
+        android:text="건강한 식습관!"
+        android:background="@drawable/main_food_alert"/>
 
 </LinearLayout>
