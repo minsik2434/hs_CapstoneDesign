@@ -2,9 +2,11 @@ package com.example.project_main;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -32,12 +34,11 @@ public class CalenderFragment extends Fragment {
     long now = System.currentTimeMillis();
     Date currentDate;
     SimpleDateFormat format;
-
+    ScrollView scrollview_calender;
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         setHasOptionsMenu(true);
-
         View view = inflater.inflate(R.layout.fragment_calender, container, false);
 
         date = new String[]{"2023-02-01", "2023-02-02", "2023-02-03"};
@@ -49,6 +50,7 @@ public class CalenderFragment extends Fragment {
         //리스트뷰, 리스트뷰 어뎁터 초기화
         listViewAdapter = new ListViewAdapter();
         schedule_list = (ListView) view.findViewById(R.id.schedule_list);
+        scrollview_calender = (ScrollView) view.findViewById(R.id.scrollview_calender);
 
 
 
@@ -97,6 +99,15 @@ public class CalenderFragment extends Fragment {
             }
         });
 
+        schedule_list.setOnTouchListener(new View.OnTouchListener() {
+
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                scrollview_calender.requestDisallowInterceptTouchEvent(true);
+                return false;
+            }
+        });
+
         return view;
     }
 
@@ -105,4 +116,5 @@ public class CalenderFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
     }
+
 }
