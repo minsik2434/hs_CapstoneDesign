@@ -2,18 +2,27 @@ package com.example.project_main;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+
 public class MyDatabaseHelper extends SQLiteOpenHelper {
 
-    private Context context;
-    //db
-    private static final String DATABASE_NAME = "ewAl_db2.db";
-    private static final int DATABASE_VERSION = 1;
+    private final static String TAG = "DataBaseHelper";
+    private static String DB_PATH = "";
+    private static String DB_NAME = "eatdatabase.db";
+    private SQLiteDatabase mDataBase;
+    private Context mContext;
     //table
     private static final String USER_TABLE_NAME = "user_table";
     private static final String FOOD_TABLE_NAME = "food_table";
@@ -68,36 +77,68 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
 
     public MyDatabaseHelper(@Nullable Context context)
     {
-        super(context, DATABASE_NAME, null, DATABASE_VERSION);
-        this.context = context;
+        super(context,DB_NAME,null,1);
+
+        DB_PATH = "/data/data/" + context.getPackageName() + "/databases/";
+        this.mContext = context;
+        dataBaseCheck();
     }
 
-    @Override
-    public void onCreate(SQLiteDatabase db)
-    {
-        createTable_user_table(db);
-        createTable_food_table(db);
-        createTable_nutrition_table(db);
-        createTable_intake_table(db);
-        createTable_allergy_table(db);
-        createTable_allergy_user_table(db);
-        createTable_disease_table(db);
-        createTable_disease_user_table(db);
+
+    public void onCreate(SQLiteDatabase db){
+        super.onOpen(db);
+        Log.d(TAG,"onOpen() : DB Opening!");
+    }
+    private void dataBaseCheck() {
+        File dbFile = new File(DB_PATH + DB_NAME);
+        if (!dbFile.exists()) {
+            dbCopy();
+            Log.d(TAG,"Database is copied.");
+        }
     }
 
-    @Override
-    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion)
-    {
-        db.execSQL("DROP TABLE IF EXISTS " + USER_TABLE_NAME);
-        db.execSQL("DROP TABLE IF EXISTS " + FOOD_TABLE_NAME);
-        db.execSQL("DROP TABLE IF EXISTS " + NUTRITION_TABLE_NAME);
-        db.execSQL("DROP TABLE IF EXISTS " + INTAKE_TABLE_NAME);
-        db.execSQL("DROP TABLE IF EXISTS " + ALLERGY_TABLE_NAME);
-        db.execSQL("DROP TABLE IF EXISTS " + ALLERGY_USER_TABLE_NAME);
-        db.execSQL("DROP TABLE IF EXISTS " + DISEASE_TABLE_NAME);
-        db.execSQL("DROP TABLE IF EXISTS " + DISEASE_USER_TABLE_NAME);
+    private void dbCopy() {
 
-        onCreate(db);
+        try {
+            File folder = new File(DB_PATH);
+            if (!folder.exists()) {
+                folder.mkdir();
+            }
+
+
+            InputStream inputStream = mContext.getAssets().open(DB_NAME);
+            String out_filename = DB_PATH + DB_NAME;
+            OutputStream outputStream = new FileOutputStream(out_filename);
+            byte[] mBuffer = new byte[1024];
+            int mLength;
+            while ((mLength = inputStream.read(mBuffer)) > 0) {
+                outputStream.write(mBuffer, 0, mLength);
+            }
+            outputStream.flush();
+            ;
+            outputStream.close();
+            inputStream.close();
+        }catch (IOException e){
+            e.printStackTrace();
+            Log.d("dbcopy","IOException 발생");
+        }
+
+    }
+
+    public void onOpen(SQLiteDatabase db) {
+        super.onOpen(db);
+        //Toast.makeText(mContext,"onOpen()",Toast.LENGTH_SHORT).show();
+        Log.d(TAG,"onOpen() : DB Opening!");
+    }
+    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+        // 테이블 삭제하고 onCreate() 다시 로드시킨다.
+        Log.d(TAG,"onUpgrade() : DB Schema Modified and Excuting onCreate()");
+    }
+    public synchronized void close(){
+        if (mDataBase != null) {
+            mDataBase.close();
+        }
+        super.close();
     }
 
     void addUser(String nickname, int age, String sex, int height, int weight, String activity)
@@ -116,155 +157,24 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
 
         if (result == -1)
         {
-            Toast.makeText(context, "Failed", Toast.LENGTH_SHORT).show();
+            Toast.makeText(mContext, "Failed", Toast.LENGTH_SHORT).show();
         }
         else
         {
-            Toast.makeText(context, "데이터 추가 성공", Toast.LENGTH_SHORT).show();
+            Toast.makeText(mContext, "데이터 추가 성공", Toast.LENGTH_SHORT).show();
         }
     }
 
-    private static void createTable_user_table(SQLiteDatabase db){
-        try {
-            if(db != null)
-            {
-                String query = "CREATE TABLE IF NOT EXISTS " + USER_TABLE_NAME
-                        + " (" + USER_TABLE_COLUMN_NICKNAME + " TEXT, "
-                        + USER_TABLE_COLUMN_AGE + " INTEGER, "
-                        + USER_TABLE_COLUMN_SEX + " TEXT, "
-                        + USER_TABLE_COLUMN_HEIGHT + " INTEGER, "
-                        + USER_TABLE_COLUMN_WEIGHT + " INTEGER, "
-                        + USER_TABLE_COLUMN_ACTIVITY + " TEXT, PRIMARY KEY(nickname)); ";
+    public String getResult(){
+        SQLiteDatabase db = getReadableDatabase();
+        String result = "";
 
-                db.execSQL(query);
-            }
-        }catch (Exception e){
-            e.printStackTrace();
+        Cursor cursor = db.rawQuery("SELECT * FROM food_table where foodname = '신라면'",null);
+        while(cursor.moveToNext()){
+            result += "foodname : " +cursor.getString(1);
         }
+
+        return result;
     }
 
-    private static void createTable_food_table(SQLiteDatabase db){
-        try {
-            if(db != null)
-            {
-                String query = "CREATE TABLE IF NOT EXISTS " + FOOD_TABLE_NAME
-                        + " (" + FOOD_TABLE_COLUMN_FOODID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
-                        + FOOD_TABLE_COLUMN_FOODNAME + " TEXT, "
-                        + FOOD_TABLE_COLUMN_RAW_MATERIAL + " TEXT, "
-                        + FOOD_TABLE_COLUMN_ALLERGY + " TEXT, "
-                        + FOOD_TABLE_COLUMN_BARCODE + " TEXT, "
-                        + FOOD_TABLE_COLUMN_FOOD_IMAGE + " TEXT); ";
-
-                db.execSQL(query);
-            }
-        }catch (Exception e){
-            e.printStackTrace();
-        }
-    }
-
-    private static void createTable_nutrition_table(SQLiteDatabase db){
-        try {
-            if(db != null)
-            {
-                String query = "CREATE TABLE IF NOT EXISTS " + NUTRITION_TABLE_NAME
-                        + " (" + NUTRITION_TABLE_COLUMN_NUTRITIONID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
-                        + NUTRITION_TABLE_COLUMN_FOODID + " INTEGER, "
-                        + NUTRITION_TABLE_COLUMN_KCAL + " INTEGER, "
-                        + NUTRITION_TABLE_COLUMN_CARBOHYDRATE + " INTEGER, "
-                        + NUTRITION_TABLE_COLUMN_PROTEIN + " INTEGER, "
-                        + NUTRITION_TABLE_COLUMN_PROVINCE + " INTEGER, "
-                        + NUTRITION_TABLE_COLUMN_CHOLESTEROL + " INTEGER, "
-                        + NUTRITION_TABLE_COLUMN_TRANS_FAT + " INTEGER, "
-                        + NUTRITION_TABLE_COLUMN_SATURATED_FAT + " INTEGER, FOREIGN KEY(foodID) REFERENCES food_table(foodID) ON UPDATE CASCADE); ";
-
-                db.execSQL(query);
-            }
-        }catch (Exception e){
-            e.printStackTrace();
-        }
-    }
-
-    private static void createTable_intake_table(SQLiteDatabase db){
-        try {
-            if(db != null)
-            {
-                String query = "CREATE TABLE IF NOT EXISTS " + INTAKE_TABLE_NAME
-                        + " (" + INTAKE_TABLE_COLUMN_INTAKEID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
-                        + INTAKE_TABLE_COLUMN_NICKNAME + " TEXT, "
-                        + INTAKE_TABLE_COLUMN_FOODID + " INTEGER, "
-                        + INTAKE_TABLE_COLUMN_DATE + " TEXT NOT NULL DEFAULT (datetime('now', 'localtime')), "
-                        + INTAKE_TABLE_COLUMN_TIME + " TEXT, FOREIGN KEY(nickname) REFERENCES user_table(nickname) ON UPDATE CASCADE"
-                        + ", FOREIGN KEY(foodID) REFERENCES food_table(foodID) ON UPDATE CASCADE); ";
-
-                db.execSQL(query);
-            }
-        }catch (Exception e){
-            e.printStackTrace();
-        }
-    }
-
-    private static void createTable_allergy_table(SQLiteDatabase db){
-        try {
-            if(db != null)
-            {
-                String query = "CREATE TABLE IF NOT EXISTS " + ALLERGY_TABLE_NAME
-                        + " (" + ALLERGY_TABLE_COLUMN_ALLERGYID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
-                        + ALLERGY_TABLE_COLUMN_ALLERGY_NAME + " TEXT); ";
-
-                db.execSQL(query);
-            }
-        }catch (Exception e){
-            e.printStackTrace();
-        }
-    }
-
-    private static void createTable_allergy_user_table(SQLiteDatabase db){
-        try {
-            if(db != null)
-            {
-                String query = "CREATE TABLE IF NOT EXISTS " + ALLERGY_USER_TABLE_NAME
-                        + " (" + ALLERGY_USER_TABLE_COLUMN_NICKNAME + " TEXT, "
-                        + ALLERGY_USER_TABLE_COLUMN_ALLERGYID + " INTEGER, PRIMARY KEY(nickname, allergyID), " +
-                        "FOREIGN KEY(nickname) REFERENCES user_table (nickname) ON UPDATE CASCADE, " +
-                        "FOREIGN KEY(allergyID) REFERENCES allergy(allergyID) ON UPDATE CASCADE); ";
-
-                db.execSQL(query);
-            }
-        }catch (Exception e){
-            e.printStackTrace();
-        }
-    }
-
-
-    private static void createTable_disease_table(SQLiteDatabase db){
-        try {
-            if(db != null)
-            {
-                String query = "CREATE TABLE IF NOT EXISTS " + DISEASE_TABLE_NAME
-                        + " (" + DISEASE_TABLE_COLUMN_DISEASEID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
-                        + DISEASE_TABLE_COLUMN_DISEASE_NAME + " TEXT); ";
-
-                db.execSQL(query);
-            }
-        }catch (Exception e){
-            e.printStackTrace();
-        }
-    }
-
-    private static void createTable_disease_user_table(SQLiteDatabase db){
-        try {
-            if(db != null)
-            {
-                String query = "CREATE TABLE IF NOT EXISTS " + DISEASE_USER_TABLE_NAME
-                        + " (" + DISEASE_USER_TABLE_COLUMN_NICKNAME + " TEXT, "
-                        + DISEASE_USER_TABLE_COLUMN_DISEASEID + " INTEGER, PRIMARY KEY(nickname,diseaseID), " +
-                        "FOREIGN KEY(nickname) REFERENCES user_table(nickname) ON UPDATE CASCADE, " +
-                        "FOREIGN KEY(diseaseID) REFERENCES disease(diseaseID) ON UPDATE CASCADE); ";
-
-                db.execSQL(query);
-            }
-        }catch (Exception e){
-            e.printStackTrace();
-        }
-    }
 }

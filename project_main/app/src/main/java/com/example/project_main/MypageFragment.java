@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class MypageFragment extends Fragment {
 
@@ -44,6 +45,9 @@ public class MypageFragment extends Fragment {
         userProfileHeight.setText(height+"");
         userProfileWeight.setText(weight+"");
 
+        //db테스트
+        String testString = dbHelper.getResult();
+        Toast.makeText(getActivity().getApplicationContext(),testString,Toast.LENGTH_SHORT).show();
 
 
 
