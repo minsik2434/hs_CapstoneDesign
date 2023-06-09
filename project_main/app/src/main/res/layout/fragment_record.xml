@@ -80,7 +80,7 @@
                                 android:id="@+id/recordFoodName"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="콘푸로스트"
+                                android:text="신라면"
                                 android:textSize="23dp"
                                 android:textColor="@android:color/background_dark"/>
                             <TextView
@@ -121,17 +121,19 @@
             <Button
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/btn1"
+                android:id="@+id/morningBtn"
                 android:layout_marginLeft="15dp"
                 android:layout_marginRight="20dp"
                 android:text="아침"/>
             <Button
+                android:id="@+id/lunchBtn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="점심"
                 android:layout_marginLeft="15dp"
                 android:layout_marginRight="20dp"/>
             <Button
+                android:id="@+id/dinnerBtn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="15dp"
@@ -149,11 +151,13 @@
             android:layout_height="wrap_content"
             android:gravity="bottom">
             <Button
+                android:id="@+id/recordBtn"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
                 android:text="기록하기"/>
         </LinearLayout>
+
     </LinearLayout>
 
 </FrameLayout>

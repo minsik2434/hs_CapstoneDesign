@@ -213,6 +213,85 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
 
     }
 
+    // 섭취 정보 추가
+    void addIntake(String nickname, int foodID, String date, String time) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues cv = new ContentValues();
+
+        int maxIntakeID = getMaxIntakeID(); // 섭취 테이블에서 가장 큰 intakeID를 가져옴
+        int nextIntakeID = maxIntakeID + 1; // 다음 intakeID를 자동으로 +1해준다.
+
+        // 테이블에 레코드가 없을 경우 intakeID를 0으로 설정
+        if (maxIntakeID == -1) {
+            nextIntakeID = 0;
+        }
+
+        cv.put(INTAKE_TABLE_COLUMN_INTAKEID, nextIntakeID);
+        cv.put(INTAKE_TABLE_COLUMN_NICKNAME, nickname);
+        cv.put(INTAKE_TABLE_COLUMN_FOODID, foodID);
+        cv.put(INTAKE_TABLE_COLUMN_DATE, date);
+        cv.put(INTAKE_TABLE_COLUMN_TIME, time);
+
+        long result = db.insert(INTAKE_TABLE_NAME, null, cv);
+    }
+
+    // 음식 이름으로 음식 ID찾기
+    int getFoodIDByFoodName(String foodName) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        String[] columns = {FOOD_TABLE_COLUMN_FOODID};
+        String selection = FOOD_TABLE_COLUMN_FOODNAME + " = ?";
+        String[] selectionArgs = {foodName};
+        Cursor cursor = db.query(FOOD_TABLE_NAME, columns, selection, selectionArgs, null, null, null);
+
+        int foodID = -1; // 기본적으로 -1로 초기화하여 음식 ID가 찾아지지 않았을 때를 나타냄
+
+        if (cursor.moveToFirst()) {
+            int columnIndex = cursor.getColumnIndex(FOOD_TABLE_COLUMN_FOODID);
+            if (columnIndex != -1) {
+                foodID = cursor.getInt(columnIndex);
+            }
+        }
+
+        cursor.close();
+        return foodID;
+    }
+
+    // 가장 큰 intakeID 가져오기
+    private int getMaxIntakeID() {
+        SQLiteDatabase db = this.getReadableDatabase();
+        String query = "SELECT MAX(" + INTAKE_TABLE_COLUMN_INTAKEID + ") FROM " + INTAKE_TABLE_NAME;
+        Cursor cursor = db.rawQuery(query, null);
+        int maxID = -1; // 초기값을 -1로 설정
+        if (cursor.moveToFirst()) {
+            maxID = cursor.getInt(0);
+        }
+        cursor.close();
+        return maxID;
+    }
+
+    String getNickname() {
+        SQLiteDatabase db = getReadableDatabase();
+        String result = "";
+
+        Cursor cursor = db.rawQuery("SELECT nickname FROM user_table LIMIT 1", null);
+        if (cursor.moveToFirst()) {
+            int columnIndex = cursor.getColumnIndex("nickname"); // 열 이름을 직접 지정
+            result = cursor.getString(columnIndex);
+        }
+
+        cursor.close();
+        return result;
+    }
+
+
+    // 테이블의 모든 행 삭제
+    void deleteAllRows(String tableName) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.delete(tableName, null, null);
+        db.close();
+        Toast.makeText(mContext, tableName + " 테이블의 모든 행이 삭제되었습니다.", Toast.LENGTH_SHORT).show();
+    }
+
     public String getResult(){
         SQLiteDatabase db = getReadableDatabase();
         String result = "";
