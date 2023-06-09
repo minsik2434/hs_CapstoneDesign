@@ -91,20 +91,34 @@ public class NutritionFirst extends Fragment {
         progressbarProvince.setProgress( Math.round( (totalProvince/100.0f)*100 ) );
 
         //탄단지 총섭취량/권장섭취량 텍스트 설정. 권장섭취량은 임시값
-        kcalPercentage.setText(totalKcal + " / 2200");
-        carboPercentage.setText( totalCarbohydrate+ " / 100.0");
-        proteinPercentage.setText( totalProtein+ " / 100.0");
-        provincePercentage.setText( totalProvince+ " / 100.0");
+        kcalPercentage.setText(totalKcal + "");
+        carboPercentage.setText( totalCarbohydrate+ " / 100.0 g");
+        proteinPercentage.setText( totalProtein+ " / 100.0 g");
+        provincePercentage.setText( totalProvince+ " / 100.0 g");
+
+        //region code(탄단지 초과 섭취 시)
+        if (100 - totalCarbohydrate < 0){
+            carboPercentage.setTextColor(Color.parseColor("#ff0000"));
+        }
+        else if (1000 - totalProtein < 0){
+            proteinPercentage.setTextColor(Color.parseColor("#ff0000"));
+        }
+        else if (100 - totalProvince < 0){
+            provincePercentage.setTextColor(Color.parseColor("#ff0000"));
+        }
+        else;
+        //endregion
         
-        //남은 칼로리 표시. 초과하면 주의 알림. 2200은 권장칼로리 임시값
+        //region 남은 칼로리 표시. 초과하면 주의 알림. 2200은 권장칼로리 임시값
         if (2200 - totalKcal < 0) {
             //주의
             remainKcal.setText((totalKcal - 2200) + " Kcal를 더 먹었습니다! " + "\n주의해주세요!");
             remainKcal.setBackgroundResource(R.drawable.main_food_alert_yellow);
+            kcalPercentage.setTextColor(Color.parseColor("#ff0000"));
         }
         else
             remainKcal.setText( "남은 칼로리는 " + (2200 - totalKcal)+" Kcal 입니다" );
-
+        //endregion
 
         return view;
     }

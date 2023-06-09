@@ -19,33 +19,33 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:layout_marginTop="5dp"
             android:layout_marginBottom="5dp">
 
             <TextView
                 android:id="@+id/foodName"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:text="이름"
-                android:textSize="20dp"/>
-
-            <TextView
-                android:id="@+id/foodKcal"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="kcal"
-                android:layout_marginLeft="10dp"/>
+                android:textSize="18dp"/>
 
         </LinearLayout>
+
+        <TextView
+            android:id="@+id/foodKcal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="kcal"
+            android:textSize="15dp"/>
+
 
         <TextView
             android:id="@+id/foodInfo"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="탄단지"
-            android:textSize="15dp"/>
+            android:textSize="12dp"/>
 
 
 

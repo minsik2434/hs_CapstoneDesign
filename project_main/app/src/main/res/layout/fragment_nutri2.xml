@@ -33,6 +33,7 @@
                     android:textColor="#000000"
                     android:textSize="15dp" />
                 <ProgressBar
+                    android:id="@+id/progressSugar"
                     android:layout_width="100dp"
                     android:layout_height="wrap_content"
                     style="?android:attr/progressBarStyleHorizontal"
@@ -41,6 +42,7 @@
                     android:max="100"
                     android:progress="0"/>
                 <TextView
+                    android:id="@+id/sugarNutri2Text"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="0 / 0 g"
@@ -62,6 +64,7 @@
                     android:textColor="#000000"
                     android:textSize="15dp" />
                 <ProgressBar
+                    android:id="@+id/progressSalt"
                     android:layout_width="100dp"
                     android:layout_height="wrap_content"
                     style="?android:attr/progressBarStyleHorizontal"
@@ -70,6 +73,7 @@
                     android:max="100"
                     android:progress="0"/>
                 <TextView
+                    android:id="@+id/saltNutri2Text"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="0.3 / 2 g"
@@ -85,7 +89,6 @@
                 android:gravity="center"
                 android:layout_weight="1">
                 <TextView
-
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="콜레스테롤"
@@ -101,7 +104,7 @@
                     android:max="100"
                     android:progress="0"/>
                 <TextView
-                    android:id="@+id/cholNutri1Text"
+                    android:id="@+id/cholNutri2Text"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="100 / 200 mg"
@@ -129,7 +132,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="포화지방산"
+                    android:text="트랜스지방"
                     android:textColor="#000000"
                     android:textSize="15dp" />
                 <ProgressBar
@@ -142,7 +145,7 @@
                     android:max="100"
                     android:progress="0"/>
                 <TextView
-                    android:id="@+id/transFatNutri1Text"
+                    android:id="@+id/transFatNutri2Text"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="2 / 15 g"
@@ -160,7 +163,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="트랜스지방"
+                    android:text="포화지방산"
                     android:textColor="#000000"
                     android:textSize="15dp" />
                 <ProgressBar
@@ -173,7 +176,7 @@
                     android:max="100"
                     android:progress="0"/>
                 <TextView
-                    android:id="@+id/saturFatFatNutri1Text"
+                    android:id="@+id/saturFatFatNutri2Text"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="2.6 / 2.3 g"

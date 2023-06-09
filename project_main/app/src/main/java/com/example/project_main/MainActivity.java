@@ -128,7 +128,6 @@ public class MainActivity extends AppCompatActivity {
         //2023-06-06
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavigationView);
         bottomNavigationView.setBackground(null);
-
         //바텀 바 터치 시 교체
         bottomNavigationView.setOnNavigationItemSelectedListener(
                 new BottomNavigationView.OnNavigationItemSelectedListener() {

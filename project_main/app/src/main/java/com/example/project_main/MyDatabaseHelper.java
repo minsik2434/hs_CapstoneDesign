@@ -213,16 +213,4 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
 
     }
 
-    public String getResult(){
-        SQLiteDatabase db = getReadableDatabase();
-        String result = "";
-
-        Cursor cursor = db.rawQuery("SELECT * FROM food_table where foodname = '신라면'",null);
-        while(cursor.moveToNext()){
-            result += "foodname : " +cursor.getString(1);
-        }
-
-        return result;
-    }
-
 }

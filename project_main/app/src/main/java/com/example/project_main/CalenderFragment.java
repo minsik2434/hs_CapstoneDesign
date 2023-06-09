@@ -49,6 +49,9 @@ public class CalenderFragment extends Fragment {
     private ArrayList<Float> foodProvince = new ArrayList<>();
     private ArrayList<String> foodNutriInfo = new ArrayList<>();
 
+    //초과하여 먹은 날짜 종합
+    private ArrayList<String> overeatDay = new ArrayList<>();
+
     MyDatabaseHelper dbHelper;
     SQLiteDatabase database;
 
@@ -59,9 +62,10 @@ public class CalenderFragment extends Fragment {
 
         View view = inflater.inflate(R.layout.fragment_calender, container, false);
 
-        date = new String[]{"2023-02-01", "2023-02-02", "2023-02-03"};
-        todayKcal = new int[]{1000,1500,2000};
-        suitableKcal = new int[]{1500,1600,1800};
+        //달력 표시용 날짜, 오늘섭취칼로리, 권장섭취칼로리
+//        date = new String[]{"2023-02-01", "2023-02-02", "2023-02-03"};
+//        todayKcal = new int[]{1000,1500,2000};
+//        suitableKcal = new int[]{1500,1600,1800};
 
         materialCalendarView = view.findViewById(R.id.calendarView);
         choice_date = view.findViewById(R.id.choice_date);
@@ -70,14 +74,6 @@ public class CalenderFragment extends Fragment {
         schedule_list = (ListView) view.findViewById(R.id.schedule_list);
 
         scrollview_calender = (ScrollView) view.findViewById(R.id.scrollview_calender);
-
-        //DB Connect
-        dbHelper = new MyDatabaseHelper(getActivity().getApplicationContext());
-        database = dbHelper.getWritableDatabase();
-
-        //DB Date format
-        SimpleDateFormat dbFormat = new SimpleDateFormat("yyyy-MM-dd");
-
 
         currentDate = new Date(now);
         format = new SimpleDateFormat("음력 MM월 dd일");
@@ -93,18 +89,25 @@ public class CalenderFragment extends Fragment {
                 new FutureDayDecorator()
         );
 
+        //권장 칼로리보다 적게 먹었다면 초록, 아니면 빨강
+//        for(int i =0;i<date.length;i++)
+//        {
+//            if(todayKcal[i]<=suitableKcal[i])
+//            {
+//                materialCalendarView.addDecorators(new BGDecorator(date[i]));
+//            }
+//            if(todayKcal[i]>suitableKcal[i])
+//            {
+//                materialCalendarView.addDecorators(new BGDecorator2(date[i]));
+//            }
+//        }
 
-        for(int i =0;i<date.length;i++)
-        {
-            if(todayKcal[i]<=suitableKcal[i])
-            {
-                materialCalendarView.addDecorators(new BGDecorator(date[i]));
-            }
-            if(todayKcal[i]>suitableKcal[i])
-            {
-                materialCalendarView.addDecorators(new BGDecorator2(date[i]));
-            }
-        }
+        //DB Connect
+        dbHelper = new MyDatabaseHelper(getActivity().getApplicationContext());
+        database = dbHelper.getWritableDatabase();
+        //DB Date format
+        SimpleDateFormat dbFormat = new SimpleDateFormat("yyyy-MM-dd");
+
         //일 선택 시
         materialCalendarView.setOnDateChangedListener(new OnDateSelectedListener() {
             @Override
@@ -115,7 +118,7 @@ public class CalenderFragment extends Fragment {
                 choice_date.setText(CalDate);
 
                 //DB get data
-                executeQuery(dbDate);
+                getIntakeExecuteQuery(dbDate);
 
                 //음식 탄단지 정보 저장
                 for (int i = 0; i < foodName.size(); i++) {
@@ -141,6 +144,15 @@ public class CalenderFragment extends Fragment {
             }
         });
 
+        //달력 꾸미기
+        //권장 칼로리(500kcal) 이상 섭취한 날짜 불러오기
+        getOvereatDayExecuteQuery(500);
+        //날짜 색 빨강으로 변경
+        for(int i =0;i<overeatDay.size();i++)
+        {
+                materialCalendarView.addDecorators(new BGDecorator2(overeatDay.get(i)));
+        }
+
         schedule_list.setOnTouchListener(new View.OnTouchListener() {
 
             @Override
@@ -149,6 +161,8 @@ public class CalenderFragment extends Fragment {
                 return false;
             }
         });
+
+
         return view;
     }
 
@@ -157,7 +171,7 @@ public class CalenderFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
     }
 
-    private void executeQuery(String todayDate){
+    private void getIntakeExecuteQuery(String todayDate){
         Cursor cursor = database.rawQuery("select food_image, foodname, kcal, carbohydrate, protein, province\n" +
                 "from food_table, nutrition, intake_table\n" +
                 "where food_table.foodID = nutrition.foodID\n" +
@@ -175,5 +189,21 @@ public class CalenderFragment extends Fragment {
         }
         cursor.close();
     }
+
+    private void getOvereatDayExecuteQuery(int suitableKcal){
+        Cursor cursor = database.rawQuery("select substr(date,1,10)\n" +
+                "from intake_table, food_table, nutrition\n" +
+                "where intake_table.foodID = food_table.foodID\n" +
+                "and food_table.foodID = nutrition.foodID\n" +
+                "group by substr(date,1,10)\n" +
+                "having sum(kcal) > "+suitableKcal+";",null);
+        int recordCount = cursor.getCount();
+        for (int i = 0; i < recordCount; i++){
+            cursor.moveToNext();
+            overeatDay.add(cursor.getString(0));
+        }
+        cursor.close();
+    }
+
 
 }
