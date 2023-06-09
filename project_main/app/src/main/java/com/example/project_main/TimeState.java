@@ -1,5 +1,8 @@
 package com.example.project_main;
 
+import android.app.AlertDialog;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -16,59 +19,132 @@ import java.util.ArrayList;
 
 public class TimeState extends Fragment {
 
-    ArrayList<MainFoodArray> breakfastArray;
-    ArrayList<MainFoodArray> lunchArray;
-    ArrayList<MainFoodArray> dinnerArray;
+    private ArrayList<TimeArray> breakfastArray = new ArrayList<>();
+    private ArrayList<TimeArray> lunchArray = new ArrayList<>();
+    private ArrayList<TimeArray> dinnerArray = new ArrayList<>();
+
+    private ArrayList<String> foodName = new ArrayList<>();
+    private ArrayList<Integer> foodKcal = new ArrayList<>();
+    private ArrayList<Float> foodCarbohydrate = new ArrayList<>();
+    private ArrayList<Float> foodProtein = new ArrayList<>();
+    private ArrayList<Float> foodProvince = new ArrayList<>();
+    private ArrayList<Float> foodSugar = new ArrayList<>();
+    private ArrayList<Float> foodSalt = new ArrayList<>();
+    private ArrayList<Float> foodCholesterol = new ArrayList<>();
+    private ArrayList<Float> foodTransFat = new ArrayList<>();
+    private ArrayList<Float> foodSaturFat = new ArrayList<>();
+
+    private ArrayList<String> foodInfo = new ArrayList<>();
+    private ArrayList<String> foodInfo2 = new ArrayList<>();
+
+    private String[] timeList = {"아침","점심","저녁"};
 
     //커스텀 리스트뷰 선택
     ListView mainFoodListView;
 
-    private static TimeStateAdapter customBreakfastAdapter;
-    private static TimeStateAdapter customLunchAdapter;
-    private static TimeStateAdapter customDinnerAdapter;
+    private static ListViewAdapter customBreakfastAdapter;
+    private static ListViewAdapter customLunchAdapter;
+    private static ListViewAdapter customDinnerAdapter;
 
-    String timeStateStr="morning"; //어댑터 선택을 위한 변수, 초기 설정은 아침
+    String timeStateStr="morning"; //어댑터 선택을 위한 변수, 첫 화면에 아침 리스트 보여줌
+
+    MyDatabaseHelper dbHelper;
+    SQLiteDatabase database;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View timeView = inflater.inflate(R.layout.fragment_time_state, container, false);
 
-        //아침 리스트 아이템 추가 (아이콘, 이름, 칼로리, 탄단지당나콜포트)
-        breakfastArray = new ArrayList<>();
-        breakfastArray.add(new MainFoodArray(R.drawable.breakfast_icon,"아침1","300kcal","탄단지1"));
-        breakfastArray.add(new MainFoodArray(R.drawable.breakfast_icon,"아침2","300kcal","탄단지2"));
-        breakfastArray.add(new MainFoodArray(R.drawable.breakfast_icon,"아침3","300kcal","탄단지3"));
+        //어댑터 설정
+        customBreakfastAdapter = new ListViewAdapter();
+        customLunchAdapter = new ListViewAdapter();
+        customDinnerAdapter = new ListViewAdapter();
 
-        //점심 리스트 아이템 추가 (아이콘, 이름, 칼로리, 탄단지당나콜포트)
-        lunchArray = new ArrayList<>();
-        lunchArray.add(new MainFoodArray(R.drawable.lunch_icon,"점심1","300kcal","탄단지1"));
-        lunchArray.add(new MainFoodArray(R.drawable.lunch_icon,"점심2","300kcal","탄단지2"));
-        lunchArray.add(new MainFoodArray(R.drawable.lunch_icon,"점심3","300kcal","탄단지3"));
+        //DB Connect
+        dbHelper = new MyDatabaseHelper(getActivity().getApplicationContext());
+        database = dbHelper.getWritableDatabase();
 
-        //저녁 리스트 아이템 추가 (아이콘, 이름, 칼로리, 탄단지당나콜포트)
-        dinnerArray = new ArrayList<>();
-        dinnerArray.add(new MainFoodArray(R.drawable.dinner_icon,"저녁1","300kcal","탄단지1"));
-        dinnerArray.add(new MainFoodArray(R.drawable.dinner_icon,"저녁2","300kcal","탄단지2"));
-        dinnerArray.add(new MainFoodArray(R.drawable.dinner_icon,"저녁3","300kcal","탄단지3"));
+        //음식 배열에 정보 추가
+        for (int i = 0; i < timeList.length; i++) {
+            //정보 추가
+            getFoodIntakeExecuteQuery(timeList[i]);
+            //탄단지 정보 종합
+            for (int j = 0; j < foodName.size(); j++) {
+                foodInfo.add("탄수화물 " + foodCarbohydrate.get(j) + "g" + " 단백질 " + foodProtein.get(j) + "g" + " 지방 " + foodProvince.get(j) + "g");
+                foodInfo2.add("■ 당류 " + foodSugar.get(j) + " g" + "\n■ 나트륨 " + foodSalt.get(j) + " mg"
+                        +"\n■ 콜레스테롤 " + foodCholesterol.get(j) + " mg"+ "\n■ 트랜스지방 " + foodTransFat.get(j) + " g"
+                        + "\n■ 포화지방산 " + foodSaturFat.get(j) + " g");
+            }
+            //리스트 아이템 추가 (아이콘, 이름, 칼로리). 아이콘 수정필요
+            switch (i) {
+                //아침
+                case 0:
+                for (int k = 0; k < foodName.size(); k++) {
+                    customBreakfastAdapter.addItem(R.drawable.breakfast_icon, foodName.get(k), foodKcal.get(k) + " Kcal", foodInfo.get(k));
+                    breakfastArray.add(new TimeArray(R.drawable.breakfast_icon,foodName.get(k),foodKcal.get(k),foodInfo.get(k), foodInfo2.get(k)));
+                }
+                break;
+                //점심
+                case 1:
+                for (int k = 0; k < foodName.size(); k++) {
+                    customLunchAdapter.addItem(R.drawable.lunch_icon, foodName.get(k), foodKcal.get(k) + " Kcal", foodInfo.get(k));
+                    lunchArray.add(new TimeArray(R.drawable.lunch_icon,foodName.get(k),foodKcal.get(k),foodInfo.get(k), foodInfo2.get(k)));
+                }
+                break;
+                //저녁
+                case 2:
+                for (int k = 0; k < foodName.size(); k++) {
+                    customDinnerAdapter.addItem(R.drawable.dinner_icon, foodName.get(k), foodKcal.get(k) + " Kcal", foodInfo.get(k));
+                    dinnerArray.add(new TimeArray(R.drawable.dinner_icon,foodName.get(k),foodKcal.get(k),foodInfo.get(k), foodInfo2.get(k)));
+                }
+                break;
+            }
+            //초기화
+            foodName.clear();
+            foodKcal.clear();
+            foodCarbohydrate.clear();
+            foodProtein.clear();
+            foodProvince.clear();
+            foodInfo.clear();
+            foodInfo2.clear();
+        }
 
         //커스텀리스트뷰 설정 및 어댑터 선언
         mainFoodListView = timeView.findViewById(R.id.time_list_custom);
+        setStateAdapter(timeStateStr);
 
-        customBreakfastAdapter = new TimeStateAdapter(getContext(),breakfastArray);
-        customLunchAdapter = new TimeStateAdapter(getContext(),lunchArray);
-        customDinnerAdapter = new TimeStateAdapter(getContext(),dinnerArray);
-
-        //아이템 클릭 시 이벤트(아침)
+        //아이템 클릭 시 이벤트
         mainFoodListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                String selectedItem = (String) view.findViewById(R.id.foodName).getTag().toString();
-                Toast.makeText(getContext(),"선택됨: " + " " + selectedItem, Toast.LENGTH_LONG).show();
+
+                //대화상자
+                AlertDialog.Builder dlg = new AlertDialog.Builder(getActivity());
+
+                switch(timeStateStr) {
+                    case "morning":
+                        dlg.setTitle(breakfastArray.get(position).getName()); //제목
+                        dlg.setMessage(breakfastArray.get(position).getKcal()+"Kcal"+"\n"+breakfastArray.get(position).getInfo()+"\n\n"+breakfastArray.get(position).getInfo2()); // 메시지
+                        dlg.setIcon(R.drawable.breakfast_icon);
+                        break;
+                    case "lunch":
+                        dlg.setTitle(lunchArray.get(position).getName()); //제목
+                        dlg.setMessage(lunchArray.get(position).getKcal()+"Kcal"+"\n"+lunchArray.get(position).getInfo()+"\n\n"+lunchArray.get(position).getInfo2()); // 메시지
+                        dlg.setIcon(R.drawable.lunch_icon);
+                        break;
+                    case "dinner":
+                        dlg.setTitle(dinnerArray.get(position).getName()); //제목
+                        dlg.setMessage(dinnerArray.get(position).getKcal()+"Kcal"+"\n"+dinnerArray.get(position).getInfo()+"\n\n"+dinnerArray.get(position).getInfo2()); // 메시지
+                        dlg.setIcon(R.drawable.dinner_icon);
+                        break;
+
+                }
+
+                dlg.show();
             }
         });
 
-        setStateAdapter(timeStateStr);
         return timeView;
     }
 
@@ -88,19 +164,48 @@ public class TimeState extends Fragment {
                 break;
         }
     }
+
+    private void getFoodIntakeExecuteQuery(String time){
+
+        Cursor cursor = database.rawQuery("select foodname, kcal, carbohydrate, protein, province, sugars, salt, cholesterol, trans_fat, saturated_fat\n" +
+                "               from food_table, nutrition, intake_table\n" +
+                "               where food_table.foodID = nutrition.foodID\n" +
+                "               and food_table.foodID = intake_table.foodID\n" +
+                "               and intakeID in (select intakeID from intake_table where substr(date,1,10) = DATE('now'))\n" +
+                "\t\t\t   and time='"+time+"';",null);
+        int recordCount = cursor.getCount();
+        for (int i = 0; i < recordCount; i++){
+            cursor.moveToNext();
+            foodName.add(cursor.getString(0));
+            foodKcal.add(cursor.getInt(1));
+            foodCarbohydrate.add(cursor.getFloat(2));
+            foodProtein.add(cursor.getFloat(3));
+            foodProvince.add(cursor.getFloat(4));
+
+            foodSugar.add(cursor.getFloat(5));
+            foodSalt.add(cursor.getFloat(6));
+            foodCholesterol.add(cursor.getFloat(7));
+            foodTransFat.add(cursor.getFloat(8));
+            foodSaturFat.add(cursor.getFloat(9));
+        }
+        cursor.close();
+
+    }
 }
 
-class MainFoodArray{
-    private int img;
-    private String name;
-    private String kcal;
-    private String info;
+class TimeArray {
+    int img;
+    String name;
+    int kcal;
+    String info;
+    String info2;
 
-    public MainFoodArray(int img, String name, String kcal, String info){
+    public TimeArray(int img, String name, int kcal, String info, String info2){
         this.img = img;
         this.name = name;
         this.kcal = kcal;
         this.info = info;
+        this.info2 = info2;
     }
 
     public int getImg(){
@@ -111,12 +216,15 @@ class MainFoodArray{
         return name;
     }
 
-    public String getKcal(){
+    public int getKcal(){
         return kcal;
     }
 
     public String getInfo(){
         return info;
+    }
+    public String getInfo2() {
+        return info2;
     }
 
 }

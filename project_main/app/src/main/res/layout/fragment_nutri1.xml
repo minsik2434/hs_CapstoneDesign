@@ -1,162 +1,211 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_height="wrap_content"
     tools:context=".NutritionFirst">
 
-    <LinearLayout
-        android:layout_width="match_parent"
+
+    <!-- 칼로리 -->
+
+    <!-- 원형 그래프 -->
+
+    <!-- 탄수화물 -->
+
+    <TextView
+        android:id="@+id/kcalNutri1Text"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:text="0"
+        android:textColor="#53BC55"
+        android:textSize="28dp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@+id/mainCircleProgressbar"
+        app:layout_constraintEnd_toEndOf="@+id/mainCircleProgressbar"
+        app:layout_constraintStart_toStartOf="@+id/mainCircleProgressbar"
+        app:layout_constraintTop_toTopOf="@+id/mainCircleProgressbar" />
 
-    <!-- 통계 화면 -->
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="160dp"
-        android:orientation="horizontal">
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="kcal"
+        android:textColor="#000000"
+        android:textSize="13dp"
+        app:layout_constraintEnd_toEndOf="@+id/mainCircleProgressbar"
+        app:layout_constraintStart_toStartOf="@+id/mainCircleProgressbar"
+        app:layout_constraintTop_toBottomOf="@+id/kcalNutri1Text" />
 
-        <!-- 칼로리, 원형 그래프 -->
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:orientation="vertical"
-            android:gravity="center">
+    <ProgressBar
+        android:id="@+id/mainCircleProgressbar"
+        android:layout_width="167dp"
+        android:layout_height="165dp"
+        android:layout_margin="5dp"
+        android:background="@drawable/circle_progressbar_background"
+        android:indeterminateOnly="false"
+        android:max="100"
+        android:progress="90"
+        android:progressDrawable="@drawable/circle_progressbar_foreground"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.065"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.071" />
 
-            <!-- 칼로리 -->
-            <TextView
-                android:id="@+id/kcalNutri1Text"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="0 / 0"
-                android:textSize="15dp"
-                android:textColor="#000000" />
+    <ProgressBar
+        android:id="@+id/progressCarbohydrate"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="28dp"
+        android:layout_marginEnd="24dp"
+        android:max="100"
+        android:progress="0"
+        android:progressBackgroundTint="#AEAEAE"
+        android:progressTint="#FF5D5D"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.993"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
-            <!-- 원형 그래프 -->
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="탄수화물"
+        android:textColor="#000000"
+        android:textSize="15dp"
+        app:layout_constraintBottom_toTopOf="@+id/progressCarbohydrate"
+        app:layout_constraintEnd_toEndOf="@+id/progressCarbohydrate"
+        app:layout_constraintStart_toStartOf="@+id/progressCarbohydrate" />
 
-            <ProgressBar
-                android:id="@+id/mainCircleProgressbar"
-                android:layout_width="120dp"
-                android:layout_height="120dp"
-                android:background="@drawable/circle_progressbar_background"
-                android:progressDrawable="@drawable/circle_progressbar_foreground"
-                android:indeterminateOnly="false"
-                android:max="100"
-                android:progress="90"
-                android:layout_margin="5dp"/>
+    <TextView
+        android:id="@+id/carboNutri1Text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:text="0 / 0 g"
+        android:textColor="#000000"
+        android:textSize="10dp"
+        app:layout_constraintEnd_toEndOf="@+id/progressCarbohydrate"
+        app:layout_constraintStart_toStartOf="@+id/progressCarbohydrate"
+        app:layout_constraintTop_toBottomOf="@+id/progressCarbohydrate" />
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="3dp"
+        app:layout_constraintBaseline_toBaselineOf="@+id/textView4"
+        app:layout_constraintEnd_toStartOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <!-- 단백질 -->
+
+    <TextView
+        android:id="@+id/textView3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="단백질"
+        android:textColor="#000000"
+        android:textSize="15dp"
+        app:layout_constraintBottom_toTopOf="@+id/progressProtein"
+        app:layout_constraintEnd_toEndOf="@+id/progressProtein"
+        app:layout_constraintStart_toStartOf="@+id/progressProtein" />
+
+    <ProgressBar
+        android:id="@+id/progressProtein"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="88dp"
+        android:layout_marginEnd="24dp"
+        android:max="100"
+        android:progress="0"
+        android:progressBackgroundTint="#AEAEAE"
+        android:progressTint="#FFCE39"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.993"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/proteinNutri1Text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="0 / 0 g"
+        android:textColor="#000000"
+        android:textSize="10dp"
+        app:layout_constraintEnd_toEndOf="@+id/progressProtein"
+        app:layout_constraintStart_toStartOf="@+id/progressProtein"
+        app:layout_constraintTop_toBottomOf="@+id/progressProtein" />
+
+    <TextView
+        android:id="@+id/textView4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="3dp"
+        app:layout_constraintEnd_toStartOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <!-- 지방 -->
+
+    <TextView
+        android:id="@+id/textView5"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="지방"
+        android:textColor="#000000"
+        android:textSize="15dp"
+        app:layout_constraintBottom_toTopOf="@+id/progressProvince"
+        app:layout_constraintEnd_toEndOf="@+id/progressProvince"
+        app:layout_constraintStart_toStartOf="@+id/progressProvince" />
+
+    <ProgressBar
+        android:id="@+id/progressProvince"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="144dp"
+        android:layout_marginEnd="24dp"
+        android:max="100"
+        android:progress="0"
+        android:progressBackgroundTint="#AEAEAE"
+        android:progressTint="#5AFF14"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.993"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/provinceNutri1Text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="0 / 0 g"
+        android:textColor="#000000"
+        android:textSize="10dp"
+        app:layout_constraintEnd_toEndOf="@+id/progressProvince"
+        app:layout_constraintStart_toStartOf="@+id/progressProvince"
+        app:layout_constraintTop_toBottomOf="@+id/progressProvince" />
+
+    <TextView
+        android:id="@+id/remainKcal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="180dp"
+        android:background="@drawable/main_food_alert"
+        android:gravity="center"
+        android:text="남은 칼로리는 600kcal 입니다"
+        android:textColor="#ffffff"
+        android:textSize="18dp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.495"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 
-        </LinearLayout>
-
-        <!-- 탄단지 기록 -->
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:orientation="vertical"
-            android:gravity="center">
-
-            <!-- 탄수화물 -->
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="탄수화물"
-                android:textColor="#000000"
-                android:textSize="15dp" />
-            <ProgressBar
-                android:id="@+id/progressCarbohydrate"
-                android:layout_width="100dp"
-                android:layout_height="wrap_content"
-                style="?android:attr/progressBarStyleHorizontal"
-                android:progressTint="#FF5D5D"
-                android:progressBackgroundTint="#AEAEAE"
-                android:max="100"
-                android:progress="0"/>
-            <TextView
-                android:id="@+id/carboNutri1Text"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="0 / 0 g"
-                android:textColor="#000000"
-                android:textSize="10dp" />
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="3dp"/>
-
-            <!-- 단백질 -->
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="단백질"
-                android:textColor="#000000"
-                android:textSize="15dp" />
-            <ProgressBar
-                android:id="@+id/progressProtein"
-                android:layout_width="100dp"
-                android:layout_height="wrap_content"
-                style="?android:attr/progressBarStyleHorizontal"
-                android:progressTint="#FFCE39"
-                android:progressBackgroundTint="#AEAEAE"
-                android:max="100"
-                android:progress="0"/>
-            <TextView
-                android:id="@+id/proteinNutri1Text"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="0 / 0 g"
-                android:textColor="#000000"
-                android:textSize="10dp" />
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="3dp"/>
-
-            <!-- 지방 -->
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="지방"
-                android:textColor="#000000"
-                android:textSize="15dp" />
-            <ProgressBar
-                android:id="@+id/progressProvince"
-                android:layout_width="100dp"
-                android:layout_height="wrap_content"
-                style="?android:attr/progressBarStyleHorizontal"
-                android:progressTint="#5AFF14"
-                android:progressBackgroundTint="#AEAEAE"
-                android:max="100"
-                android:progress="0"/>
-
-            <TextView
-                android:id="@+id/provinceNutri1Text"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="0 / 0 g"
-                android:textColor="#000000"
-                android:textSize="10dp"/>
-
-        </LinearLayout>
-    </LinearLayout>
-
-        <TextView
-            android:id="@+id/remainKcal"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:gravity="center"
-            android:layout_gravity="center"
-            android:textColor="#ffffff"
-            android:textStyle="bold"
-            android:textSize="18dp"
-            android:text="남은 칼로리는 600kcal 입니다"
-            android:background="@drawable/main_food_alert"/>
-
-    </LinearLayout>
-
-
-
-</LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,5 +1,6 @@
 package com.example.project_main;
 
+import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
@@ -9,6 +10,7 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -24,6 +26,7 @@ public class MypageFragment extends Fragment {
     private float weight;
     private String activity;
 
+    ImageButton mypageSetting;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -45,11 +48,15 @@ public class MypageFragment extends Fragment {
         userProfileHeight.setText(height+"");
         userProfileWeight.setText(weight+"");
 
-        //db테스트
-        String testString = dbHelper.getResult();
-        Toast.makeText(getActivity().getApplicationContext(),testString,Toast.LENGTH_SHORT).show();
-
-
+        //설정 버튼(버그 있음)
+//        mypageSetting = view.findViewById(R.id.settingsBtn);
+//        mypageSetting.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Intent intent = new Intent(getActivity(),init_setup1.class);
+//                startActivity(intent);
+//            }
+//        });
 
         return view;
     }
