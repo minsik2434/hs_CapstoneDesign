@@ -141,6 +141,26 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
         super.close();
     }
 
+    public RecodeSelectDto executeQuerySearchFoodByBarcode(String barcodeNum) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery("select food_image, foodname, kcal, carbohydrate, protein, province, raw_material " +
+                "from food_table, nutrition where food_table.foodID = nutrition.foodID and barcode = '"+barcodeNum+"';",null);
+        cursor.moveToLast();
+        RecodeSelectDto recode_list = new RecodeSelectDto();
+        recode_list.setFoodImage(cursor.getString(0));
+        recode_list.setFoodName(cursor.getString(1));
+        recode_list.setFoodKcal((int) cursor.getFloat(2));
+        recode_list.setFoodCarbohydrate(cursor.getFloat(3));
+        recode_list.setFoodProtein(cursor.getFloat(4));
+        recode_list.setFoodProvince(cursor.getFloat(5));
+        recode_list.setRaw_material(cursor.getString(6));
+
+        cursor.close();
+        db.close();
+
+        return recode_list;
+    }
+
     void addUser(String nickname, int age, String sex, int height, int weight, String activity)
     {
         SQLiteDatabase db = this.getWritableDatabase();
