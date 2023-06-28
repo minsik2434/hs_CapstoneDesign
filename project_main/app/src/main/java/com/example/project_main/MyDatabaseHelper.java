@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
+import android.widget.ArrayAdapter;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
@@ -15,6 +16,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.ArrayList;
 
 public class MyDatabaseHelper extends SQLiteOpenHelper {
 
@@ -23,6 +25,7 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
     private static String DB_NAME = "eatdatabase.db";
     private SQLiteDatabase mDataBase;
     private Context mContext;
+    private ArrayAdapter<String> adapter;
     //table
     private static final String USER_TABLE_NAME = "user_table";
     private static final String FOOD_TABLE_NAME = "food_table";
@@ -115,7 +118,6 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
                 outputStream.write(mBuffer, 0, mLength);
             }
             outputStream.flush();
-            ;
             outputStream.close();
             inputStream.close();
         }catch (IOException e){
@@ -154,15 +156,6 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
         cv.put(USER_TABLE_COLUMN_ACTIVITY, activity);
 
         long result = db.insert(USER_TABLE_NAME, null, cv);
-
-        if (result == -1)
-        {
-            Toast.makeText(mContext, "Failed", Toast.LENGTH_SHORT).show();
-        }
-        else
-        {
-            Toast.makeText(mContext, "데이터 추가 성공", Toast.LENGTH_SHORT).show();
-        }
     }
     // 알러지 추가
     void addAllergies(int allergyID, String allergyName) {
@@ -175,7 +168,6 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
         long result = db.insert(ALLERGY_TABLE_NAME, null, cv);
 
     }
-
 
     // 지병 추가
     void addDiseases(int diseaseID, String disease_name) {
@@ -245,6 +237,7 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
 
         int foodID = -1; // 기본적으로 -1로 초기화하여 음식 ID가 찾아지지 않았을 때를 나타냄
 
+
         if (cursor.moveToFirst()) {
             int columnIndex = cursor.getColumnIndex(FOOD_TABLE_COLUMN_FOODID);
             if (columnIndex != -1) {
@@ -269,6 +262,7 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
         return maxID;
     }
 
+    // 닉네임을 가져오는 함수
     String getNickname() {
         SQLiteDatabase db = getReadableDatabase();
         String result = "";
