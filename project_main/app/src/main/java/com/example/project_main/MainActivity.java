@@ -75,7 +75,7 @@ public class MainActivity extends AppCompatActivity {
         SharedPreferences preferences = getSharedPreferences("my_preferences", MODE_PRIVATE);
         boolean isFirstRun = preferences.getBoolean("first_run", true);
 
-//        // 테스트를 위해 값을 초기화
+        // 테스트를 위해 값을 초기화
 //        SharedPreferences.Editor editor = preferences.edit();
 //        editor.putBoolean("first_run", true);
 //        editor.apply();

@@ -2,9 +2,12 @@ package com.example.project_main;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -29,12 +32,34 @@ public class init_setup1 extends AppCompatActivity {
 
         dbHelper = new MyDatabaseHelper(this);
 
-//        // 테이블의 모든 값을 삭제
+        // 테이블의 모든 값을 삭제
 //        dbHelper.deleteAllRows("user_table");
 //        dbHelper.deleteAllRows("allergy");
 //        dbHelper.deleteAllRows("allergy_user");
 //        dbHelper.deleteAllRows("disease");
 //        dbHelper.deleteAllRows("disease_user");
+//        dbHelper.deleteAllRows("intake_table");
+
+
+
+        //키를 눌렀을 때도 동작
+        editNickname.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView textView, int actionId, KeyEvent keyEvent) {
+                if (actionId == EditorInfo.IME_ACTION_DONE || keyEvent.getKeyCode() == KeyEvent.KEYCODE_ENTER) {
+                    String nickname = editNickname.getText().toString();
+                    if (nickname == null || nickname.trim().isEmpty()) {
+                        Toast.makeText(init_setup1.this, "닉네임을 입력하세요.", Toast.LENGTH_LONG).show();
+                    } else {
+                        Intent intent = new Intent(getApplicationContext(), init_setup2.class);
+                        intent.putExtra("nickname", nickname);
+                        startActivity(intent);
+                    }
+                    return true;
+                }
+                return false;
+            }
+        });
 
         // 다음 버튼을 눌렀을 때
         // 닉네임을 입력하지 않으면 트스트로 알려주고 다음으로 넘어가지 않음
