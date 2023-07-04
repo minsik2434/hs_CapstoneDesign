@@ -79,6 +79,8 @@
                                 android:id="@+id/recordFoodName"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
+
+                                android:text="신라면"
                                 android:textSize="23dp"
                                 android:textColor="@android:color/background_dark"/>
                         </LinearLayout>
@@ -100,6 +102,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
+                    android:id="@+id/raw_material_text"
                     android:text="선택한 음식의 정보 출력\n...\n...\n...\n...\n...\n..."
                     android:background="@android:color/transparent"/>
             </LinearLayout>

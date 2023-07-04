@@ -133,48 +133,49 @@ public class RecordFragment extends Fragment {
             @Override
             public void onClick(View v) {
 
-                String foodname = recordFoodName.getText().toString();
-                if(foodname.isEmpty()){
-                    Toast.makeText(getActivity(),"기록할 음식이 없습니다.",Toast.LENGTH_LONG).show();
+                int count = 0;
+                if(morningClicked==true)
+                    count+=1;
+                if(lunchClicked==true)
+                    count+=1;
+                if(dinnerClicked==true)
+                    count+=1;
+
+                if(count == 0){
+                    Toast.makeText(getActivity(),"아침 점심 저녁 중 하나를 선택하세요.",Toast.LENGTH_LONG).show();
+                }
+                else if(count != 1){
+                    Toast.makeText(getActivity(),"아침 점심 저녁 중 하나만 선택하세요.",Toast.LENGTH_LONG).show();
                 }
                 else{
-                    int count = 0;
-                    if(morningClicked==true)
-                        count+=1;
-                    if(lunchClicked==true)
-                        count+=1;
-                    if(dinnerClicked==true)
-                        count+=1;
-
-                    if(count == 0){
-                        Toast.makeText(getActivity(),"아침 점심 저녁 중 하나를 선택하세요.",Toast.LENGTH_LONG).show();
+                    String nickname = dbHelper.getNickname();
+                    String foodname = recordFoodName.getText().toString();
+                    String date = getCurrentDateTime();
+                    String time;
+                    if(morningClicked == true){
+                        time = morningBtn.getText().toString();
                     }
-                    else if(count != 1){
-                        Toast.makeText(getActivity(),"아침 점심 저녁 중 하나만 선택하세요.",Toast.LENGTH_LONG).show();
+                    else if(lunchClicked == true){
+                        time = lunchBtn.getText().toString();
                     }
                     else {
-                        String nickname = dbHelper.getNickname();
-                        int foodID = dbHelper.getFoodIDByFoodName(recordFoodName.getText().toString());
-                        String date = getCurrentDateTime();
-                        String time;
-                        if (morningClicked == true) {
-                            time = morningBtn.getText().toString();
-                        } else if (lunchClicked == true) {
-                            time = lunchBtn.getText().toString();
-                        } else {
-                            time = dinnerBtn.getText().toString();
-                        }
-
-                        dbHelper.addIntake(nickname, foodID, date, time);
-
-                        morningClicked = false;
-                        lunchClicked = false;
-                        dinnerClicked = false;
-
-                        MainActivity mainActivity = (MainActivity) requireActivity();
-                        mainActivity.getSupportFragmentManager().beginTransaction().replace(R.id.container, mainActivity.fragment_main).commit();
+                        time = dinnerBtn.getText().toString();
                     }
+
+//                    dbHelper.addIntake(nickname, foodname, date, time);
+
+                     morningClicked = false;
+                     lunchClicked = false;
+                     dinnerClicked = false;
+
+//                    MainActivity mainActivity = (MainActivity) requireActivity();
+//                    mainActivity.getSupportFragmentManager().beginTransaction().replace(R.id.container, mainActivity.fragment_main).commit();
+
+                    Intent intent = new Intent(getActivity(), MainActivity.class);
+                    startActivity(intent);
+
                 }
+
             }
         });
 
@@ -197,5 +198,7 @@ public class RecordFragment extends Fragment {
         Date currentDateTime = new Date();
         return dateFormat.format(currentDateTime);
     }
+
+
 
 }

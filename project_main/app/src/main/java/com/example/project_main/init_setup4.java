@@ -7,19 +7,21 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 
+import java.util.ArrayList;
+
 public class init_setup4 extends Activity {
 
 
     Button btnPre4, btnNext4;
     TextView spinnerText;
-
-    Button checkBtn4;
 
     private Spinner exerciseSpinner;
 
@@ -32,8 +34,6 @@ public class init_setup4 extends Activity {
         btnNext4 = findViewById(R.id.btnNext4);
         spinnerText = findViewById(R.id.spinnerText);
         exerciseSpinner = findViewById(R.id.exerciseSpinner);
-
-        checkBtn4 = findViewById(R.id.checkBtn4);
 
 
         ArrayAdapter<CharSequence> exerciseAdapter = ArrayAdapter.createFromResource(this, R.array.exerciselist
@@ -71,8 +71,6 @@ public class init_setup4 extends Activity {
         });
 
 
-
-
         btnPre4.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -85,8 +83,6 @@ public class init_setup4 extends Activity {
                 intent.putExtra("weight", weight);
                 intent.putExtra("sex", sex);
                 intent.putExtra("activity", activity);
-
-
                 startActivity(intent);
                 finish();
             }
@@ -98,6 +94,7 @@ public class init_setup4 extends Activity {
                 String activity = exerciseSpinner.getSelectedItem().toString();
 
                 Intent intent = new Intent(getApplicationContext(), init_setup5.class);
+
                 intent.putExtra("nickname", nickname);
                 intent.putExtra("age", age);
                 intent.putExtra("height", height);
@@ -110,10 +107,10 @@ public class init_setup4 extends Activity {
         });
     }
 
-
     @Override
     public void onBackPressed() {
         //super.onBackPressed();
     }
+
 
 }

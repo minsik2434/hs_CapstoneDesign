@@ -15,7 +15,7 @@ import java.util.ArrayList;
 
 public class init_setup5 extends Activity {
 
-    TextView textCal, carbohydrateGram, proteinGram, fatGram;
+    TextView textKcal, carbohydrateGram, proteinGram, fatGram;
     Button btnStart;
 
 
@@ -26,12 +26,11 @@ public class init_setup5 extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.init_setup5);
 
-        textCal = findViewById(R.id.textKcal);
+        textKcal = findViewById(R.id.textKcal);
         btnStart = findViewById(R.id.btnStart);
         carbohydrateGram = findViewById(R.id.carbohydrateGram);
         proteinGram = findViewById(R.id.proteinGram);
         fatGram = findViewById(R.id.fatGram);
-
 
         // SharedPreferences 객체 초기화
         preferences = getSharedPreferences("my_preferences", MODE_PRIVATE);
@@ -48,17 +47,18 @@ public class init_setup5 extends Activity {
         Integer height = Integer.valueOf(heightString);
         Integer weight = Integer.valueOf(weightString);
 
+        double recommendKcal = Harris_Benedict(age, weight, height, sex, activity);
 
-        double recommendCal = Harris_Benedict(age, weight, height, sex, activity);
+        double carbohydrate = calCarbohydrate(recommendKcal);
+        double protein=calProtein(recommendKcal);
+        double fat=calFat(recommendKcal);
 
-        double carbohydrate = calCarbohydrate(recommendCal);
-        double protein=calProtein(recommendCal);
-        double fat=calFat(recommendCal);
-
-        textCal.setText(String.valueOf((int)recommendCal));
+        textKcal.setText(String.valueOf((int)recommendKcal));
         carbohydrateGram.setText(String.valueOf((int)carbohydrate));
         proteinGram.setText(String.valueOf((int)protein));
         fatGram.setText(String.valueOf((int)fat));
+
+        int intRecommendedKcal = (int)recommendKcal;
 
 
         btnStart.setOnClickListener(new View.OnClickListener() {
@@ -72,7 +72,7 @@ public class init_setup5 extends Activity {
 
                 MyDatabaseHelper dbHelper = new MyDatabaseHelper(getApplicationContext());
 
-                dbHelper.addUser(nickname, age, sex, height, weight, activity);
+                dbHelper.addUser(nickname, age, sex, height, weight, activity,intRecommendedKcal);
 
                 Intent intent = new Intent(init_setup5.this, MainActivity.class);
                 startActivity(intent);
@@ -132,6 +132,7 @@ public class init_setup5 extends Activity {
 
         return recommendCal;
     }
+
     //        일일 권장칼로리 = 60%탄수화물, 15%단백질, 25%지방
     //        1그램의 탄수화물은 4칼로리에 해당
     //        1그램의 단백질은 4칼로리에 해당
@@ -151,8 +152,6 @@ public class init_setup5 extends Activity {
         double fat=recommendCal*0.25/9;
         return fat;
     }
-
-
 
 
 }

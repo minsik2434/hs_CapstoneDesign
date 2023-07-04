@@ -49,7 +49,8 @@ public class TimeState extends Fragment {
     String timeStateStr="morning"; //어댑터 선택을 위한 변수, 첫 화면에 아침 리스트 보여줌
 
     MyDatabaseHelper dbHelper;
-    SQLiteDatabase database;
+    private ArrayList<RecodeSelectDto> intake_food = new ArrayList<RecodeSelectDto>();
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -63,12 +64,16 @@ public class TimeState extends Fragment {
 
         //DB Connect
         dbHelper = new MyDatabaseHelper(getActivity().getApplicationContext());
-        database = dbHelper.getWritableDatabase();
+
 
         //음식 배열에 정보 추가
         for (int i = 0; i < timeList.length; i++) {
             //정보 추가
-            getFoodIntakeExecuteQuery(timeList[i]);
+            String sql_sentence = "select food_table.foodname, manufacturer, classification, kcal, carbohydrate, protein, province, sugars, salt, cholesterol, saturated_fat, trans_fat\n" +
+                    "from food_table, intake_table\n" +
+                    "where food_table.foodname = intake_table.foodname\n" +
+                    "and intakeID in (select intakeID from intake_table where substr(date,1,10) = date('now')) and time= '"+timeList[i]+"';";
+            intake_food = dbHelper.executeQuerySearchIntakeFoodToday(sql_sentence);
             //탄단지 정보 종합
             for (int j = 0; j < foodName.size(); j++) {
                 foodInfo.add("탄수화물 " + foodCarbohydrate.get(j) + "g" + " 단백질 " + foodProtein.get(j) + "g" + " 지방 " + foodProvince.get(j) + "g");
@@ -163,33 +168,6 @@ public class TimeState extends Fragment {
                 mainFoodListView.setAdapter(customDinnerAdapter);
                 break;
         }
-    }
-
-    private void getFoodIntakeExecuteQuery(String time){
-
-        Cursor cursor = database.rawQuery("select foodname, kcal, carbohydrate, protein, province, sugars, salt, cholesterol, trans_fat, saturated_fat\n" +
-                "               from food_table, nutrition, intake_table\n" +
-                "               where food_table.foodID = nutrition.foodID\n" +
-                "               and food_table.foodID = intake_table.foodID\n" +
-                "               and intakeID in (select intakeID from intake_table where substr(date,1,10) = DATE('now'))\n" +
-                "\t\t\t   and time='"+time+"';",null);
-        int recordCount = cursor.getCount();
-        for (int i = 0; i < recordCount; i++){
-            cursor.moveToNext();
-            foodName.add(cursor.getString(0));
-            foodKcal.add(cursor.getInt(1));
-            foodCarbohydrate.add(cursor.getFloat(2));
-            foodProtein.add(cursor.getFloat(3));
-            foodProvince.add(cursor.getFloat(4));
-
-            foodSugar.add(cursor.getFloat(5));
-            foodSalt.add(cursor.getFloat(6));
-            foodCholesterol.add(cursor.getFloat(7));
-            foodTransFat.add(cursor.getFloat(8));
-            foodSaturFat.add(cursor.getFloat(9));
-        }
-        cursor.close();
-
     }
 }
 
