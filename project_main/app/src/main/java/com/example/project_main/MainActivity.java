@@ -75,10 +75,10 @@ public class MainActivity extends AppCompatActivity {
         SharedPreferences preferences = getSharedPreferences("my_preferences", MODE_PRIVATE);
         boolean isFirstRun = preferences.getBoolean("first_run", true);
 
-        // 테스트를 위해 값을 초기화
-//        SharedPreferences.Editor editor = preferences.edit();
-//        editor.putBoolean("first_run", true);
-//        editor.apply();
+//        // 테스트를 위해 값을 초기화
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putBoolean("first_run", true);
+        editor.apply();
 
         // 앱을 처음 실행했을 때
         if (isFirstRun) {
@@ -178,41 +178,41 @@ public class MainActivity extends AppCompatActivity {
                 String barcode = result.getContents();
                 Toast.makeText(this, "Scanned: " + barcode, Toast.LENGTH_LONG).show();
 
-                try
-                {
-                    //DB Connect
-                    MyDatabaseHelper dbHelper = new MyDatabaseHelper(this);
-                    RecodeSelectDto recode_list = new RecodeSelectDto();
-                    recode_list = dbHelper.executeQuerySearchFoodByBarcode(barcode);
-                    String foodImg = recode_list.getFoodImage();
-                    String foodName = recode_list.getFoodName();
-                    int foodKcal = recode_list.getFoodKcal();
-                    float foodCarbohydrate = recode_list.getFoodCarbohydrate();
-                    float foodProtein = recode_list.getFoodProtein();
-                    float foodProvince = recode_list.getFoodProvince();
-                    String foodRaw_material = recode_list.getRaw_material();
-
-                    if (foodName != null)
-                    {
-                        //음식 탄단지 정보 저장
-                        String foodInfo = "탄수화물 " + foodCarbohydrate + "g" + " 단백질 " + foodProtein + "g" + " 지방 " + foodProvince + "g";
-                        //이미지 저장해야 함
-                        searchedFoodName.setText(foodName);
-                        searchedFoodKcal.setText(foodKcal+"Kcal");
-                        searchedFoodNutriInfo.setText(foodInfo);
-                        raw_material_text.setText(foodRaw_material);
-                        Toast.makeText(this, "음식 정보를 불러왔습니다!", Toast.LENGTH_SHORT).show();
-                    }
-                    else
-                    {
-                        Toast.makeText(this, "음식 정보가 없습니다!", Toast.LENGTH_SHORT).show();
-                    }
-                    Toast.makeText(this, "음식 정보를 불러왔습니다!", Toast.LENGTH_SHORT).show();
-
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    Toast.makeText(this, "An error occured!", Toast.LENGTH_SHORT).show();
-                }
+//                try
+//                {
+//                    //DB Connect
+//                    MyDatabaseHelper dbHelper = new MyDatabaseHelper(this);
+//                    RecodeSelectDto recode_list = new RecodeSelectDto();
+//                    recode_list = dbHelper.executeQuerySearchFoodByBarcode(barcode);
+//                    String foodImg = recode_list.getFoodImage();
+//                    String foodName = recode_list.getFoodName();
+//                    int foodKcal = recode_list.getFoodKcal();
+//                    float foodCarbohydrate = recode_list.getFoodCarbohydrate();
+//                    float foodProtein = recode_list.getFoodProtein();
+//                    float foodProvince = recode_list.getFoodProvince();
+//                    String foodRaw_material = recode_list.getRaw_material();
+//
+//                    if (foodName != null)
+//                    {
+//                        //음식 탄단지 정보 저장
+//                        String foodInfo = "탄수화물 " + foodCarbohydrate + "g" + " 단백질 " + foodProtein + "g" + " 지방 " + foodProvince + "g";
+//                        //이미지 저장해야 함
+//                        searchedFoodName.setText(foodName);
+//                        searchedFoodKcal.setText(foodKcal+"Kcal");
+//                        searchedFoodNutriInfo.setText(foodInfo);
+//                        raw_material_text.setText(foodRaw_material);
+//                        Toast.makeText(this, "음식 정보를 불러왔습니다!", Toast.LENGTH_SHORT).show();
+//                    }
+//                    else
+//                    {
+//                        Toast.makeText(this, "음식 정보가 없습니다!", Toast.LENGTH_SHORT).show();
+//                    }
+//                    Toast.makeText(this, "음식 정보를 불러왔습니다!", Toast.LENGTH_SHORT).show();
+//
+//                } catch (Exception e) {
+//                    e.printStackTrace();
+//                    Toast.makeText(this, "An error occured!", Toast.LENGTH_SHORT).show();
+//                }
 
             } else {
                 Toast.makeText(this, "No barcode scanned", Toast.LENGTH_SHORT).show();

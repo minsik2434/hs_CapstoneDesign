@@ -54,12 +54,6 @@
             android:layout_marginBottom="40dp"
             />
 
-        <Button
-            android:id="@+id/checkBtn4"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            />
-
 
     </LinearLayout>
 

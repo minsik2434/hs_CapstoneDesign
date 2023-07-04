@@ -6,7 +6,6 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
-import android.widget.ArrayAdapter;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
@@ -25,7 +24,6 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
     private static String DB_NAME = "eatdatabase.db";
     private SQLiteDatabase mDataBase;
     private Context mContext;
-    private ArrayAdapter<String> adapter;
     //table
     private static final String USER_TABLE_NAME = "user_table";
     private static final String FOOD_TABLE_NAME = "food_table";
@@ -42,6 +40,7 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
     private static final String USER_TABLE_COLUMN_HEIGHT = "height";
     private static final String USER_TABLE_COLUMN_WEIGHT = "weight";
     private static final String USER_TABLE_COLUMN_ACTIVITY = "activity";
+    private static final String USER_TABLE_COLUMN_RECOMMENDED_KCAL = "recommended_kcal";
     //food_table column
     private static final String FOOD_TABLE_COLUMN_FOODID = "foodID";
     private static final String FOOD_TABLE_COLUMN_FOODNAME = "foodname";
@@ -62,7 +61,7 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
     //intake_table column
     private static final String INTAKE_TABLE_COLUMN_INTAKEID = "intakeID";
     private static final String INTAKE_TABLE_COLUMN_NICKNAME = "nickname";
-    private static final String INTAKE_TABLE_COLUMN_FOODID = "foodID";
+    private static final String INTAKE_TABLE_COLUMN_FOODNAME = "foodname";
     private static final String INTAKE_TABLE_COLUMN_DATE = "date";
     private static final String INTAKE_TABLE_COLUMN_TIME = "time";
     //allergy_table column
@@ -118,6 +117,7 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
                 outputStream.write(mBuffer, 0, mLength);
             }
             outputStream.flush();
+            ;
             outputStream.close();
             inputStream.close();
         }catch (IOException e){
@@ -143,27 +143,57 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
         super.close();
     }
 
-    public RecodeSelectDto executeQuerySearchFoodByBarcode(String barcodeNum) {
-        SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor = db.rawQuery("select food_image, foodname, kcal, carbohydrate, protein, province, raw_material " +
-                "from food_table, nutrition where food_table.foodID = nutrition.foodID and barcode = '"+barcodeNum+"';",null);
-        cursor.moveToLast();
-        RecodeSelectDto recode_list = new RecodeSelectDto();
-        recode_list.setFoodImage(cursor.getString(0));
-        recode_list.setFoodName(cursor.getString(1));
-        recode_list.setFoodKcal((int) cursor.getFloat(2));
-        recode_list.setFoodCarbohydrate(cursor.getFloat(3));
-        recode_list.setFoodProtein(cursor.getFloat(4));
-        recode_list.setFoodProvince(cursor.getFloat(5));
-        recode_list.setRaw_material(cursor.getString(6));
+//
+//    public RecodeSelectDto executeQuerySearchFoodByBarcode(String barcodeNum) {
+//        SQLiteDatabase db = this.getReadableDatabase();
+//        Cursor cursor = db.rawQuery("select food_image, foodname, kcal, carbohydrate, protein, province, raw_material " +
+//                "from food_table, nutrition where food_table.foodID = nutrition.foodID and barcode = '"+barcodeNum+"';",null);
+//        cursor.moveToLast();
+//        RecodeSelectDto recode_list = new RecodeSelectDto();
+//        recode_list.setFoodImage(cursor.getString(0));
+//        recode_list.setFoodName(cursor.getString(1));
+//        recode_list.setFoodKcal((int) cursor.getFloat(2));
+//        recode_list.setFoodCarbohydrate(cursor.getFloat(3));
+//        recode_list.setFoodProtein(cursor.getFloat(4));
+//        recode_list.setFoodProvince(cursor.getFloat(5));
+//        recode_list.setRaw_material(cursor.getString(6));
+//
+//        cursor.close();
+//        db.close();
+//
+//        return recode_list;
+//    }
 
+
+    //오늘 먹은 음식의 영양 정보
+    public ArrayList<RecodeSelectDto> executeQuerySearchIntakeFoodToday(String sql_sentence){
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery(sql_sentence,null);
+        int recordCount = cursor.getCount();
+        ArrayList<RecodeSelectDto> intake_food = new ArrayList<RecodeSelectDto>();
+
+        for (int i = 0; i < recordCount; i++){
+            cursor.moveToNext();
+            intake_food.get(i).setFoodName(cursor.getString(0));
+            intake_food.get(i).setManufacturer(cursor.getString(1));
+            intake_food.get(i).setClassification(cursor.getString(2));
+            intake_food.get(i).setKcal(cursor.getFloat(3));
+            intake_food.get(i).setCarbohydrate(cursor.getFloat(4));
+            intake_food.get(i).setProtein(cursor.getFloat(5));
+            intake_food.get(i).setProvince(cursor.getFloat(6));
+            intake_food.get(i).setSugars(cursor.getFloat(7));
+            intake_food.get(i).setSalt(cursor.getFloat(8));
+            intake_food.get(i).setCholesterol(cursor.getFloat(9));
+            intake_food.get(i).setSaturated_fat(cursor.getFloat(10));
+            intake_food.get(i).setTrans_fat(cursor.getFloat(11));
+        }
         cursor.close();
         db.close();
 
-        return recode_list;
+        return intake_food;
     }
 
-    void addUser(String nickname, int age, String sex, int height, int weight, String activity)
+    void addUser(String nickname, int age, String sex, int height, int weight, String activity, int recommended_kcal)
     {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues cv = new ContentValues();
@@ -174,99 +204,40 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
         cv.put(USER_TABLE_COLUMN_HEIGHT, height);
         cv.put(USER_TABLE_COLUMN_WEIGHT, weight);
         cv.put(USER_TABLE_COLUMN_ACTIVITY, activity);
+        cv.put(USER_TABLE_COLUMN_RECOMMENDED_KCAL, recommended_kcal);
 
         long result = db.insert(USER_TABLE_NAME, null, cv);
+
+        if (result == -1)
+        {
+            Toast.makeText(mContext, "Failed", Toast.LENGTH_SHORT).show();
+        }
+        else
+        {
+            Toast.makeText(mContext, "데이터 추가 성공", Toast.LENGTH_SHORT).show();
+        }
+        db.close();
     }
-    // 알러지 추가
-    void addAllergies(int allergyID, String allergyName) {
+
+    void addIntake(String nickname, String foodname, String date, String time){
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues cv = new ContentValues();
 
-        cv.put(ALLERGY_TABLE_COLUMN_ALLERGYID, allergyID);
-        cv.put(ALLERGY_TABLE_COLUMN_ALLERGY_NAME, allergyName);
+        int maxIntakeID = getMaxIntakeID();
+        int nextIntakeID = maxIntakeID+1;
 
-        long result = db.insert(ALLERGY_TABLE_NAME, null, cv);
-
-    }
-
-    // 지병 추가
-    void addDiseases(int diseaseID, String disease_name) {
-        SQLiteDatabase db = this.getWritableDatabase();
-        ContentValues cv = new ContentValues();
-
-        cv.put(DISEASE_TABLE_COLUMN_DISEASEID, diseaseID);
-        cv.put(DISEASE_TABLE_COLUMN_DISEASE_NAME, disease_name);
-
-        long result = db.insert(DISEASE_TABLE_NAME, null, cv);
-
-    }
-
-    // 사용자 알러지 추가
-    void addUserAllergies(String nickname, int allergyID) {
-        SQLiteDatabase db = this.getWritableDatabase();
-        ContentValues cv = new ContentValues();
-
-        cv.put(ALLERGY_USER_TABLE_COLUMN_ALLERGYID, allergyID);
-        cv.put(ALLERGY_USER_TABLE_COLUMN_NICKNAME, nickname);
-
-        long result = db.insert(ALLERGY_USER_TABLE_NAME, null, cv);
-
-    }
-
-    // 사용자 지병 추가
-    void addUserDiseases(String nickname, int diseaseID) {
-        SQLiteDatabase db = this.getWritableDatabase();
-        ContentValues cv = new ContentValues();
-
-        cv.put(DISEASE_USER_TABLE_COLUMN_NICKNAME, nickname);
-        cv.put(DISEASE_USER_TABLE_COLUMN_DISEASEID, diseaseID);
-
-        long result = db.insert(DISEASE_USER_TABLE_NAME, null, cv);
-
-    }
-
-    // 섭취 정보 추가
-    void addIntake(String nickname, int foodID, String date, String time) {
-        SQLiteDatabase db = this.getWritableDatabase();
-        ContentValues cv = new ContentValues();
-
-        int maxIntakeID = getMaxIntakeID(); // 섭취 테이블에서 가장 큰 intakeID를 가져옴
-        int nextIntakeID = maxIntakeID + 1; // 다음 intakeID를 자동으로 +1해준다.
-
-        // 테이블에 레코드가 없을 경우 intakeID를 0으로 설정
-        if (maxIntakeID == -1) {
+        if(maxIntakeID == -1){
             nextIntakeID = 0;
         }
 
         cv.put(INTAKE_TABLE_COLUMN_INTAKEID, nextIntakeID);
         cv.put(INTAKE_TABLE_COLUMN_NICKNAME, nickname);
-        cv.put(INTAKE_TABLE_COLUMN_FOODID, foodID);
+        cv.put(INTAKE_TABLE_COLUMN_FOODNAME, foodname);
         cv.put(INTAKE_TABLE_COLUMN_DATE, date);
         cv.put(INTAKE_TABLE_COLUMN_TIME, time);
 
         long result = db.insert(INTAKE_TABLE_NAME, null, cv);
-    }
 
-    // 음식 이름으로 음식 ID찾기
-    int getFoodIDByFoodName(String foodName) {
-        SQLiteDatabase db = this.getReadableDatabase();
-        String[] columns = {FOOD_TABLE_COLUMN_FOODID};
-        String selection = FOOD_TABLE_COLUMN_FOODNAME + " = ?";
-        String[] selectionArgs = {foodName};
-        Cursor cursor = db.query(FOOD_TABLE_NAME, columns, selection, selectionArgs, null, null, null);
-
-        int foodID = -1; // 기본적으로 -1로 초기화하여 음식 ID가 찾아지지 않았을 때를 나타냄
-
-
-        if (cursor.moveToFirst()) {
-            int columnIndex = cursor.getColumnIndex(FOOD_TABLE_COLUMN_FOODID);
-            if (columnIndex != -1) {
-                foodID = cursor.getInt(columnIndex);
-            }
-        }
-
-        cursor.close();
-        return foodID;
     }
 
     // 가장 큰 intakeID 가져오기
@@ -282,7 +253,61 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
         return maxID;
     }
 
-    // 닉네임을 가져오는 함수
+
+    // 알러지 추가
+    void addAllergies(int allergyID, String allergyName) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues cv = new ContentValues();
+
+        cv.put(ALLERGY_TABLE_COLUMN_ALLERGYID, allergyID);
+        cv.put(ALLERGY_TABLE_COLUMN_ALLERGY_NAME, allergyName);
+
+        long result = db.insert(ALLERGY_TABLE_NAME, null, cv);
+        db.close();
+
+    }
+
+
+    // 지병 추가
+    void addDiseases(int diseaseID, String disease_name) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues cv = new ContentValues();
+
+        cv.put(DISEASE_TABLE_COLUMN_DISEASEID, diseaseID);
+        cv.put(DISEASE_TABLE_COLUMN_DISEASE_NAME, disease_name);
+
+        long result = db.insert(DISEASE_TABLE_NAME, null, cv);
+        db.close();
+
+    }
+
+    // 사용자 알러지 추가
+    void addUserAllergies(String nickname, int allergyID) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues cv = new ContentValues();
+
+        cv.put(ALLERGY_USER_TABLE_COLUMN_ALLERGYID, allergyID);
+        cv.put(ALLERGY_USER_TABLE_COLUMN_NICKNAME, nickname);
+
+        long result = db.insert(ALLERGY_USER_TABLE_NAME, null, cv);
+        db.close();
+
+    }
+
+    // 사용자 지병 추가
+    void addUserDiseases(String nickname, int diseaseID) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues cv = new ContentValues();
+
+        cv.put(DISEASE_USER_TABLE_COLUMN_NICKNAME, nickname);
+        cv.put(DISEASE_USER_TABLE_COLUMN_DISEASEID, diseaseID);
+
+        long result = db.insert(DISEASE_USER_TABLE_NAME, null, cv);
+        db.close();
+
+    }
+
+
     String getNickname() {
         SQLiteDatabase db = getReadableDatabase();
         String result = "";

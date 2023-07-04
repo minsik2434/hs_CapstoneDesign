@@ -29,13 +29,11 @@ public class NutritionFirst extends Fragment {
     private ProgressBar progressbarProvince;
 
     MyDatabaseHelper dbHelper;
-    SQLiteDatabase database;
-
-    private ArrayList<Integer> foodKcal = new ArrayList<>();
-    private ArrayList<Float> foodCarbohydrate = new ArrayList<>();
-    private ArrayList<Float> foodProtein = new ArrayList<>();
-    private ArrayList<Float> foodProvince = new ArrayList<>();
-
+    private ArrayList<RecodeSelectDto> intake_food = new ArrayList<RecodeSelectDto>();
+    String sql_sentence = "select food_table.foodname, manufacturer, classification, kcal, carbohydrate, protein, province, sugars, salt, cholesterol, saturated_fat, trans_fat\n" +
+            "from food_table, intake_table\n" +
+            "where food_table.foodname = intake_table.foodname\n" +
+            "and intakeID in (select intakeID from intake_table where substr(date,1,10) = date('now'));";
 
     private TextView kcalPercentage;
     private TextView carboPercentage;
@@ -63,8 +61,7 @@ public class NutritionFirst extends Fragment {
 
         //DB Connect
         dbHelper = new MyDatabaseHelper(getActivity().getApplicationContext());
-        database = dbHelper.getWritableDatabase();
-        executeQuery();
+        intake_food = dbHelper.executeQuerySearchIntakeFoodToday(sql_sentence);
 
         //변수 선언
         int totalKcal=0;
@@ -73,12 +70,12 @@ public class NutritionFirst extends Fragment {
         Float totalProvince=0.0f;
 
         //총합
-        for (int i = 0; i < foodKcal.size(); i++)
+        for (int i = 0; i < intake_food.size(); i++)
         {
-            totalKcal += foodKcal.get(i);
-            totalCarbohydrate += foodCarbohydrate.get(i);
-            totalProtein += foodProtein.get(i);
-            totalProvince += foodProvince.get(i);
+            totalKcal += (int) intake_food.get(i).getKcal();
+            totalCarbohydrate += intake_food.get(i).getCarbohydrate();
+            totalProtein += intake_food.get(i).getProtein();
+            totalProvince += intake_food.get(i).getProvince();
         }
 
         //테스트
@@ -108,7 +105,7 @@ public class NutritionFirst extends Fragment {
         }
         else;
         //endregion
-        
+
         //region 남은 칼로리 표시. 초과하면 주의 알림. 2200은 권장칼로리 임시값
         if (2200 - totalKcal < 0) {
             //주의
@@ -123,24 +120,6 @@ public class NutritionFirst extends Fragment {
         return view;
     }
 
-    //오늘 먹은 음식의 영양 정보
-    private void executeQuery(){
-        Cursor cursor = database.rawQuery("select kcal, carbohydrate, protein, province\n" +
-                "from food_table, nutrition, intake_table\n" +
-                "where food_table.foodID = nutrition.foodID\n" +
-                "and food_table.foodID = intake_table.foodID\n" +
-                "and intakeID in (select intakeID from intake_table where substr(date,1,10) = DATE('now') );",null);
-        int recordCount = cursor.getCount();
 
-        for (int i = 0; i < recordCount; i++){
-            cursor.moveToNext();
-            foodKcal.add(cursor.getInt(0));
-            foodCarbohydrate.add(cursor.getFloat(1));
-            foodProtein.add(cursor.getFloat(2));
-            foodProvince.add(cursor.getFloat(3));
-        }
-
-        cursor.close();
-    }
 
 }

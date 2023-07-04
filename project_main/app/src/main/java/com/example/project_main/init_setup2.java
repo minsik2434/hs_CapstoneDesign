@@ -19,9 +19,6 @@ public class init_setup2 extends Activity {
     RadioGroup rGroup;
     RadioButton btnMan, btnWoman;
 
-    Button checkBtn;
-
-
     private static final int REQUEST_CODE_SETUP1 = 1002; // setup1 액티비티 요청 코드
 
     @Override
@@ -51,29 +48,29 @@ public class init_setup2 extends Activity {
             @Override
             public void onClick(View view) {
 
-//                String age = editAge.getText().toString();
-//                String height = editHeight.getText().toString();
-//                String weight = editWeight.getText().toString();
-//                String sex;
-//
-//                if(btnMan.isChecked()==true){
-//                    sex = "남성";
-//                }
-//                else if(btnWoman.isChecked()==true){
-//                    sex = "여성";
-//                }
-//                else{
-//                    Toast.makeText(init_setup2.this, "성별을 골라주세요.", Toast.LENGTH_SHORT).show();
-//                    return;
-//                }
-//
-//
+                String age = editAge.getText().toString();
+                String height = editHeight.getText().toString();
+                String weight = editWeight.getText().toString();
+                String sex;
+
+                if(btnMan.isChecked()==true){
+                    sex = "남성";
+                }
+                else if(btnWoman.isChecked()==true){
+                    sex = "여성";
+                }
+                else{
+                    Toast.makeText(init_setup2.this, "성별을 골라주세요.", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+
                 Intent intent = new Intent(getApplicationContext(), init_setup1.class);
-//                intent.putExtra("nickname", nickname);
-//                intent.putExtra("age", age);
-//                intent.putExtra("height", height);
-//                intent.putExtra("weight", weight);
-//                intent.putExtra("sex", sex);
+                intent.putExtra("nickname", nickname);
+                intent.putExtra("age", age);
+                intent.putExtra("height", height);
+                intent.putExtra("weight", weight);
+                intent.putExtra("sex", sex);
                 startActivity(intent);
                 finish();
 
