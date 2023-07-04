@@ -3,6 +3,7 @@ package com.example.project_main;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
+import android.media.MediaRouter;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -29,21 +30,19 @@ public class NutritionFirst extends Fragment {
     private ProgressBar progressbarProvince;
 
     MyDatabaseHelper dbHelper;
-    SQLiteDatabase database;
+    private ArrayList<RecodeSelectDto> intake_food = new ArrayList<RecodeSelectDto>();
+    private ArrayList<UserDto> userInfo = new ArrayList<UserDto>();
 
-    private ArrayList<Integer> foodKcal = new ArrayList<>();
-    private ArrayList<Float> foodCarbohydrate = new ArrayList<>();
-    private ArrayList<Float> foodProtein = new ArrayList<>();
-    private ArrayList<Float> foodProvince = new ArrayList<>();
-
+    String sql_sentence = "select food_table.foodname, manufacturer, classification, kcal, carbohydrate, protein, province, sugars, salt, cholesterol, saturated_fat, trans_fat\n" +
+            "from food_table, intake_table\n" +
+            "where food_table.foodname = intake_table.foodname\n" +
+            "and intakeID in (select intakeID from intake_table where substr(date,1,10) = date('now'));";
 
     private TextView kcalPercentage;
     private TextView carboPercentage;
     private TextView proteinPercentage;
     private TextView provincePercentage;
     private TextView remainKcal;
-
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -61,10 +60,13 @@ public class NutritionFirst extends Fragment {
         provincePercentage = view.findViewById(R.id.provinceNutri1Text);
         remainKcal = view.findViewById(R.id.remainKcal);
 
-        //DB Connect
+        //DB Connect get intake food
         dbHelper = new MyDatabaseHelper(getActivity().getApplicationContext());
-        database = dbHelper.getWritableDatabase();
-        executeQuery();
+        intake_food = dbHelper.executeQuerySearchIntakeFoodToday(sql_sentence);
+
+        //DB Connect get user info
+        dbHelper = new MyDatabaseHelper(getActivity().getApplicationContext());
+        userInfo = dbHelper.ExecuteQueryGetUserInfo();
 
         //변수 선언
         int totalKcal=0;
@@ -73,28 +75,25 @@ public class NutritionFirst extends Fragment {
         Float totalProvince=0.0f;
 
         //총합
-        for (int i = 0; i < foodKcal.size(); i++)
+        for (int i = 0; i < intake_food.size(); i++)
         {
-            totalKcal += foodKcal.get(i);
-            totalCarbohydrate += foodCarbohydrate.get(i);
-            totalProtein += foodProtein.get(i);
-            totalProvince += foodProvince.get(i);
+            totalKcal += (int) intake_food.get(i).getKcal();
+            totalCarbohydrate += intake_food.get(i).getCarbohydrate();
+            totalProtein += intake_food.get(i).getProtein();
+            totalProvince += intake_food.get(i).getProvince();
         }
 
-        //테스트
-        //Toast.makeText(getActivity().getApplicationContext(), Math.round( (totalProvince/100.0f)*100 )+"", Toast.LENGTH_SHORT).show();
-
         //프로그레스 바 설정. 2200.0f 는 임시값. (총 먹은 칼로리/권장 칼로리)
-        mainCircleProgressbar.setProgress( Math.round( (totalKcal/2200.0f)*100) ) ;
+        mainCircleProgressbar.setProgress( Math.round( (totalKcal/userInfo.get(0).getRecommendedKcal())*100) ) ;
         progressbarCarbohydrate.setProgress( Math.round( (totalCarbohydrate/100.0f)*100 ) );
         progressbarProtein.setProgress( Math.round( (totalProtein/100.0f)*100 ) );
         progressbarProvince.setProgress( Math.round( (totalProvince/100.0f)*100 ) );
 
         //탄단지 총섭취량/권장섭취량 텍스트 설정. 권장섭취량은 임시값
         kcalPercentage.setText(totalKcal + "");
-        carboPercentage.setText( totalCarbohydrate+ " / 100.0 g");
-        proteinPercentage.setText( totalProtein+ " / 100.0 g");
-        provincePercentage.setText( totalProvince+ " / 100.0 g");
+        carboPercentage.setText( String.format("%.2f",totalCarbohydrate) + " / 100.0 g");
+        proteinPercentage.setText( String.format("%.2f",totalProtein)+ " / 100.0 g");
+        provincePercentage.setText( String.format("%.2f",totalProvince)+ " / 100.0 g");
 
         //region code(탄단지 초과 섭취 시)
         if (100 - totalCarbohydrate < 0){
@@ -108,39 +107,21 @@ public class NutritionFirst extends Fragment {
         }
         else;
         //endregion
-        
+
         //region 남은 칼로리 표시. 초과하면 주의 알림. 2200은 권장칼로리 임시값
-        if (2200 - totalKcal < 0) {
+        if (userInfo.get(0).getRecommendedKcal() - totalKcal < 0) {
             //주의
-            remainKcal.setText((totalKcal - 2200) + " Kcal를 더 먹었습니다! " + "\n주의해주세요!");
+            remainKcal.setText( ( totalKcal - userInfo.get(0).getRecommendedKcal() )  + " Kcal를 더 먹었습니다! " + "\n주의해주세요!");
             remainKcal.setBackgroundResource(R.drawable.main_food_alert_yellow);
             kcalPercentage.setTextColor(Color.parseColor("#ff0000"));
         }
         else
-            remainKcal.setText( "남은 칼로리는 " + (2200 - totalKcal)+" Kcal 입니다" );
+            remainKcal.setText( "남은 칼로리는 " + ( userInfo.get(0).getRecommendedKcal() - totalKcal)  +" Kcal 입니다" );
         //endregion
 
         return view;
     }
 
-    //오늘 먹은 음식의 영양 정보
-    private void executeQuery(){
-        Cursor cursor = database.rawQuery("select kcal, carbohydrate, protein, province\n" +
-                "from food_table, nutrition, intake_table\n" +
-                "where food_table.foodID = nutrition.foodID\n" +
-                "and food_table.foodID = intake_table.foodID\n" +
-                "and intakeID in (select intakeID from intake_table where substr(date,1,10) = DATE('now') );",null);
-        int recordCount = cursor.getCount();
 
-        for (int i = 0; i < recordCount; i++){
-            cursor.moveToNext();
-            foodKcal.add(cursor.getInt(0));
-            foodCarbohydrate.add(cursor.getFloat(1));
-            foodProtein.add(cursor.getFloat(2));
-            foodProvince.add(cursor.getFloat(3));
-        }
-
-        cursor.close();
-    }
 
 }

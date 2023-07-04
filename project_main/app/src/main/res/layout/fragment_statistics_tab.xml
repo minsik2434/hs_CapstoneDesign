@@ -12,7 +12,6 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal">
 
-
         <Button
             android:id="@+id/fragment_calender_btn"
             android:text="달력"

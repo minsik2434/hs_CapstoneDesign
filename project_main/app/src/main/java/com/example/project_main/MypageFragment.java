@@ -1,6 +1,5 @@
 package com.example.project_main;
 
-import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
@@ -12,19 +11,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.TextView;
-import android.widget.Toast;
+
+import java.util.ArrayList;
 
 public class MypageFragment extends Fragment {
 
     MyDatabaseHelper dbHelper;
-    SQLiteDatabase database;
-
-    private String nickname;
-    private int age;
-    private String sex;
-    private float height;
-    private float weight;
-    private String activity;
+    ArrayList<UserDto> userInfo = new ArrayList<>();
 
     ImageButton mypageSetting;
 
@@ -33,20 +26,19 @@ public class MypageFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_mypage, container, false);
 
-        TextView userProfileName = view.findViewById(R.id.userProfileName);
-        TextView userProfileAge = view.findViewById(R.id.userProfileAge);
+        TextView userProfileNameAgeSex = view.findViewById(R.id.userProfileNameAgeSex);
         TextView userProfileHeight = view.findViewById(R.id.userProfileHeight);
         TextView userProfileWeight = view.findViewById(R.id.userProfileWeight);
+        TextView userProfileActivity = view.findViewById(R.id.userProfileActivity);
 
         //DB Connect
         dbHelper = new MyDatabaseHelper(getActivity().getApplicationContext());
-        database = dbHelper.getWritableDatabase();
-        executeQuery();
+        userInfo = dbHelper.ExecuteQueryGetUserInfo();
 
-        userProfileName.setText(nickname);
-        userProfileAge.setText(age+"");
-        userProfileHeight.setText(height+"");
-        userProfileWeight.setText(weight+"");
+        userProfileNameAgeSex.setText(userInfo.get(0).getNickname()+" / "+userInfo.get(0).getAge()+"세("+userInfo.get(0).getSex()+")");
+        userProfileHeight.setText(userInfo.get(0).getHeight()+"");
+        userProfileWeight.setText(userInfo.get(0).getWeight()+"");
+        userProfileActivity.setText(userInfo.get(0).getActivity());
 
         //설정 버튼(버그 있음)
 //        mypageSetting = view.findViewById(R.id.settingsBtn);
@@ -59,23 +51,6 @@ public class MypageFragment extends Fragment {
 //        });
 
         return view;
-    }
-
-    private void executeQuery(){
-
-        Cursor cursor = database.rawQuery("select nickname, age, sex, height, weight, activity from user_table",null);
-        int recordCount = cursor.getCount();
-        for (int i = 0; i < recordCount; i++){
-            cursor.moveToNext();
-            nickname = cursor.getString(0);
-            age = cursor.getInt(1);
-            sex = cursor.getString(2);
-            height = cursor.getFloat(3);
-            weight = cursor.getFloat(4);
-            activity = cursor.getString(5);
-        }
-        cursor.close();
-
     }
 
 }

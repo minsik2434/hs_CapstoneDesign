@@ -6,7 +6,6 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
-import android.widget.ArrayAdapter;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
@@ -25,7 +24,6 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
     private static String DB_NAME = "eatdatabase.db";
     private SQLiteDatabase mDataBase;
     private Context mContext;
-    private ArrayAdapter<String> adapter;
     //table
     private static final String USER_TABLE_NAME = "user_table";
     private static final String FOOD_TABLE_NAME = "food_table";
@@ -118,6 +116,7 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
                 outputStream.write(mBuffer, 0, mLength);
             }
             outputStream.flush();
+            ;
             outputStream.close();
             inputStream.close();
         }catch (IOException e){
@@ -143,24 +142,116 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
         super.close();
     }
 
-    public RecodeSelectDto executeQuerySearchFoodByBarcode(String barcodeNum) {
+//    public RecodeSelectDto executeQuerySearchFoodByBarcode(String barcodeNum) {
+//        SQLiteDatabase db = this.getReadableDatabase();
+//        Cursor cursor = db.rawQuery("select food_image, foodname, kcal, carbohydrate, protein, province, raw_material " +
+//                "from food_table, nutrition where food_table.foodID = nutrition.foodID and barcode = '"+barcodeNum+"';",null);
+//        cursor.moveToLast();
+//        RecodeSelectDto recode_list = new RecodeSelectDto();
+//        recode_list.setFoodImage(cursor.getString(0));
+//        recode_list.setFoodName(cursor.getString(1));
+//        recode_list.setFoodKcal((int) cursor.getFloat(2));
+//        recode_list.setFoodCarbohydrate(cursor.getFloat(3));
+//        recode_list.setFoodProtein(cursor.getFloat(4));
+//        recode_list.setFoodProvince(cursor.getFloat(5));
+//        recode_list.setRaw_material(cursor.getString(6));
+//
+//        cursor.close();
+//        db.close();
+//
+//        return recode_list;
+//    }
+
+    //오늘 먹은 음식의 영양 정보
+    public ArrayList<RecodeSelectDto> executeQuerySearchIntakeFoodToday(String sql_sentence){
+        ArrayList<RecodeSelectDto> intake_food = new ArrayList<RecodeSelectDto>();
+
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor = db.rawQuery("select food_image, foodname, kcal, carbohydrate, protein, province, raw_material " +
-                "from food_table, nutrition where food_table.foodID = nutrition.foodID and barcode = '"+barcodeNum+"';",null);
-        cursor.moveToLast();
-        RecodeSelectDto recode_list = new RecodeSelectDto();
-        recode_list.setFoodImage(cursor.getString(0));
-        recode_list.setFoodName(cursor.getString(1));
-        recode_list.setFoodKcal((int) cursor.getFloat(2));
-        recode_list.setFoodCarbohydrate(cursor.getFloat(3));
-        recode_list.setFoodProtein(cursor.getFloat(4));
-        recode_list.setFoodProvince(cursor.getFloat(5));
-        recode_list.setRaw_material(cursor.getString(6));
+        Cursor cursor = db.rawQuery(sql_sentence,null);
+
+//        Cursor cursor = db.rawQuery("select food_table.foodname, manufacturer, classification, kcal, carbohydrate, protein, province, sugars, salt, cholesterol, saturated_fat, trans_fat\n" +
+//                "from food_table, intake_table\n" +
+//                "where food_table.foodname = intake_table.foodname\n" +
+//                "and intakeID in (select intakeID from intake_table where substr(date,1,10) = date('now'));",null);
+        int recordCount = cursor.getCount();
+
+        for (int i = 0; i < recordCount; i++){
+            cursor.moveToNext();
+            RecodeSelectDto test = new RecodeSelectDto();
+
+            test.setFoodName(cursor.getString(0));
+            test.setManufacturer(cursor.getString(1));
+            test.setClassification(cursor.getString(2));
+            test.setKcal(cursor.getFloat(3));
+            test.setCarbohydrate(cursor.getFloat(4));
+            test.setProtein(cursor.getFloat(5));
+            test.setProvince(cursor.getFloat(6));
+            test.setSugars(cursor.getFloat(7));
+            test.setSalt(cursor.getFloat(8));
+            test.setCholesterol(cursor.getFloat(9));
+            test.setSaturated_fat(cursor.getFloat(10));
+            test.setTrans_fat(cursor.getFloat(11));
+            intake_food.add(test);
+        }
 
         cursor.close();
         db.close();
 
-        return recode_list;
+        return intake_food;
+    }
+
+    //칼로리 과다 섭취한 날짜
+    public ArrayList<CalendarDto> ExecuteQueryGetOvereatDay(int suitableKcal){
+        ArrayList<CalendarDto> overeatDay = new ArrayList<CalendarDto>();
+
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery("select substr(date,1,10)\n" +
+                "                from intake_table, food_table\n" +
+                "                where intake_table.foodname = food_table.foodname\n" +
+                "                group by substr(date,1,10)\n" +
+                "                having sum(kcal) > "+suitableKcal+";",null);
+
+        int count = cursor.getCount();
+
+        for (int i = 0; i < count; i++){
+            cursor.moveToNext();
+            CalendarDto dto = new CalendarDto();
+
+            dto.setOvereatDate(cursor.getString(0));
+            overeatDay.add(dto);
+        }
+
+        cursor.close();
+        db.close();
+
+        return overeatDay;
+    }
+    
+    //사용자 정보 가져오기
+    public ArrayList<UserDto> ExecuteQueryGetUserInfo(){
+        ArrayList<UserDto> userInfo = new ArrayList<>();
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        Cursor cursor = db.rawQuery("select nickname, age, sex, height, weight, activity,recommended_kcal from user_table",null);
+        int recordCount = cursor.getCount();
+
+        for (int i = 0; i < recordCount; i++){
+            cursor.moveToNext();
+            UserDto user = new UserDto();
+
+            user.setNickname(cursor.getString(0));
+            user.setAge(cursor.getInt(1));
+            user.setSex(cursor.getString(2));
+            user.setHeight(cursor.getFloat(3));
+            user.setWeight(cursor.getFloat(4));
+            user.setActivity(cursor.getString(5));
+            user.setRecommendedKcal(cursor.getInt(6));
+            userInfo.add(user);
+        }
+        cursor.close();
+        db.close();
+
+        return userInfo;
     }
 
     void addUser(String nickname, int age, String sex, int height, int weight, String activity)
@@ -176,6 +267,15 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
         cv.put(USER_TABLE_COLUMN_ACTIVITY, activity);
 
         long result = db.insert(USER_TABLE_NAME, null, cv);
+
+        if (result == -1)
+        {
+            Toast.makeText(mContext, "Failed", Toast.LENGTH_SHORT).show();
+        }
+        else
+        {
+            Toast.makeText(mContext, "데이터 추가 성공", Toast.LENGTH_SHORT).show();
+        }
     }
     // 알러지 추가
     void addAllergies(int allergyID, String allergyName) {
@@ -188,6 +288,7 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
         long result = db.insert(ALLERGY_TABLE_NAME, null, cv);
 
     }
+
 
     // 지병 추가
     void addDiseases(int diseaseID, String disease_name) {
@@ -257,7 +358,6 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
 
         int foodID = -1; // 기본적으로 -1로 초기화하여 음식 ID가 찾아지지 않았을 때를 나타냄
 
-
         if (cursor.moveToFirst()) {
             int columnIndex = cursor.getColumnIndex(FOOD_TABLE_COLUMN_FOODID);
             if (columnIndex != -1) {
@@ -282,7 +382,6 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
         return maxID;
     }
 
-    // 닉네임을 가져오는 함수
     String getNickname() {
         SQLiteDatabase db = getReadableDatabase();
         String result = "";

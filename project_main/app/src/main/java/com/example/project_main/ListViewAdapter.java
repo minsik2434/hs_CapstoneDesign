@@ -44,13 +44,11 @@ public class ListViewAdapter extends BaseAdapter {
         }
 
         //화면에 보여질 데이터 참조
-        ImageView foodImage = convertView.findViewById(R.id.foodImage);
         TextView foodName = convertView.findViewById(R.id.foodName);
         TextView foodkcal = convertView.findViewById(R.id.foodKcal);
         TextView foodInfo = convertView.findViewById(R.id.foodInfo);
 
         //화면에 보여질 데이터 설정
-        foodImage.setImageResource(listViewItem.getFoodImage());
         foodName.setText(listViewItem.getFoodName());
         foodkcal.setText(listViewItem.getFoodKcal());
         foodInfo.setText(listViewItem.getFoodInfo());
@@ -59,8 +57,8 @@ public class ListViewAdapter extends BaseAdapter {
         return convertView;
     }
 
-    public void addItem(int image, String name, String kcal, String info) {
-        ListViewItem item = new ListViewItem(image,name,kcal,info);
+    public void addItem(String name, String kcal, String info) {
+        ListViewItem item = new ListViewItem(name,kcal,info);
         listViewItemList.add(item);
     }
 

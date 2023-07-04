@@ -27,7 +27,11 @@ public class NutritionSecond extends Fragment {
     private ProgressBar progressbarSaturFat;
 
     MyDatabaseHelper dbHelper;
-    SQLiteDatabase database;
+    private ArrayList<RecodeSelectDto> intake_food = new ArrayList<RecodeSelectDto>();
+    String sql_sentence = "select food_table.foodname, manufacturer, classification, kcal, carbohydrate, protein, province, sugars, salt, cholesterol, saturated_fat, trans_fat\n" +
+            "from food_table, intake_table\n" +
+            "where food_table.foodname = intake_table.foodname\n" +
+            "and intakeID in (select intakeID from intake_table where substr(date,1,10) = date('now'));";
 
     private TextView sugarPercentage;
     private TextView saltPercentage;
@@ -35,7 +39,6 @@ public class NutritionSecond extends Fragment {
     private TextView transFatPercentage;
     private TextView saturFatPercentage;
     private TextView remainNutri2;
-
 
     private ArrayList<Float> foodSugar = new ArrayList<>();
     private ArrayList<Float> foodSalt = new ArrayList<>();
@@ -65,8 +68,7 @@ public class NutritionSecond extends Fragment {
 
         //DB Connect
         dbHelper = new MyDatabaseHelper(getActivity().getApplicationContext());
-        database = dbHelper.getWritableDatabase();
-        executeQuery();
+        intake_food = dbHelper.executeQuerySearchIntakeFoodToday(sql_sentence);
 
         //변수 선언
         Float totalSugar=0.0f;
@@ -77,13 +79,13 @@ public class NutritionSecond extends Fragment {
         int needAlert=0;
 
         //총합
-        for (int i = 0; i < foodCholesterol.size(); i++)
+        for (int i = 0; i < intake_food.size(); i++)
         {
-            totalSugar += foodSugar.get(i);
-            totalSalt += foodSalt.get(i);
-            totalCholesterol += foodCholesterol.get(i);
-            totalTransFat += foodTransFat.get(i);
-            totalSaturFat += foodSaturFat.get(i);
+            totalSugar += intake_food.get(i).getSugars();
+            totalSalt += intake_food.get(i).getSalt();
+            totalCholesterol += intake_food.get(i).getCholesterol();
+            totalTransFat += intake_food.get(i).getTrans_fat();
+            totalSaturFat += intake_food.get(i).getSaturated_fat();
         }
 
         //프로그레스 바 설정. (총 먹은 양/권장량)
@@ -95,18 +97,13 @@ public class NutritionSecond extends Fragment {
 
         //총섭취량/권장섭취량 텍스트 설정. 권장섭취량은 임시값
 
-        sugarPercentage.setText( totalSugar+ " / 100.0g");
-        saltPercentage.setText( totalSalt+ " / 1000.0mg");
-        cholPercentage.setText( totalCholesterol+ " / 100.0mg");
-        transFatPercentage.setText( totalTransFat+ " / 100.0g");
-        saturFatPercentage.setText( totalSaturFat+ " / 100.0g");
+        sugarPercentage.setText( String.format("%.2f",totalSugar)+ " / 100.0g");
+        saltPercentage.setText( String.format("%.2f",totalSalt)+ " / 1000.0mg");
+        cholPercentage.setText( String.format("%.2f",totalCholesterol)+ " / 100.0mg");
+        transFatPercentage.setText( String.format("%.2f",totalTransFat)+ " / 100.0g");
+        saturFatPercentage.setText( String.format("%.2f",totalSaturFat)+ " / 100.0g");
 
         //초과하면 주의 알림. 100은 권장량 임시값
-        if ( 100 - totalSugar < 0 || 1000 - totalSalt < 0 || 100 - totalCholesterol < 0 || 100 - totalTransFat < 0 || 100 - totalSaturFat < 0) {
-
-        }
-        else;
-
         //region code(if overeaten, change color to red)
         if (100 - totalSugar < 0){
             sugarPercentage.setTextColor(Color.parseColor("#ff0000"));
@@ -139,23 +136,5 @@ public class NutritionSecond extends Fragment {
         return view;
     }
 
-    //오늘 먹은 음식의 영양 정보
-    private void executeQuery(){
-        Cursor cursor = database.rawQuery("select sugars, salt, cholesterol, trans_fat, saturated_fat\n" +
-                "from food_table, nutrition, intake_table\n" +
-                "where food_table.foodID = nutrition.foodID\n" +
-                "and food_table.foodID = intake_table.foodID\n" +
-                "and intakeID in (select intakeID from intake_table where substr(date,1,10) = DATE('now') );",null);
-        int recordCount = cursor.getCount();
-        for (int i = 0; i < recordCount; i++){
-            cursor.moveToNext();
 
-            foodSugar.add(cursor.getFloat(0));
-            foodSalt.add(cursor.getFloat(1));
-            foodCholesterol.add(cursor.getFloat(2));
-            foodTransFat.add(cursor.getFloat(3));
-            foodSaturFat.add(cursor.getFloat(4));
-        }
-        cursor.close();
-    }
 }
