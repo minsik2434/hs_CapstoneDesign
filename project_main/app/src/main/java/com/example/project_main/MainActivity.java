@@ -39,6 +39,8 @@ import org.eazegraph.lib.charts.PieChart;
 import org.eazegraph.lib.models.PieModel;
 import org.eazegraph.lib.utils.Utils;
 
+import java.io.IOException;
+
 public class MainActivity extends AppCompatActivity {
 
     MainFragment fragment_main;
@@ -57,13 +59,14 @@ public class MainActivity extends AppCompatActivity {
     MyDatabaseHelper dbHelper;
     SQLiteDatabase database;
 
-    int foodImg=0;
+
+    String foodImg;
     String foodName;
     int foodKcal;
-    String foodInfo;
-    float foodCarbohydrate = 0.0f;
-    float foodProtein = 0.0f;
-    float foodProvince = 0.0f;
+    float foodCarbohydrate;
+    float foodProtein;
+    float foodProvince;
+    String foodRaw_material;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,9 +79,10 @@ public class MainActivity extends AppCompatActivity {
         boolean isFirstRun = preferences.getBoolean("first_run", true);
 
 //        // 테스트를 위해 값을 초기화
-        SharedPreferences.Editor editor = preferences.edit();
-        editor.putBoolean("first_run", true);
-        editor.apply();
+//
+//        SharedPreferences.Editor editor = preferences.edit();
+//        editor.putBoolean("first_run", true);
+//        editor.apply();
 
         // 앱을 처음 실행했을 때
         if (isFirstRun) {
@@ -167,7 +171,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
 
-        ImageView searchedFoodImg = findViewById(R.id.recordFoodImg);
         TextView searchedFoodName = findViewById(R.id.recordFoodName);
         TextView searchedFoodKcal = findViewById(R.id.recordFoodKcal);
         TextView searchedFoodNutriInfo = findViewById(R.id.recordFoodInfo);
@@ -177,42 +180,56 @@ public class MainActivity extends AppCompatActivity {
             if (result.getContents() != null) {
                 String barcode = result.getContents();
                 Toast.makeText(this, "Scanned: " + barcode, Toast.LENGTH_LONG).show();
+                MyDatabaseHelper dbHelper = new MyDatabaseHelper(this);
 
-//                try
-//                {
-//                    //DB Connect
-//                    MyDatabaseHelper dbHelper = new MyDatabaseHelper(this);
-//                    RecodeSelectDto recode_list = new RecodeSelectDto();
-//                    recode_list = dbHelper.executeQuerySearchFoodByBarcode(barcode);
-//                    String foodImg = recode_list.getFoodImage();
-//                    String foodName = recode_list.getFoodName();
-//                    int foodKcal = recode_list.getFoodKcal();
-//                    float foodCarbohydrate = recode_list.getFoodCarbohydrate();
-//                    float foodProtein = recode_list.getFoodProtein();
-//                    float foodProvince = recode_list.getFoodProvince();
-//                    String foodRaw_material = recode_list.getRaw_material();
-//
-//                    if (foodName != null)
-//                    {
-//                        //음식 탄단지 정보 저장
-//                        String foodInfo = "탄수화물 " + foodCarbohydrate + "g" + " 단백질 " + foodProtein + "g" + " 지방 " + foodProvince + "g";
-//                        //이미지 저장해야 함
-//                        searchedFoodName.setText(foodName);
-//                        searchedFoodKcal.setText(foodKcal+"Kcal");
-//                        searchedFoodNutriInfo.setText(foodInfo);
-//                        raw_material_text.setText(foodRaw_material);
-//                        Toast.makeText(this, "음식 정보를 불러왔습니다!", Toast.LENGTH_SHORT).show();
-//                    }
-//                    else
-//                    {
-//                        Toast.makeText(this, "음식 정보가 없습니다!", Toast.LENGTH_SHORT).show();
-//                    }
-//                    Toast.makeText(this, "음식 정보를 불러왔습니다!", Toast.LENGTH_SHORT).show();
-//
-//                } catch (Exception e) {
-//                    e.printStackTrace();
-//                    Toast.makeText(this, "An error occured!", Toast.LENGTH_SHORT).show();
-//                }
+                new Thread(new Runnable() {
+                    public void run() {
+                        try {
+
+                            API_function api_function = new API_function();
+
+                            String dataBybarcode = api_function.dataSearchByBarcode(barcode);
+                            System.out.println("dataBybarcode : " + dataBybarcode);
+                            String[] PrdNmAndPrdNoData = api_function.itemsByBarcodeJsonParser(dataBybarcode);
+                            System.out.println("PrdNmAndPrdNoData : " + PrdNmAndPrdNoData[0] + PrdNmAndPrdNoData[1]);
+                            foodName = PrdNmAndPrdNoData[0];
+
+                            String dataByPrdNo = api_function.dataSearchByPrdNo(PrdNmAndPrdNoData[1]);
+                            System.out.println("dataByPrdNo : " + dataByPrdNo);
+                            String[] PrdRawmtrlAndPrdImgData = api_function.itemsByPrdNoJsonParser(dataByPrdNo);
+                            System.out.println("PrdRawmtrlAndPrdImgData : " + PrdRawmtrlAndPrdImgData[0] + PrdRawmtrlAndPrdImgData[1]);
+                            foodRaw_material = PrdRawmtrlAndPrdImgData[0];
+                            foodImg = PrdRawmtrlAndPrdImgData[1];
+
+                            RecodeSelectDto recode_list = new RecodeSelectDto();
+                            recode_list = dbHelper.executeQuerySearchFoodByBarcode(foodName);
+                            foodKcal = (int) recode_list.getKcal();
+                            foodCarbohydrate = recode_list.getCarbohydrate();
+                            foodProtein = recode_list.getProtein();
+                            foodProvince = recode_list.getProvince();
+
+
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    if (foodName != null)
+                                    {
+                                        //음식 탄단지 정보 저장
+                                        String foodInfo = "탄수화물 " + foodCarbohydrate + "g" + " 단백질 " + foodProtein + "g" + " 지방 " + foodProvince + "g";
+                                        //이미지 저장해야 함
+                                        searchedFoodName.setText(foodName);
+                                        searchedFoodKcal.setText(foodKcal+"Kcal");
+                                        searchedFoodNutriInfo.setText(foodInfo);
+                                        raw_material_text.setText(foodRaw_material);
+                                    }
+                                }
+                            });
+
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }).start();
 
             } else {
                 Toast.makeText(this, "No barcode scanned", Toast.LENGTH_SHORT).show();
@@ -236,19 +253,18 @@ public class MainActivity extends AppCompatActivity {
     }
 
         private void executeQuerySearchByBarcode(String barcodeNum){
-        Cursor cursor = database.rawQuery("select food_image, foodname, kcal, carbohydrate, protein, province\n" +
+        Cursor cursor = database.rawQuery("select foodname, kcal, carbohydrate, protein, province\n" +
                 "from food_table, nutrition\n" +
                 "where food_table.foodID = nutrition.foodID\n" +
                 "and barcode = '"+barcodeNum+"';",null);
         int recordCount = cursor.getCount();
         for (int i = 0; i < recordCount; i++){
             cursor.moveToNext();
-            foodImg = cursor.getInt(0);
-            foodName = cursor.getString(1);
-            foodKcal = cursor.getInt(2);
-            foodCarbohydrate = cursor.getFloat(3);
-            foodProtein = cursor.getFloat(4);
-            foodProvince = cursor.getFloat(5);
+            foodName = cursor.getString(0);
+            foodKcal = cursor.getInt(1);
+            foodCarbohydrate = cursor.getFloat(2);
+            foodProtein = cursor.getFloat(3);
+            foodProvince = cursor.getFloat(4);
         }
         cursor.close();
     }

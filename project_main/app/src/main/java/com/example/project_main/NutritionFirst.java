@@ -3,6 +3,7 @@ package com.example.project_main;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
+import android.media.MediaRouter;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -30,18 +31,16 @@ public class NutritionFirst extends Fragment {
 
     MyDatabaseHelper dbHelper;
     private ArrayList<RecodeSelectDto> intake_food = new ArrayList<RecodeSelectDto>();
-    String sql_sentence = "select food_table.foodname, manufacturer, classification, kcal, carbohydrate, protein, province, sugars, salt, cholesterol, saturated_fat, trans_fat\n" +
-            "from food_table, intake_table\n" +
-            "where food_table.foodname = intake_table.foodname\n" +
-            "and intakeID in (select intakeID from intake_table where substr(date,1,10) = date('now'));";
+    private ArrayList<UserDto> userInfo = new ArrayList<UserDto>();
+
+
+    String sql_sentence = "SELECT intake_table.foodname, manufacturer, classification, kcal, carbohydrate, protein, province, sugars, salt, cholesterol, saturated_fat, trans_fat  from intake_table join food_table on intake_table.foodname = food_table.foodname where substr(date,1,10) = date('now','localtime');";
 
     private TextView kcalPercentage;
     private TextView carboPercentage;
     private TextView proteinPercentage;
     private TextView provincePercentage;
     private TextView remainKcal;
-
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -59,9 +58,11 @@ public class NutritionFirst extends Fragment {
         provincePercentage = view.findViewById(R.id.provinceNutri1Text);
         remainKcal = view.findViewById(R.id.remainKcal);
 
-        //DB Connect
+        //DB Connect get intake food
         dbHelper = new MyDatabaseHelper(getActivity().getApplicationContext());
         intake_food = dbHelper.executeQuerySearchIntakeFoodToday(sql_sentence);
+        userInfo = dbHelper.ExecuteQueryGetUserInfo();
+
 
         //변수 선언
         int totalKcal=0;
@@ -78,20 +79,17 @@ public class NutritionFirst extends Fragment {
             totalProvince += intake_food.get(i).getProvince();
         }
 
-        //테스트
-        //Toast.makeText(getActivity().getApplicationContext(), Math.round( (totalProvince/100.0f)*100 )+"", Toast.LENGTH_SHORT).show();
-
         //프로그레스 바 설정. 2200.0f 는 임시값. (총 먹은 칼로리/권장 칼로리)
-        mainCircleProgressbar.setProgress( Math.round( (totalKcal/2200.0f)*100) ) ;
+        mainCircleProgressbar.setProgress( Math.round( (totalKcal/userInfo.get(0).getRecommendedKcal())*100) ) ;
         progressbarCarbohydrate.setProgress( Math.round( (totalCarbohydrate/100.0f)*100 ) );
         progressbarProtein.setProgress( Math.round( (totalProtein/100.0f)*100 ) );
         progressbarProvince.setProgress( Math.round( (totalProvince/100.0f)*100 ) );
 
         //탄단지 총섭취량/권장섭취량 텍스트 설정. 권장섭취량은 임시값
         kcalPercentage.setText(totalKcal + "");
-        carboPercentage.setText( totalCarbohydrate+ " / 100.0 g");
-        proteinPercentage.setText( totalProtein+ " / 100.0 g");
-        provincePercentage.setText( totalProvince+ " / 100.0 g");
+        carboPercentage.setText( String.format("%.2f",totalCarbohydrate) + " / 100.0 g");
+        proteinPercentage.setText( String.format("%.2f",totalProtein)+ " / 100.0 g");
+        provincePercentage.setText( String.format("%.2f",totalProvince)+ " / 100.0 g");
 
         //region code(탄단지 초과 섭취 시)
         if (100 - totalCarbohydrate < 0){
@@ -107,14 +105,14 @@ public class NutritionFirst extends Fragment {
         //endregion
 
         //region 남은 칼로리 표시. 초과하면 주의 알림. 2200은 권장칼로리 임시값
-        if (2200 - totalKcal < 0) {
+        if (userInfo.get(0).getRecommendedKcal() - totalKcal < 0) {
             //주의
-            remainKcal.setText((totalKcal - 2200) + " Kcal를 더 먹었습니다! " + "\n주의해주세요!");
+            remainKcal.setText( ( totalKcal - userInfo.get(0).getRecommendedKcal() )  + " Kcal를 더 먹었습니다! " + "\n주의해주세요!");
             remainKcal.setBackgroundResource(R.drawable.main_food_alert_yellow);
             kcalPercentage.setTextColor(Color.parseColor("#ff0000"));
         }
         else
-            remainKcal.setText( "남은 칼로리는 " + (2200 - totalKcal)+" Kcal 입니다" );
+            remainKcal.setText( "남은 칼로리는 " + ( userInfo.get(0).getRecommendedKcal() - totalKcal)  +" Kcal 입니다" );
         //endregion
 
         return view;

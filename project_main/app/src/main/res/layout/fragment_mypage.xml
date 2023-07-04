@@ -27,13 +27,13 @@
             android:layout_gravity="center"/>
 
         <TextView
-            android:id="@+id/userProfileName"
+            android:id="@+id/userProfileNameAgeSex"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="15dp"
             android:layout_gravity="center"
             android:textSize="20dp"
-            android:text="홍길동"/>
+            android:text="홍길동/20세(남)"/>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -53,7 +53,7 @@
                     android:layout_weight="1" />
 
                 <TextView
-                    android:id="@+id/userProfileAge"
+                    android:id="@+id/userProfileHeight"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:gravity="center"
@@ -62,22 +62,22 @@
                     android:text="0"/>
 
                 <TextView
-                    android:id="@+id/userProfileHeight"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:gravity="center"
-                    android:layout_weight="1"
-                    android:textSize="22dp"
-                    android:text="170.0"/>
-
-                <TextView
                     android:id="@+id/userProfileWeight"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:gravity="center"
                     android:layout_weight="1"
                     android:textSize="22dp"
-                    android:text="60.0"/>
+                    android:text="0"/>
+
+                <TextView
+                    android:id="@+id/userProfileActivity"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:layout_weight="1"
+                    android:textSize="18dp"
+                    android:text="비어있음"/>
 
                 <TextView
                     android:layout_width="match_parent"
@@ -104,14 +104,6 @@
                     android:gravity="center"
                     android:layout_weight="1"
                     android:textSize="15dp"
-                    android:text="세"/>
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:layout_weight="1"
-                    android:textSize="15dp"
                     android:text="cm"/>
 
                 <TextView
@@ -121,6 +113,14 @@
                     android:layout_weight="1"
                     android:textSize="15dp"
                     android:text="kg"/>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:layout_weight="1"
+                    android:textSize="15dp"
+                    android:text="운동"/>
 
                 <TextView
                     android:layout_width="match_parent"

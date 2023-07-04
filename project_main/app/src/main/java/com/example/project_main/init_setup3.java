@@ -145,6 +145,4 @@ public class init_setup3 extends Activity {
         //super.onBackPressed();
     }
 
-
-
 }

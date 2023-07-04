@@ -120,9 +120,5 @@ public class init_setup2 extends Activity {
         });
 
     }
-    @Override
-    public void onBackPressed() {
-        //super.onBackPressed();
-    }
 
 }

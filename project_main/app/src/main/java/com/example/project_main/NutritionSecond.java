@@ -40,7 +40,6 @@ public class NutritionSecond extends Fragment {
     private TextView saturFatPercentage;
     private TextView remainNutri2;
 
-
     private ArrayList<Float> foodSugar = new ArrayList<>();
     private ArrayList<Float> foodSalt = new ArrayList<>();
     private ArrayList<Float> foodCholesterol = new ArrayList<>();
@@ -98,11 +97,11 @@ public class NutritionSecond extends Fragment {
 
         //총섭취량/권장섭취량 텍스트 설정. 권장섭취량은 임시값
 
-        sugarPercentage.setText( totalSugar+ " / 100.0g");
-        saltPercentage.setText( totalSalt+ " / 1000.0mg");
-        cholPercentage.setText( totalCholesterol+ " / 100.0mg");
-        transFatPercentage.setText( totalTransFat+ " / 100.0g");
-        saturFatPercentage.setText( totalSaturFat+ " / 100.0g");
+        sugarPercentage.setText( String.format("%.2f",totalSugar)+ " / 100.0g");
+        saltPercentage.setText( String.format("%.2f",totalSalt)+ " / 1000.0mg");
+        cholPercentage.setText( String.format("%.2f",totalCholesterol)+ " / 100.0mg");
+        transFatPercentage.setText( String.format("%.2f",totalTransFat)+ " / 100.0g");
+        saturFatPercentage.setText( String.format("%.2f",totalSaturFat)+ " / 100.0g");
 
         //초과하면 주의 알림. 100은 권장량 임시값
         //region code(if overeaten, change color to red)

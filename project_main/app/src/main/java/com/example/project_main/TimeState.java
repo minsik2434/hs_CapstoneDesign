@@ -23,17 +23,6 @@ public class TimeState extends Fragment {
     private ArrayList<TimeArray> lunchArray = new ArrayList<>();
     private ArrayList<TimeArray> dinnerArray = new ArrayList<>();
 
-    private ArrayList<String> foodName = new ArrayList<>();
-    private ArrayList<Integer> foodKcal = new ArrayList<>();
-    private ArrayList<Float> foodCarbohydrate = new ArrayList<>();
-    private ArrayList<Float> foodProtein = new ArrayList<>();
-    private ArrayList<Float> foodProvince = new ArrayList<>();
-    private ArrayList<Float> foodSugar = new ArrayList<>();
-    private ArrayList<Float> foodSalt = new ArrayList<>();
-    private ArrayList<Float> foodCholesterol = new ArrayList<>();
-    private ArrayList<Float> foodTransFat = new ArrayList<>();
-    private ArrayList<Float> foodSaturFat = new ArrayList<>();
-
     private ArrayList<String> foodInfo = new ArrayList<>();
     private ArrayList<String> foodInfo2 = new ArrayList<>();
 
@@ -49,9 +38,8 @@ public class TimeState extends Fragment {
     String timeStateStr="morning"; //어댑터 선택을 위한 변수, 첫 화면에 아침 리스트 보여줌
 
     MyDatabaseHelper dbHelper;
+
     private ArrayList<RecodeSelectDto> intake_food = new ArrayList<RecodeSelectDto>();
-
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -65,55 +53,47 @@ public class TimeState extends Fragment {
         //DB Connect
         dbHelper = new MyDatabaseHelper(getActivity().getApplicationContext());
 
-
         //음식 배열에 정보 추가
         for (int i = 0; i < timeList.length; i++) {
             //정보 추가
-            String sql_sentence = "select food_table.foodname, manufacturer, classification, kcal, carbohydrate, protein, province, sugars, salt, cholesterol, saturated_fat, trans_fat\n" +
-                    "from food_table, intake_table\n" +
-                    "where food_table.foodname = intake_table.foodname\n" +
-                    "and intakeID in (select intakeID from intake_table where substr(date,1,10) = date('now')) and time= '"+timeList[i]+"';";
+            String sql_sentence = "SELECT intake_table.foodname, manufacturer, classification, kcal, carbohydrate, protein, province, sugars, salt, cholesterol, saturated_fat, trans_fat  from intake_table join food_table on intake_table.foodname = food_table.foodname where substr(date,1,10) = date('now','localtime');";
             intake_food = dbHelper.executeQuerySearchIntakeFoodToday(sql_sentence);
             //탄단지 정보 종합
-            for (int j = 0; j < foodName.size(); j++) {
-                foodInfo.add("탄수화물 " + foodCarbohydrate.get(j) + "g" + " 단백질 " + foodProtein.get(j) + "g" + " 지방 " + foodProvince.get(j) + "g");
-                foodInfo2.add("■ 당류 " + foodSugar.get(j) + " g" + "\n■ 나트륨 " + foodSalt.get(j) + " mg"
-                        +"\n■ 콜레스테롤 " + foodCholesterol.get(j) + " mg"+ "\n■ 트랜스지방 " + foodTransFat.get(j) + " g"
-                        + "\n■ 포화지방산 " + foodSaturFat.get(j) + " g");
+            for (int j = 0; j < intake_food.size(); j++) {
+                foodInfo.add("탄수화물 " + intake_food.get(j).getCarbohydrate() + "g" + " 단백질 " + intake_food.get(j).getProtein() + "g" + " 지방 " + intake_food.get(j).getProvince() + "g");
+                foodInfo2.add("■ 당류 " + intake_food.get(j).getSugars() + " g" + "\n■ 나트륨 " + intake_food.get(j).getSalt() + " mg"
+                        +"\n■ 콜레스테롤 " + intake_food.get(j).getCholesterol() + " mg"+ "\n■ 트랜스지방 " + intake_food.get(j).getTrans_fat() + " g"
+                        + "\n■ 포화지방산 " + intake_food.get(j).getSaturated_fat() + " g");
             }
             //리스트 아이템 추가 (아이콘, 이름, 칼로리). 아이콘 수정필요
             switch (i) {
                 //아침
                 case 0:
-                for (int k = 0; k < foodName.size(); k++) {
-                    customBreakfastAdapter.addItem(R.drawable.breakfast_icon, foodName.get(k), foodKcal.get(k) + " Kcal", foodInfo.get(k));
-                    breakfastArray.add(new TimeArray(R.drawable.breakfast_icon,foodName.get(k),foodKcal.get(k),foodInfo.get(k), foodInfo2.get(k)));
+                for (int k = 0; k < intake_food.size(); k++) {
+                    customBreakfastAdapter.addItem(intake_food.get(k).getFoodName(), intake_food.get(k).getKcal() + " Kcal", foodInfo.get(k));
+                    breakfastArray.add(new TimeArray(intake_food.get(k).getFoodName(),(int) intake_food.get(k).getKcal(), foodInfo.get(k), foodInfo2.get(k)));
                 }
                 break;
                 //점심
                 case 1:
-                for (int k = 0; k < foodName.size(); k++) {
-                    customLunchAdapter.addItem(R.drawable.lunch_icon, foodName.get(k), foodKcal.get(k) + " Kcal", foodInfo.get(k));
-                    lunchArray.add(new TimeArray(R.drawable.lunch_icon,foodName.get(k),foodKcal.get(k),foodInfo.get(k), foodInfo2.get(k)));
+                for (int k = 0; k < intake_food.size(); k++) {
+                    customLunchAdapter.addItem(intake_food.get(k).getFoodName(), intake_food.get(k).getKcal() + " Kcal", foodInfo.get(k));
+                    lunchArray.add(new TimeArray(intake_food.get(k).getFoodName(),(int) intake_food.get(k).getKcal(), foodInfo.get(k), foodInfo2.get(k)));
                 }
                 break;
                 //저녁
                 case 2:
-                for (int k = 0; k < foodName.size(); k++) {
-                    customDinnerAdapter.addItem(R.drawable.dinner_icon, foodName.get(k), foodKcal.get(k) + " Kcal", foodInfo.get(k));
-                    dinnerArray.add(new TimeArray(R.drawable.dinner_icon,foodName.get(k),foodKcal.get(k),foodInfo.get(k), foodInfo2.get(k)));
+                for (int k = 0; k < intake_food.size(); k++) {
+                    customDinnerAdapter.addItem(intake_food.get(k).getFoodName(), intake_food.get(k).getKcal() + " Kcal", foodInfo.get(k));
+                    dinnerArray.add(new TimeArray(intake_food.get(k).getFoodName(),(int) intake_food.get(k).getKcal(), foodInfo.get(k), foodInfo2.get(k)));
                 }
                 break;
             }
             //초기화
-            foodName.clear();
-            foodKcal.clear();
-            foodCarbohydrate.clear();
-            foodProtein.clear();
-            foodProvince.clear();
             foodInfo.clear();
             foodInfo2.clear();
         }
+
 
         //커스텀리스트뷰 설정 및 어댑터 선언
         mainFoodListView = timeView.findViewById(R.id.time_list_custom);
@@ -172,22 +152,18 @@ public class TimeState extends Fragment {
 }
 
 class TimeArray {
-    int img;
+
     String name;
     int kcal;
     String info;
     String info2;
 
-    public TimeArray(int img, String name, int kcal, String info, String info2){
-        this.img = img;
+    public TimeArray(String name, int kcal, String info, String info2){
+
         this.name = name;
         this.kcal = kcal;
         this.info = info;
         this.info2 = info2;
-    }
-
-    public int getImg(){
-        return img;
     }
 
     public String getName(){

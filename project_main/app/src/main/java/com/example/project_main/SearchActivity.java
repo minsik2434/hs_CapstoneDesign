@@ -35,7 +35,7 @@ public class SearchActivity extends Activity {
         listView = findViewById(R.id.foodlist);
         
         adapter = new ListViewAdapter();
-        adapter.addItem(R.mipmap.ic_launcher, "음식이름", "칼로리" + " Kcal", "탄100g단100g지100g");
+        adapter.addItem("음식이름", "칼로리" + " Kcal", "탄100g단100g지100g");
 
         listView.setAdapter(adapter);
         //get(position) 사용하면 해당 위치 정보 가져올 수 있음

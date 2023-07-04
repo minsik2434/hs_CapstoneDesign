@@ -64,6 +64,7 @@ public class init_setup4 extends Activity {
                     spinnerText.setText("운동 많이 함이 선택되었습니다.");
                 }
             }
+
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
                 spinnerText.setText("아무 것도 선택되지 않았습니다.");
@@ -75,7 +76,6 @@ public class init_setup4 extends Activity {
             @Override
             public void onClick(View view) {
                 String activity = exerciseSpinner.getSelectedItem().toString();
-
                 Intent intent = new Intent(getApplicationContext(), init_setup3.class);
                 intent.putExtra("nickname", nickname);
                 intent.putExtra("age", age);
@@ -91,7 +91,7 @@ public class init_setup4 extends Activity {
         btnNext4.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String activity = exerciseSpinner.getSelectedItem().toString();
+                String activity = exerciseSpinner.getSelectedItem().toString();;
 
                 Intent intent = new Intent(getApplicationContext(), init_setup5.class);
 
@@ -110,7 +110,7 @@ public class init_setup4 extends Activity {
     @Override
     public void onBackPressed() {
         //super.onBackPressed();
-    }
 
+    }
 
 }

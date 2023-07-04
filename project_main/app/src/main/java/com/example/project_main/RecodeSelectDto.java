@@ -111,5 +111,4 @@ public class RecodeSelectDto {
         this.trans_fat = trans_fat;
     }
 
-
 }

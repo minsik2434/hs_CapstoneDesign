@@ -7,7 +7,6 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 
@@ -15,9 +14,9 @@ import java.util.ArrayList;
 
 public class init_setup5 extends Activity {
 
+
     TextView textKcal, carbohydrateGram, proteinGram, fatGram;
     Button btnStart;
-
 
     SharedPreferences preferences;
 
@@ -28,6 +27,7 @@ public class init_setup5 extends Activity {
 
         textKcal = findViewById(R.id.textKcal);
         btnStart = findViewById(R.id.btnStart);
+
         carbohydrateGram = findViewById(R.id.carbohydrateGram);
         proteinGram = findViewById(R.id.proteinGram);
         fatGram = findViewById(R.id.fatGram);
@@ -49,6 +49,7 @@ public class init_setup5 extends Activity {
 
         double recommendKcal = Harris_Benedict(age, weight, height, sex, activity);
 
+
         double carbohydrate = calCarbohydrate(recommendKcal);
         double protein=calProtein(recommendKcal);
         double fat=calFat(recommendKcal);
@@ -59,7 +60,6 @@ public class init_setup5 extends Activity {
         fatGram.setText(String.valueOf((int)fat));
 
         int intRecommendedKcal = (int)recommendKcal;
-
 
         btnStart.setOnClickListener(new View.OnClickListener() {
             @Override

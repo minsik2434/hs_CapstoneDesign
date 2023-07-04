@@ -4,21 +4,14 @@ import android.graphics.drawable.Drawable;
 
 public class ListViewItem {
 
-    private int foodImage;
     private String foodName;
     private String foodKcal;
     private String foodInfo;
 
-    ListViewItem(int image, String name,String kcal, String info){
-        this.foodImage = image;
+    ListViewItem(String name,String kcal, String info){
         this.foodName = name;
         this.foodKcal = kcal;
         this.foodInfo = info;
-    }
-
-    public int getFoodImage()
-    {
-        return this.foodImage;
     }
 
     public String getFoodName()
@@ -35,9 +28,6 @@ public class ListViewItem {
         return this.foodInfo;
     }
 
-    public void setFoodImage(int image) {
-        this.foodImage = image;
-    }
     public void setFoodName(String name) {
         this.foodName = name;
     }

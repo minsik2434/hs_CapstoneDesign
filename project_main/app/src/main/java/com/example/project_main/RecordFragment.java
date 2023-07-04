@@ -162,17 +162,14 @@ public class RecordFragment extends Fragment {
                         time = dinnerBtn.getText().toString();
                     }
 
+
 //                    dbHelper.addIntake(nickname, foodname, date, time);
 
                      morningClicked = false;
                      lunchClicked = false;
                      dinnerClicked = false;
-
-//                    MainActivity mainActivity = (MainActivity) requireActivity();
-//                    mainActivity.getSupportFragmentManager().beginTransaction().replace(R.id.container, mainActivity.fragment_main).commit();
-
-                    Intent intent = new Intent(getActivity(), MainActivity.class);
-                    startActivity(intent);
+                     Intent intent = new Intent(getActivity(), MainActivity.class);
+                     startActivity(intent);
 
                 }
 
