@@ -112,7 +112,7 @@ public class NutritionFirst extends Fragment {
             kcalPercentage.setTextColor(Color.parseColor("#ff0000"));
         }
         else
-            remainKcal.setText( "남은 칼로리는 " + ( userInfo.get(0).getRecommendedKcal() - totalKcal)  +" Kcal 입니다" );
+            remainKcal.setText( "남은 칼로리는 " + ( Math.round( userInfo.get(0).getRecommendedKcal() - totalKcal ) )  +" Kcal 입니다" );
         //endregion
 
         return view;

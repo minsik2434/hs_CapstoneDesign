@@ -100,7 +100,6 @@ public class RecordFragment extends Fragment {
                     return;
                 }
 
-
                 dbHelper.addIntake(nickname, foodname, date, time);
 
                 Intent intent = new Intent(getActivity(), MainActivity.class);
