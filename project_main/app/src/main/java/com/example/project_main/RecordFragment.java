@@ -1,6 +1,8 @@
 package com.example.project_main;
 
 
+import static android.app.Activity.RESULT_OK;
+
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -9,7 +11,9 @@ import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
 import android.os.Bundle;
 
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
@@ -26,6 +30,7 @@ import android.widget.Toast;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -79,7 +84,7 @@ public class RecordFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(getActivity(),SearchActivity.class);
-                startActivity(intent);
+                startActivityForResult(intent,0);
             }
         });
 
@@ -129,6 +134,7 @@ public class RecordFragment extends Fragment {
     }
 
 
+
     private String getTimeStringFromRadioGroup() {
         int checkedRadioButtonId = timeToEat_group.getCheckedRadioButtonId();
         if (checkedRadioButtonId == R.id.morningBtn) {
@@ -142,5 +148,16 @@ public class RecordFragment extends Fragment {
         return ""; // 기본 빈 시간 문자열로 설정합니다.
     }
 
-
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        if(resultCode == RESULT_OK){
+            API_function api = new API_function();
+            String fn = data.getStringExtra("fname");
+            String kcal = data.getStringExtra("kcal");
+            String info = data.getStringExtra("foodinfo");
+            recordFoodName.setText(fn);
+            recordFoodKcal.setText(kcal);
+            recordFoodInfo.setText(info);
+        }
+    }
 }
