@@ -16,8 +16,8 @@ import java.util.HashMap;
 
 public class API_function {
 
-    String Barcodekey;
-    String HACCPKEY;
+    String Barcodekey = "78d4923e65234bd4994c";
+    String HACCPKEY = "Xd2Yy7OLRNMYdBz3BThVsTzQnoBlWeeB4ClMz52gNBB%2FNDXpxuRpEzHUDdRE8X%2By48oE65X%2FjDB9zpzmCt6qiw%3D%3D";
     String string_data;
     TextView text;
 

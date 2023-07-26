@@ -163,16 +163,14 @@ public class RecordFragment extends Fragment {
                     }
 
 
-//                    dbHelper.addIntake(nickname, foodname, date, time);
+                    dbHelper.addIntake(nickname, foodname, date, time);
 
                      morningClicked = false;
                      lunchClicked = false;
                      dinnerClicked = false;
                      Intent intent = new Intent(getActivity(), MainActivity.class);
                      startActivity(intent);
-
                 }
-
             }
         });
 

@@ -284,8 +284,6 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
         db.close();
     }
 
-
-
     // 사용자 알러지 추가
     void addUserAllergies(String nickname, int allergyID) {
         SQLiteDatabase db = this.getWritableDatabase();
@@ -405,5 +403,20 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
 
         return result;
     }
+
+    void resetUserInfo(String name, int age, String sex, float height, float weight, String activity, int recommendKcal  ){
+        SQLiteDatabase db = getWritableDatabase();
+
+                db.execSQL("UPDATE user_table " +
+                "SET nickname = '"+name+"'," +
+                "age = "+ age +",\n" +
+                "sex ='"+ sex +"',\n" +
+                "height = "+ height +",\n" +
+                "weight = "+ weight +",\n" +
+                "activity = '"+ activity +"',\n" +
+                "recommended_kcal = "+ recommendKcal+" ;");
+
+    }
+
 
 }
