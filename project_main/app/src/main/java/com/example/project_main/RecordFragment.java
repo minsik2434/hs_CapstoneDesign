@@ -18,6 +18,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -31,12 +33,10 @@ import java.util.Date;
 public class RecordFragment extends Fragment {
 
     private static final int CAMERA_PERMISSION_REQUEST_CODE = 200;
-    Button barcodebtn, recordBtn, morningBtn, lunchBtn, dinnerBtn;
+    Button barcodebtn, recordBtn;
     TextView recordFoodName, recordFoodKcal, recordFoodInfo;
-
-    boolean morningClicked = false;
-    boolean lunchClicked = false;
-    boolean dinnerClicked = false;
+    RadioGroup timeToEat_group;
+    RadioButton morningBtn, lunchBtn, dinnerBtn;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -51,6 +51,8 @@ public class RecordFragment extends Fragment {
         recordFoodName = view.findViewById(R.id.recordFoodName);
         recordFoodKcal = view.findViewById(R.id.recordFoodKcal);
         recordFoodInfo = view.findViewById(R.id.recordFoodInfo);
+
+        timeToEat_group = view.findViewById(R.id.timeToEat_group);
 
         morningBtn = view.findViewById(R.id.morningBtn);
         lunchBtn = view.findViewById(R.id.lunchBtn);
@@ -82,96 +84,27 @@ public class RecordFragment extends Fragment {
         });
 
 
-
-        morningBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                if(morningClicked == false){
-                    morningClicked = true;
-                    morningBtn.setBackgroundColor(Color.parseColor("#FFBB86FC"));
-                }
-                else{
-                    morningClicked = false;
-                    morningBtn.setBackgroundColor(Color.parseColor("#DCDCDC"));
-                }
-            }
-        });
-
-        lunchBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(lunchClicked == false){
-                    lunchClicked = true;
-                    lunchBtn.setBackgroundColor(Color.parseColor("#FFBB86FC"));
-                }
-                else{
-                    lunchClicked = false;
-                    lunchBtn.setBackgroundColor(Color.parseColor("#DCDCDC"));
-                }
-
-            }
-        });
-
-        dinnerBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(dinnerClicked == false){
-                    dinnerClicked = true;
-                    dinnerBtn.setBackgroundColor(Color.parseColor("#FFBB86FC"));
-                }
-                else{
-                    dinnerClicked = false;
-                    dinnerBtn.setBackgroundColor(Color.parseColor("#DCDCDC"));
-                }
-
-            }
-        });
-
         // 기록하기 버튼을 눌렀을 때
         recordBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                int count = 0;
-                if(morningClicked==true)
-                    count+=1;
-                if(lunchClicked==true)
-                    count+=1;
-                if(dinnerClicked==true)
-                    count+=1;
 
-                if(count == 0){
-                    Toast.makeText(getActivity(),"아침 점심 저녁 중 하나를 선택하세요.",Toast.LENGTH_LONG).show();
+                String nickname = dbHelper.getNickname();
+                String foodname = recordFoodName.getText().toString();
+                String date = getCurrentDateTime();
+                String time = getTimeStringFromRadioGroup();
+
+                if(time.isEmpty()){
+                    Toast.makeText(getActivity(), "아침, 점심, 저녁 중 하나를 선택하세요.",Toast.LENGTH_SHORT).show();
+                    return;
                 }
-                else if(count != 1){
-                    Toast.makeText(getActivity(),"아침 점심 저녁 중 하나만 선택하세요.",Toast.LENGTH_LONG).show();
-                }
-                else{
-                    String nickname = dbHelper.getNickname();
-                    String foodname = recordFoodName.getText().toString();
-                    String date = getCurrentDateTime();
-                    String time;
-                    if(morningClicked == true){
-                        time = morningBtn.getText().toString();
-                    }
-                    else if(lunchClicked == true){
-                        time = lunchBtn.getText().toString();
-                    }
-                    else {
-                        time = dinnerBtn.getText().toString();
-                    }
 
 
-//                    dbHelper.addIntake(nickname, foodname, date, time);
+                dbHelper.addIntake(nickname, foodname, date, time);
 
-                     morningClicked = false;
-                     lunchClicked = false;
-                     dinnerClicked = false;
-                     Intent intent = new Intent(getActivity(), MainActivity.class);
-                     startActivity(intent);
-
-                }
+                Intent intent = new Intent(getActivity(), MainActivity.class);
+                startActivity(intent);
 
             }
         });
@@ -196,6 +129,19 @@ public class RecordFragment extends Fragment {
         return dateFormat.format(currentDateTime);
     }
 
+
+    private String getTimeStringFromRadioGroup() {
+        int checkedRadioButtonId = timeToEat_group.getCheckedRadioButtonId();
+        if (checkedRadioButtonId == R.id.morningBtn) {
+            return morningBtn.getText().toString();
+        } else if (checkedRadioButtonId == R.id.lunchBtn) {
+            return lunchBtn.getText().toString();
+        } else if (checkedRadioButtonId == R.id.dinnerBtn) {
+            return dinnerBtn.getText().toString();
+        }
+
+        return ""; // 기본 빈 시간 문자열로 설정합니다.
+    }
 
 
 }

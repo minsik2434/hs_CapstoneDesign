@@ -32,12 +32,6 @@ public class init_setup1 extends AppCompatActivity {
 
         dbHelper = new MyDatabaseHelper(this);
 
-//        // 테이블의 모든 값을 삭제
-//        dbHelper.deleteAllRows("user_table");
-//        dbHelper.deleteAllRows("allergy");
-//        dbHelper.deleteAllRows("allergy_user");
-//        dbHelper.deleteAllRows("disease");
-//        dbHelper.deleteAllRows("disease_user");
 
         //키를 눌렀을 때도 동작
         editNickname.setOnEditorActionListener(new TextView.OnEditorActionListener() {

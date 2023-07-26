@@ -73,22 +73,22 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        dbHelper = new MyDatabaseHelper(this);
+        database = dbHelper.getReadableDatabase();
+        boolean isUserTableEmpty = dbHelper.isUserTableEmpty();
 
-        // 앱의 진입점인 Mainactivity.java에서 실행 여부를 체크합니다.
-        SharedPreferences preferences = getSharedPreferences("my_preferences", MODE_PRIVATE);
-        boolean isFirstRun = preferences.getBoolean("first_run", true);
+        // 테이블 삭제
+//        dbHelper.deleteAllRows("user_table");
+//        dbHelper.deleteAllRows("allergy");
+//        dbHelper.deleteAllRows("allergy_user");
+//        dbHelper.deleteAllRows("disease");
+//        dbHelper.deleteAllRows("disease_user");
 
-//        // 테스트를 위해 값을 초기화
-//
-//        SharedPreferences.Editor editor = preferences.edit();
-//        editor.putBoolean("first_run", true);
-//        editor.apply();
 
-        // 앱을 처음 실행했을 때
-        if (isFirstRun) {
-            // init_setup1.java로 이동하는 코드
+        if (isUserTableEmpty) {
             Intent intent = new Intent(MainActivity.this, init_setup1.class);
             startActivity(intent);
+            finish(); // 현재 액티비티를 종료하여 뒤로가기 버튼으로 다시 이 액티비티로 돌아오지 않도록 합니다.
         }
 
         //fragment 추가
