@@ -14,13 +14,14 @@
             android:layout_margin="5dp"
             android:orientation="horizontal">
             <EditText
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:inputType="text"
+                android:imeOptions="actionSearch"
+                android:layout_margin="8dp"
+                android:id="@+id/searchBar"
                 android:background="@drawable/border"
-                android:layout_weight="7"
-                android:layout_margin="5dp"
                 android:drawableStart="@drawable/glassbtn"
-                />
+                android:layout_width="350dp"
+                android:layout_height="wrap_content" />
             <ImageButton
                 android:layout_width="20dp"
                 android:layout_height="20dp"

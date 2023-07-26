@@ -53,6 +53,7 @@ public class ListViewAdapter extends BaseAdapter {
         foodkcal.setText(listViewItem.getFoodKcal());
         foodInfo.setText(listViewItem.getFoodInfo());
 
+
         // 설정한 view를 반환해줘야 함
         return convertView;
     }
@@ -65,5 +66,7 @@ public class ListViewAdapter extends BaseAdapter {
     public void clearItem(){
         listViewItemList.clear();
     }
+
+
 
 }

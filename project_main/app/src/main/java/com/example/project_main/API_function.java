@@ -16,7 +16,8 @@ import java.util.HashMap;
 
 public class API_function {
 
-    String Barcodekey;
+    String Barcodekey="78d4923e65234bd4994c";
+
     String HACCPKEY;
     String string_data;
     TextView text;
@@ -137,5 +138,64 @@ public class API_function {
         }
         return arraysum;
     }
+
+
+
+    String AllergySearchByName(String prdnm) throws IOException {
+        StringBuilder urlBuilder = new StringBuilder("http://openapi.foodsafetykorea.go.kr/api");
+        urlBuilder.append("/" + Barcodekey); /* Service Key */
+        urlBuilder.append("/" + "C002"); //api 종류에 따른 코드 *바코드연계제품api*
+        urlBuilder.append("/" + "json"); //json 타입
+        urlBuilder.append("/" + "1"); // 요청시작위치
+        urlBuilder.append("/" + "2"); // 요청종료위치
+        //urlBuilder.append("/" + "PRDLST_NM=" + prdnm); //json 타입
+        URL url = new URL(urlBuilder.toString());
+        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+        conn.setRequestMethod("GET");
+        conn.setRequestProperty("Content-type", "application/json");
+        BufferedReader rd;
+        if(conn.getResponseCode() >= 200 && conn.getResponseCode() <= 300) {
+            rd = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+        } else {
+            rd = new BufferedReader(new InputStreamReader(conn.getErrorStream()));
+        }
+        StringBuilder sb = new StringBuilder();
+        String line;
+        while ((line = rd.readLine()) != null) {
+            sb.append(line);
+        }
+        rd.close();
+        conn.disconnect();
+        return sb.toString();
+    }
+
+    public String[] allergyJsonParser(String jsonString) {
+
+        String prdlstNo = null; //픔먹 보고번호
+        String prdlstNm = null; //제품명
+        String[] arr = new String[2];
+
+        try {
+            JSONObject jsonObject = new JSONObject(jsonString);
+            JSONObject C002 = jsonObject.getJSONObject("C002"); // body키의 값들
+            System.out.println("1번째 : "+C002);
+            JSONArray items = C002.getJSONArray("row"); // body키의 값들(items,totalCount...등) 중 items키의 값들 JSONArray를 가져옴.
+            System.out.println("2번째 :" +items);
+
+            HashMap map = new HashMap<>();
+            JSONObject jObject = items.getJSONObject(0);
+            System.out.println("3번째 :" +jObject);
+            prdlstNm = jObject.optString("PRDLST_NM");
+            prdlstNo = jObject.optString("PRDLST_REPORT_NO");
+            arr[0] = prdlstNm;
+            arr[1] = prdlstNo;
+
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return arr;
+    }
+
 }
 
