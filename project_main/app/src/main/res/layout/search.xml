@@ -22,7 +22,11 @@
                 android:background="@drawable/border"
                 android:drawableStart="@drawable/glassbtn"
                 android:layout_width="350dp"
+<<<<<<< HEAD
                 android:layout_height="wrap_content"/>
+=======
+                android:layout_height="wrap_content" />
+>>>>>>> 0b1921a7a148ac754b1b3e25c24bbc6feb55b6ef
             <ImageButton
                 android:layout_width="20dp"
                 android:layout_height="20dp"

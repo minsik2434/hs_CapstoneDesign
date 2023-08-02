@@ -34,6 +34,10 @@
     </FrameLayout>
 
     <!-- 그래프 -->
+    <com.example.project_main.BarChartView
+        android:id="@+id/barChart"
+        android:layout_width="match_parent"
+        android:layout_height="300dp" />
 
 
 

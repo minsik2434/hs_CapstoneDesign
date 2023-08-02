@@ -33,7 +33,9 @@
         <activity android:name=".init_setup4" android:label="init_setup4"/>
         <activity android:name=".init_setup5" android:label="init_setup5"/>
         <activity android:name=".SearchActivity" android:label="search"/>
-
+        <activity android:name=".UserInfoReset" android:label="user_info_reset"/>
+        <activity android:name=".UserInfoResetResult" android:label="user_info_reset_result"/>
+        <activity android:name=".UserAllergyReset" android:label="user_info_reset_allergy"/>
 
        
     </application>

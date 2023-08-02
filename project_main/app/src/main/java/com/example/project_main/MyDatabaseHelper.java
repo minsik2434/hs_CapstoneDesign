@@ -15,7 +15,11 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Locale;
 
 public class MyDatabaseHelper extends SQLiteOpenHelper {
 
@@ -256,8 +260,6 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
         db.close();
     }
 
-
-
     // 사용자 알러지 추가
     void addUserAllergies(String nickname, int allergyID) {
         SQLiteDatabase db = this.getWritableDatabase();
@@ -268,6 +270,10 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
 
         long result = db.insert(ALLERGY_USER_TABLE_NAME, null, cv);
         db.close();
+<<<<<<< HEAD
+=======
+
+>>>>>>> 0b1921a7a148ac754b1b3e25c24bbc6feb55b6ef
     }
 
     // 사용자 지병 추가
@@ -280,6 +286,10 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
 
         long result = db.insert(DISEASE_USER_TABLE_NAME, null, cv);
         db.close();
+<<<<<<< HEAD
+=======
+
+>>>>>>> 0b1921a7a148ac754b1b3e25c24bbc6feb55b6ef
     }
 
     // 섭취 정보 추가
@@ -358,6 +368,88 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
         return result;
     }
 
+    public int[] calculateCaloriesFor7Days() {
+        SQLiteDatabase db = this.getReadableDatabase();
+        int[] caloriesArray = new int[7];
+
+        Calendar calendar = Calendar.getInstance();
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+
+        for (int i = 6; i >= 0; i--) {
+            String date = dateFormat.format(calendar.getTime());
+
+            Cursor cursor = db.rawQuery("SELECT SUM(kcal) FROM intake_table " +
+                    "INNER JOIN food_table ON intake_table.foodname = food_table.foodname " +
+                    "WHERE substr(date, 1, 10) = ?;", new String[]{date});
+
+            if (cursor.moveToFirst()) {
+                caloriesArray[i] = cursor.getInt(0);
+            } else {
+                caloriesArray[i] = 0;
+            }
+
+            cursor.close();
+
+            calendar.add(Calendar.DAY_OF_YEAR, -1);
+        }
+
+        db.close();
+
+        return caloriesArray;
+    }
+
+
+    public String getNthMostEatenFoodForWeek(int rank) {
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        // 한 주 전의 날짜 구하기
+        Calendar calendar = Calendar.getInstance();
+        calendar.add(Calendar.DAY_OF_WEEK, -7);
+        Date startDate = calendar.getTime();
+
+        // 현재 날짜 구하기
+        Date currentDate = new Date();
+
+        // 날짜 포맷 설정 (yyyy-MM-dd)
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+
+        // 이번 주에 rank번째로 많이 먹은 음식을 가져오기 위한 쿼리
+        String query = "SELECT foodname, COUNT(foodname) as count FROM intake_table " +
+                "WHERE date >= '" + dateFormat.format(startDate) + "' AND date <= '" + dateFormat.format(currentDate) + "' " +
+                "GROUP BY foodname " +
+                "ORDER BY count DESC " +
+                "LIMIT 1 OFFSET " + (rank - 1) + ";";
+
+        Cursor cursor = db.rawQuery(query, null);
+        String foodName = "";
+
+        if (cursor.moveToFirst()) {
+            int columnIndex = cursor.getColumnIndex("foodname");
+            foodName = cursor.getString(columnIndex);
+        }
+
+        cursor.close();
+        db.close();
+
+        return foodName;
+    }
+
+    // user_table이 비어있는지 확인하는 함수
+    public boolean isUserTableEmpty() {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT COUNT(*) FROM " + USER_TABLE_NAME, null);
+        int recordCount = 0;
+
+        if (cursor != null) {
+            cursor.moveToFirst();
+            recordCount = cursor.getInt(0);
+            cursor.close();
+        }
+
+        db.close();
+        return recordCount == 0;
+    }
+
 
     // 테이블의 모든 행 삭제
     void deleteAllRows(String tableName) {
@@ -378,5 +470,20 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
 
         return result;
     }
+
+    void resetUserInfo(String name, int age, String sex, float height, float weight, String activity, int recommendKcal  ){
+        SQLiteDatabase db = getWritableDatabase();
+
+                db.execSQL("UPDATE user_table " +
+                "SET nickname = '"+name+"'," +
+                "age = "+ age +",\n" +
+                "sex ='"+ sex +"',\n" +
+                "height = "+ height +",\n" +
+                "weight = "+ weight +",\n" +
+                "activity = '"+ activity +"',\n" +
+                "recommended_kcal = "+ recommendKcal+" ;");
+
+    }
+
 
 }

@@ -1,6 +1,8 @@
 package com.example.project_main;
 
 
+import static android.app.Activity.RESULT_OK;
+
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -9,6 +11,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
 import android.os.Bundle;
 
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
@@ -20,12 +23,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -33,12 +39,14 @@ import java.util.Date;
 public class RecordFragment extends Fragment {
 
     private static final int CAMERA_PERMISSION_REQUEST_CODE = 200;
+<<<<<<< HEAD
     Button searchbtn, barcodebtn, recordBtn, morningBtn, lunchBtn, dinnerBtn;
+=======
+    Button barcodebtn, recordBtn;
+>>>>>>> 0b1921a7a148ac754b1b3e25c24bbc6feb55b6ef
     TextView recordFoodName, recordFoodKcal, recordFoodInfo;
-
-    boolean morningClicked = false;
-    boolean lunchClicked = false;
-    boolean dinnerClicked = false;
+    RadioGroup timeToEat_group;
+    RadioButton morningBtn, lunchBtn, dinnerBtn;
 
     TextView searchedFoodName;
     TextView searchedFoodKcal;
@@ -61,6 +69,8 @@ public class RecordFragment extends Fragment {
         recordFoodName = view.findViewById(R.id.recordFoodName);
         recordFoodKcal = view.findViewById(R.id.recordFoodKcal);
         recordFoodInfo = view.findViewById(R.id.recordFoodInfo);
+
+        timeToEat_group = view.findViewById(R.id.timeToEat_group);
 
         morningBtn = view.findViewById(R.id.morningBtn);
         lunchBtn = view.findViewById(R.id.lunchBtn);
@@ -89,6 +99,7 @@ public class RecordFragment extends Fragment {
             }
         });
 
+<<<<<<< HEAD
         morningBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -133,42 +144,28 @@ public class RecordFragment extends Fragment {
 
             }
         });
+=======
+>>>>>>> 0b1921a7a148ac754b1b3e25c24bbc6feb55b6ef
 
         // 기록하기 버튼을 눌렀을 때
         recordBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                int count = 0;
-                if(morningClicked==true)
-                    count+=1;
-                if(lunchClicked==true)
-                    count+=1;
-                if(dinnerClicked==true)
-                    count+=1;
 
-                if(count == 0){
-                    Toast.makeText(getActivity(),"아침 점심 저녁 중 하나를 선택하세요.",Toast.LENGTH_LONG).show();
+                String nickname = dbHelper.getNickname();
+                String foodname = recordFoodName.getText().toString();
+                String date = getCurrentDateTime();
+                String time = getTimeStringFromRadioGroup();
+
+                if(time.isEmpty()){
+                    Toast.makeText(getActivity(), "아침, 점심, 저녁 중 하나를 선택하세요.",Toast.LENGTH_SHORT).show();
+                    return;
                 }
-                else if(count != 1){
-                    Toast.makeText(getActivity(),"아침 점심 저녁 중 하나만 선택하세요.",Toast.LENGTH_LONG).show();
-                }
-                else{
-                    String nickname = dbHelper.getNickname();
-                    String foodname = recordFoodName.getText().toString();
-                    String date = getCurrentDateTime();
-                    String time;
-                    if(morningClicked == true){
-                        time = morningBtn.getText().toString();
-                    }
-                    else if(lunchClicked == true){
-                        time = lunchBtn.getText().toString();
-                    }
-                    else {
-                        time = dinnerBtn.getText().toString();
-                    }
 
+                dbHelper.addIntake(nickname, foodname, date, time);
 
+<<<<<<< HEAD
                     dbHelper.addIntake(nickname, foodname, date, time);
 
                      morningClicked = false;
@@ -178,6 +175,10 @@ public class RecordFragment extends Fragment {
                      startActivity(intent);
 
                 }
+=======
+                Intent intent = new Intent(getActivity(), MainActivity.class);
+                startActivity(intent);
+>>>>>>> 0b1921a7a148ac754b1b3e25c24bbc6feb55b6ef
 
             }
         });
@@ -210,6 +211,7 @@ public class RecordFragment extends Fragment {
             if (resultCode == getActivity().RESULT_OK) {
                 Log.i("TAG", data.getStringExtra("foodname"));
 
+<<<<<<< HEAD
                 searchedFoodName.setText(data.getStringExtra("foodname"));
                 searchedFoodKcal.setText(data.getStringExtra("kcal"));
                 searchedFoodNutriInfo.setText(data.getStringExtra("foodinfo"));
@@ -218,6 +220,31 @@ public class RecordFragment extends Fragment {
             else{
                 Toast.makeText(getContext(), "RESULT_CANCEL", Toast.LENGTH_SHORT).show();
             }
+=======
+    private String getTimeStringFromRadioGroup() {
+        int checkedRadioButtonId = timeToEat_group.getCheckedRadioButtonId();
+        if (checkedRadioButtonId == R.id.morningBtn) {
+            return morningBtn.getText().toString();
+        } else if (checkedRadioButtonId == R.id.lunchBtn) {
+            return lunchBtn.getText().toString();
+        } else if (checkedRadioButtonId == R.id.dinnerBtn) {
+            return dinnerBtn.getText().toString();
+        }
+
+        return ""; // 기본 빈 시간 문자열로 설정합니다.
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        if(resultCode == RESULT_OK){
+            API_function api = new API_function();
+            String fn = data.getStringExtra("fname");
+            String kcal = data.getStringExtra("kcal");
+            String info = data.getStringExtra("foodinfo");
+            recordFoodName.setText(fn);
+            recordFoodKcal.setText(kcal);
+            recordFoodInfo.setText(info);
+>>>>>>> 0b1921a7a148ac754b1b3e25c24bbc6feb55b6ef
         }
     }
 }

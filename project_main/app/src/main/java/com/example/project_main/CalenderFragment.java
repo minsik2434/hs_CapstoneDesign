@@ -114,7 +114,7 @@ public class CalenderFragment extends Fragment {
                 listViewAdapter.clearItem();
                 //어뎁터에 아이템 추가
                 for (int i = 0; i < intake_food.size(); i++) {
-                    listViewAdapter.addItem(intake_food.get(i).getFoodName(), intake_food.get(i).getKcal() + " Kcal", foodNutriInfo.get(i));
+                    listViewAdapter.addItem(intake_food.get(i).getFoodName(), Math.round(intake_food.get(i).getKcal()) + " Kcal", foodNutriInfo.get(i));
                 }
                 //리스트뷰에 어뎁터 set
                 schedule_list.setAdapter(listViewAdapter);
