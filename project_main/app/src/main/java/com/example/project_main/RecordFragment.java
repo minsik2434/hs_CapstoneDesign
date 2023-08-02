@@ -10,10 +10,12 @@ import android.graphics.Color;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,21 +33,29 @@ import java.util.Date;
 public class RecordFragment extends Fragment {
 
     private static final int CAMERA_PERMISSION_REQUEST_CODE = 200;
-    Button barcodebtn, recordBtn, morningBtn, lunchBtn, dinnerBtn;
+    Button searchbtn, barcodebtn, recordBtn, morningBtn, lunchBtn, dinnerBtn;
     TextView recordFoodName, recordFoodKcal, recordFoodInfo;
 
     boolean morningClicked = false;
     boolean lunchClicked = false;
     boolean dinnerClicked = false;
 
+    TextView searchedFoodName;
+    TextView searchedFoodKcal;
+    TextView searchedFoodNutriInfo;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_record, container, false);
 
 
-        Button searchbtn = (Button) view.findViewById(R.id.searchbtn);
 
 
+        searchedFoodName = view.findViewById(R.id.recordFoodName);
+        searchedFoodKcal = view.findViewById(R.id.recordFoodKcal);
+        searchedFoodNutriInfo = view.findViewById(R.id.recordFoodInfo);
+
+        searchbtn = (Button) view.findViewById(R.id.searchbtn);
         barcodebtn = view.findViewById(R.id.barcodeBtn);
         recordBtn = view.findViewById(R.id.recordBtn);
         recordFoodName = view.findViewById(R.id.recordFoodName);
@@ -56,9 +66,7 @@ public class RecordFragment extends Fragment {
         lunchBtn = view.findViewById(R.id.lunchBtn);
         dinnerBtn = view.findViewById(R.id.dinnerBtn);
 
-
         MyDatabaseHelper dbHelper = new MyDatabaseHelper(getActivity().getApplicationContext());
-
 
         barcodebtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -77,11 +85,9 @@ public class RecordFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(getActivity(),SearchActivity.class);
-                startActivity(intent);
+                startActivityForResult(intent,0);
             }
         });
-
-
 
         morningBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -163,7 +169,7 @@ public class RecordFragment extends Fragment {
                     }
 
 
-//                    dbHelper.addIntake(nickname, foodname, date, time);
+                    dbHelper.addIntake(nickname, foodname, date, time);
 
                      morningClicked = false;
                      lunchClicked = false;
@@ -196,6 +202,22 @@ public class RecordFragment extends Fragment {
         return dateFormat.format(currentDateTime);
     }
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
 
+        if (requestCode == 0) {
+            if (resultCode == getActivity().RESULT_OK) {
+                Log.i("TAG", data.getStringExtra("foodname"));
 
+                searchedFoodName.setText(data.getStringExtra("foodname"));
+                searchedFoodKcal.setText(data.getStringExtra("kcal"));
+                searchedFoodNutriInfo.setText(data.getStringExtra("foodinfo"));
+
+            }
+            else{
+                Toast.makeText(getContext(), "RESULT_CANCEL", Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
 }

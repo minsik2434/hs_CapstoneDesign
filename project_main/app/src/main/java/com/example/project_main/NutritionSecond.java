@@ -40,12 +40,6 @@ public class NutritionSecond extends Fragment {
     private TextView saturFatPercentage;
     private TextView remainNutri2;
 
-    private ArrayList<Float> foodSugar = new ArrayList<>();
-    private ArrayList<Float> foodSalt = new ArrayList<>();
-    private ArrayList<Float> foodCholesterol = new ArrayList<>();
-    private ArrayList<Float> foodTransFat = new ArrayList<>();
-    private ArrayList<Float> foodSaturFat = new ArrayList<>();
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {

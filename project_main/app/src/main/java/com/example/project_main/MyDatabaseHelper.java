@@ -143,32 +143,6 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
         super.close();
     }
 
-
-    public RecodeSelectDto executeQuerySearchFoodByBarcode(String foodname) {
-        SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor = db.rawQuery("select kcal, carbohydrate, protein, province from food_table where foodname = '"+foodname+"';",null);
-        cursor.moveToFirst();
-        RecodeSelectDto recode_list = new RecodeSelectDto();
-        recode_list.setFoodName(null);
-        recode_list.setManufacturer(null);
-        recode_list.setClassification(null);
-        recode_list.setKcal(cursor.getFloat(0));
-        recode_list.setCarbohydrate(cursor.getFloat(1));
-        recode_list.setProtein(cursor.getFloat(2));
-        recode_list.setProvince(cursor.getFloat(3));
-        recode_list.setSugars(0);
-        recode_list.setSalt(0);
-        recode_list.setCholesterol(0);
-        recode_list.setSaturated_fat(0);
-        recode_list.setTrans_fat(0);
-
-
-        cursor.close();
-        db.close();
-
-        return recode_list;
-    }
-
     //오늘 먹은 음식의 영양 정보
     public ArrayList<RecodeSelectDto> executeQuerySearchIntakeFoodToday(String sql_sentence){
         ArrayList<RecodeSelectDto> intake_food = new ArrayList<RecodeSelectDto>();
@@ -176,10 +150,6 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.rawQuery(sql_sentence,null);
 
-//        Cursor cursor = db.rawQuery("select food_table.foodname, manufacturer, classification, kcal, carbohydrate, protein, province, sugars, salt, cholesterol, saturated_fat, trans_fat\n" +
-//                "from food_table, intake_table\n" +
-//                "where food_table.foodname = intake_table.foodname\n" +
-//                "and intakeID in (select intakeID from intake_table where substr(date,1,10) = date('now'));",null);
         int recordCount = cursor.getCount();
 
         for (int i = 0; i < recordCount; i++){
@@ -200,6 +170,8 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
             test.setTrans_fat(cursor.getFloat(11));
             intake_food.add(test);
         }
+        cursor.close();
+        db.close();
         return intake_food;
     }
 
@@ -295,7 +267,7 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
         cv.put(ALLERGY_USER_TABLE_COLUMN_NICKNAME, nickname);
 
         long result = db.insert(ALLERGY_USER_TABLE_NAME, null, cv);
-
+        db.close();
     }
 
     // 사용자 지병 추가
@@ -307,7 +279,7 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
         cv.put(DISEASE_USER_TABLE_COLUMN_DISEASEID, diseaseID);
 
         long result = db.insert(DISEASE_USER_TABLE_NAME, null, cv);
-
+        db.close();
     }
 
     // 섭취 정보 추가
@@ -330,6 +302,7 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
         cv.put(INTAKE_TABLE_COLUMN_TIME, time);
 
         long result = db.insert(INTAKE_TABLE_NAME, null, cv);
+        db.close();
     }
     // 가장 큰 intakeID 가져오기
     private int getMaxIntakeID() {
@@ -355,7 +328,6 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
 
         long result = db.insert(ALLERGY_TABLE_NAME, null, cv);
         db.close();
-
     }
 
 
@@ -382,6 +354,7 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
         }
 
         cursor.close();
+        db.close();
         return result;
     }
 
