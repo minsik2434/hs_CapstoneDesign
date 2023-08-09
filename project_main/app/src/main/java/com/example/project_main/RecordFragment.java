@@ -3,6 +3,8 @@ package com.example.project_main;
 
 import static android.app.Activity.RESULT_OK;
 
+import static com.google.zxing.integration.android.IntentIntegrator.REQUEST_CODE;
+
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -18,10 +20,15 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
+import android.os.Handler;
+import android.os.Looper;
+import android.text.SpannableString;
+import android.text.style.ForegroundColorSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
@@ -40,6 +47,7 @@ public class RecordFragment extends Fragment {
     private static final int CAMERA_PERMISSION_REQUEST_CODE = 200;
     Button barcodebtn, recordBtn;
     TextView recordFoodName, recordFoodKcal, recordFoodInfo;
+    TextView raw_mtrl;
     RadioGroup timeToEat_group;
     RadioButton morningBtn, lunchBtn, dinnerBtn;
 
@@ -56,7 +64,7 @@ public class RecordFragment extends Fragment {
         recordFoodName = view.findViewById(R.id.recordFoodName);
         recordFoodKcal = view.findViewById(R.id.recordFoodKcal);
         recordFoodInfo = view.findViewById(R.id.recordFoodInfo);
-
+        raw_mtrl = view.findViewById(R.id.raw_material_text);
         timeToEat_group = view.findViewById(R.id.timeToEat_group);
 
         morningBtn = view.findViewById(R.id.morningBtn);
@@ -150,14 +158,25 @@ public class RecordFragment extends Fragment {
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        if(resultCode == RESULT_OK){
-            API_function api = new API_function();
+        Handler handler = new Handler(Looper.getMainLooper());
+        String target = "대두";
+        if(resultCode == RESULT_OK) {
             String fn = data.getStringExtra("fname");
             String kcal = data.getStringExtra("kcal");
             String info = data.getStringExtra("foodinfo");
+            String mtrl = data.getStringExtra("rawmtrl");
+            SpannableString spannableString = new SpannableString(mtrl);
+            int startIndex = mtrl.indexOf(target);
+            if(startIndex != -1){
+                int endIndex = startIndex + target.length();
+                spannableString.setSpan(new ForegroundColorSpan(Color.RED),startIndex,endIndex,0);
+
+            }
             recordFoodName.setText(fn);
             recordFoodKcal.setText(kcal);
             recordFoodInfo.setText(info);
+
+            raw_mtrl.setText(spannableString);
         }
     }
 }

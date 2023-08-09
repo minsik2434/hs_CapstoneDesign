@@ -174,7 +174,7 @@ public class MainActivity extends AppCompatActivity {
         TextView searchedFoodName = findViewById(R.id.recordFoodName);
         TextView searchedFoodKcal = findViewById(R.id.recordFoodKcal);
         TextView searchedFoodNutriInfo = findViewById(R.id.recordFoodInfo);
-        EditText raw_material_text = (EditText) findViewById(R.id.raw_material_text);
+        TextView raw_material_text = (TextView) findViewById(R.id.raw_material_text);
 
         if (result != null) {
             if (result.getContents() != null) {
