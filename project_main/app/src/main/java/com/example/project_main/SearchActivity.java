@@ -22,6 +22,7 @@ import androidx.annotation.Nullable;
 
 import org.w3c.dom.Text;
 
+import java.io.IOException;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
@@ -80,14 +81,30 @@ public class SearchActivity extends Activity {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                ListViewItem vo = (ListViewItem) listView.getAdapter().getItem(position);
-                Intent intent = new Intent();
-                intent.putExtra("foodname", vo.getFoodName());
-                intent.putExtra("kcal", vo.getFoodKcal());
-                intent.putExtra("foodinfo", vo.getFoodInfo());
 
-                setResult(Activity.RESULT_OK, intent);
-                finish();
+                API_function api = new API_function();
+                ListViewItem listViewItem = (ListViewItem) parent.getItemAtPosition(position);
+                Intent intent = new Intent(getApplicationContext(),RecordFragment.class);
+                String fn = listViewItem.getFoodName();
+                final String[] mtrl = new String[1];
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        try {
+                            String json = api.dataSearchByPrdNm(fn);
+                            String[] PrdNmAndPrdNoData = api.itemsByPrdNmParser(json,fn);
+                            mtrl[0] = PrdNmAndPrdNoData[0];
+                            intent.putExtra("fname", listViewItem.getFoodName());
+                            intent.putExtra("kcal",listViewItem.getFoodKcal());
+                            intent.putExtra("foodinfo",listViewItem.getFoodInfo());
+                            intent.putExtra("rawmtrl",mtrl[0]);
+                            setResult(RESULT_OK,intent);
+                            finish();
+                        } catch (IOException e) {
+                            throw new RuntimeException(e);
+                        }
+                    }
+                }).start();
             }
         });
 
