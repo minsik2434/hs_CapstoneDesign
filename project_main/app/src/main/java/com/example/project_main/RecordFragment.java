@@ -39,11 +39,7 @@ import java.util.Date;
 public class RecordFragment extends Fragment {
 
     private static final int CAMERA_PERMISSION_REQUEST_CODE = 200;
-<<<<<<< HEAD
-    Button searchbtn, barcodebtn, recordBtn, morningBtn, lunchBtn, dinnerBtn;
-=======
-    Button barcodebtn, recordBtn;
->>>>>>> 0b1921a7a148ac754b1b3e25c24bbc6feb55b6ef
+    Button barcodebtn, recordBtn,searchbtn;
     TextView recordFoodName, recordFoodKcal, recordFoodInfo;
     RadioGroup timeToEat_group;
     RadioButton morningBtn, lunchBtn, dinnerBtn;
@@ -99,53 +95,6 @@ public class RecordFragment extends Fragment {
             }
         });
 
-<<<<<<< HEAD
-        morningBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                if(morningClicked == false){
-                    morningClicked = true;
-                    morningBtn.setBackgroundColor(Color.parseColor("#FFBB86FC"));
-                }
-                else{
-                    morningClicked = false;
-                    morningBtn.setBackgroundColor(Color.parseColor("#DCDCDC"));
-                }
-            }
-        });
-
-        lunchBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(lunchClicked == false){
-                    lunchClicked = true;
-                    lunchBtn.setBackgroundColor(Color.parseColor("#FFBB86FC"));
-                }
-                else{
-                    lunchClicked = false;
-                    lunchBtn.setBackgroundColor(Color.parseColor("#DCDCDC"));
-                }
-
-            }
-        });
-
-        dinnerBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(dinnerClicked == false){
-                    dinnerClicked = true;
-                    dinnerBtn.setBackgroundColor(Color.parseColor("#FFBB86FC"));
-                }
-                else{
-                    dinnerClicked = false;
-                    dinnerBtn.setBackgroundColor(Color.parseColor("#DCDCDC"));
-                }
-
-            }
-        });
-=======
->>>>>>> 0b1921a7a148ac754b1b3e25c24bbc6feb55b6ef
 
         // 기록하기 버튼을 눌렀을 때
         recordBtn.setOnClickListener(new View.OnClickListener() {
@@ -164,21 +113,8 @@ public class RecordFragment extends Fragment {
                 }
 
                 dbHelper.addIntake(nickname, foodname, date, time);
-
-<<<<<<< HEAD
-                    dbHelper.addIntake(nickname, foodname, date, time);
-
-                     morningClicked = false;
-                     lunchClicked = false;
-                     dinnerClicked = false;
-                     Intent intent = new Intent(getActivity(), MainActivity.class);
-                     startActivity(intent);
-
-                }
-=======
                 Intent intent = new Intent(getActivity(), MainActivity.class);
                 startActivity(intent);
->>>>>>> 0b1921a7a148ac754b1b3e25c24bbc6feb55b6ef
 
             }
         });
@@ -203,24 +139,8 @@ public class RecordFragment extends Fragment {
         return dateFormat.format(currentDateTime);
     }
 
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
 
-        if (requestCode == 0) {
-            if (resultCode == getActivity().RESULT_OK) {
-                Log.i("TAG", data.getStringExtra("foodname"));
 
-<<<<<<< HEAD
-                searchedFoodName.setText(data.getStringExtra("foodname"));
-                searchedFoodKcal.setText(data.getStringExtra("kcal"));
-                searchedFoodNutriInfo.setText(data.getStringExtra("foodinfo"));
-
-            }
-            else{
-                Toast.makeText(getContext(), "RESULT_CANCEL", Toast.LENGTH_SHORT).show();
-            }
-=======
     private String getTimeStringFromRadioGroup() {
         int checkedRadioButtonId = timeToEat_group.getCheckedRadioButtonId();
         if (checkedRadioButtonId == R.id.morningBtn) {
@@ -238,13 +158,13 @@ public class RecordFragment extends Fragment {
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         if(resultCode == RESULT_OK){
             API_function api = new API_function();
-            String fn = data.getStringExtra("fname");
+            String fn = data.getStringExtra("foodname");
             String kcal = data.getStringExtra("kcal");
             String info = data.getStringExtra("foodinfo");
             recordFoodName.setText(fn);
             recordFoodKcal.setText(kcal);
             recordFoodInfo.setText(info);
->>>>>>> 0b1921a7a148ac754b1b3e25c24bbc6feb55b6ef
+
         }
     }
 }

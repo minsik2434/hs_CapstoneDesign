@@ -270,10 +270,6 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
 
         long result = db.insert(ALLERGY_USER_TABLE_NAME, null, cv);
         db.close();
-<<<<<<< HEAD
-=======
-
->>>>>>> 0b1921a7a148ac754b1b3e25c24bbc6feb55b6ef
     }
 
     // 사용자 지병 추가
@@ -286,10 +282,7 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
 
         long result = db.insert(DISEASE_USER_TABLE_NAME, null, cv);
         db.close();
-<<<<<<< HEAD
-=======
 
->>>>>>> 0b1921a7a148ac754b1b3e25c24bbc6feb55b6ef
     }
 
     // 섭취 정보 추가
