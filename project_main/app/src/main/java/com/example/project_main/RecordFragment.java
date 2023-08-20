@@ -3,6 +3,8 @@ package com.example.project_main;
 
 import static android.app.Activity.RESULT_OK;
 
+import static com.google.zxing.integration.android.IntentIntegrator.REQUEST_CODE;
+
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -18,10 +20,16 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
+
+import android.os.Handler;
+import android.os.Looper;
+import android.text.SpannableString;
+import android.text.style.ForegroundColorSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
@@ -38,34 +46,41 @@ import java.util.Date;
 public class RecordFragment extends Fragment {
 
     private static final int CAMERA_PERMISSION_REQUEST_CODE = 200;
-    Button barcodebtn, recordBtn;
+    Button barcodebtn, recordBtn,searchbtn;
     TextView recordFoodName, recordFoodKcal, recordFoodInfo;
+    TextView raw_mtrl;
     RadioGroup timeToEat_group;
     RadioButton morningBtn, lunchBtn, dinnerBtn;
+
+    TextView searchedFoodName;
+    TextView searchedFoodKcal;
+    TextView searchedFoodNutriInfo;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_record, container, false);
 
 
-        Button searchbtn = (Button) view.findViewById(R.id.searchbtn);
 
 
+        searchedFoodName = view.findViewById(R.id.recordFoodName);
+        searchedFoodKcal = view.findViewById(R.id.recordFoodKcal);
+        searchedFoodNutriInfo = view.findViewById(R.id.recordFoodInfo);
+
+        searchbtn = (Button) view.findViewById(R.id.searchbtn);
         barcodebtn = view.findViewById(R.id.barcodeBtn);
         recordBtn = view.findViewById(R.id.recordBtn);
         recordFoodName = view.findViewById(R.id.recordFoodName);
         recordFoodKcal = view.findViewById(R.id.recordFoodKcal);
         recordFoodInfo = view.findViewById(R.id.recordFoodInfo);
-
+        raw_mtrl = view.findViewById(R.id.raw_material_text);
         timeToEat_group = view.findViewById(R.id.timeToEat_group);
 
         morningBtn = view.findViewById(R.id.morningBtn);
         lunchBtn = view.findViewById(R.id.lunchBtn);
         dinnerBtn = view.findViewById(R.id.dinnerBtn);
 
-
         MyDatabaseHelper dbHelper = new MyDatabaseHelper(getActivity().getApplicationContext());
-
 
         barcodebtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -106,7 +121,6 @@ public class RecordFragment extends Fragment {
                 }
 
                 dbHelper.addIntake(nickname, foodname, date, time);
-
                 Intent intent = new Intent(getActivity(), MainActivity.class);
                 startActivity(intent);
 
@@ -150,14 +164,25 @@ public class RecordFragment extends Fragment {
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        if(resultCode == RESULT_OK){
-            API_function api = new API_function();
+
+        Handler handler = new Handler(Looper.getMainLooper());
+        String target = "대두";
+        if(resultCode == RESULT_OK) {
             String fn = data.getStringExtra("fname");
             String kcal = data.getStringExtra("kcal");
             String info = data.getStringExtra("foodinfo");
+            String mtrl = data.getStringExtra("rawmtrl");
+            SpannableString spannableString = new SpannableString(mtrl);
+            int startIndex = mtrl.indexOf(target);
+            if(startIndex != -1){
+                int endIndex = startIndex + target.length();
+                spannableString.setSpan(new ForegroundColorSpan(Color.RED),startIndex,endIndex,0);
+
+            }
             recordFoodName.setText(fn);
             recordFoodKcal.setText(kcal);
             recordFoodInfo.setText(info);
+            raw_mtrl.setText(spannableString);
         }
     }
 }

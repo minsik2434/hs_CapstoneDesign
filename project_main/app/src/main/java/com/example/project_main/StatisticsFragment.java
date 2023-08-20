@@ -26,6 +26,7 @@ public class StatisticsFragment extends Fragment {
     private int num_page = 3;
     private CircleIndicator3 mIndicator;
     private BarChartView barChartView;
+    private LineChartView lineChartView;
     private MyDatabaseHelper dbHelper;
 
     @Nullable
@@ -35,6 +36,9 @@ public class StatisticsFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_statistics, container, false);
 
         dbHelper = new MyDatabaseHelper(getActivity().getApplicationContext());
+
+        barChartView = view.findViewById(R.id.barChart);
+        lineChartView = view.findViewById(R.id.lineChart);
 
 
         /**
@@ -77,15 +81,23 @@ public class StatisticsFragment extends Fragment {
             }
         });
 
+//        int[] data = dbHelper.caloriesFor7Days();
+//        int[] carbohydrate = dbHelper.carbohydrateCaloriesFor7Days();
+//        int[] protein = dbHelper.proteinCaloriesFor7Days();
+//        int[] fat = dbHelper.fatCaloriesFor7Days();
 
-
-        barChartView = view.findViewById(R.id.barChart);
-        MyDatabaseHelper dbHelper = new MyDatabaseHelper(getActivity().getApplicationContext());
-
-//        int[] data = dbHelper.calculateCaloriesFor7Days();
+        // 단백질 : 파란색 지방 : 마젠타  탄수화물 : 빨간색
         int[] data = {2300, 5000, 3200, 2000, 2150, 2365, 7400};
-        int[] weightData = {45,50,50,60,80,65,47};
-        barChartView.setData(data,weightData);
+        int[] weight = {70, 50, 53, 80, 103, 47, 60};
+        int[] carbohydrate = {1000, 800, 900, 700, 600, 750, 850};
+        int[] protein = {400, 700, 600, 450, 550, 400, 800};
+        int[] fat = {900, 1200, 700, 850, 1000, 1215, 950};
+
+        // 선그래프
+        lineChartView.setWeightData(weight);
+
+        // 데이터를 BarChartView에 설정하여 그래프를 그립니다.
+        barChartView.setData(data, carbohydrate, protein, fat);
 
         return view;
     }

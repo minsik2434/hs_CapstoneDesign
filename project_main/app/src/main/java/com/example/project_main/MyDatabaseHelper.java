@@ -147,32 +147,6 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
         super.close();
     }
 
-
-    public RecodeSelectDto executeQuerySearchFoodByBarcode(String foodname) {
-        SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor = db.rawQuery("select kcal, carbohydrate, protein, province from food_table where foodname = '"+foodname+"';",null);
-        cursor.moveToFirst();
-        RecodeSelectDto recode_list = new RecodeSelectDto();
-        recode_list.setFoodName(null);
-        recode_list.setManufacturer(null);
-        recode_list.setClassification(null);
-        recode_list.setKcal(cursor.getFloat(0));
-        recode_list.setCarbohydrate(cursor.getFloat(1));
-        recode_list.setProtein(cursor.getFloat(2));
-        recode_list.setProvince(cursor.getFloat(3));
-        recode_list.setSugars(0);
-        recode_list.setSalt(0);
-        recode_list.setCholesterol(0);
-        recode_list.setSaturated_fat(0);
-        recode_list.setTrans_fat(0);
-
-
-        cursor.close();
-        db.close();
-
-        return recode_list;
-    }
-
     //오늘 먹은 음식의 영양 정보
     public ArrayList<RecodeSelectDto> executeQuerySearchIntakeFoodToday(String sql_sentence){
         ArrayList<RecodeSelectDto> intake_food = new ArrayList<RecodeSelectDto>();
@@ -180,10 +154,6 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.rawQuery(sql_sentence,null);
 
-//        Cursor cursor = db.rawQuery("select food_table.foodname, manufacturer, classification, kcal, carbohydrate, protein, province, sugars, salt, cholesterol, saturated_fat, trans_fat\n" +
-//                "from food_table, intake_table\n" +
-//                "where food_table.foodname = intake_table.foodname\n" +
-//                "and intakeID in (select intakeID from intake_table where substr(date,1,10) = date('now'));",null);
         int recordCount = cursor.getCount();
 
         for (int i = 0; i < recordCount; i++){
@@ -204,6 +174,8 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
             test.setTrans_fat(cursor.getFloat(11));
             intake_food.add(test);
         }
+        cursor.close();
+        db.close();
         return intake_food;
     }
 
@@ -298,7 +270,6 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
 
         long result = db.insert(ALLERGY_USER_TABLE_NAME, null, cv);
         db.close();
-
     }
 
     // 사용자 지병 추가
@@ -360,7 +331,6 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
 
         long result = db.insert(ALLERGY_TABLE_NAME, null, cv);
         db.close();
-
     }
 
 
@@ -387,10 +357,11 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
         }
 
         cursor.close();
+        db.close();
         return result;
     }
 
-    public int[] calculateCaloriesFor7Days() {
+    public int[] caloriesFor7Days() {
         SQLiteDatabase db = this.getReadableDatabase();
         int[] caloriesArray = new int[7];
 
@@ -419,7 +390,6 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
 
         return caloriesArray;
     }
-
 
     public String getNthMostEatenFoodForWeek(int rank) {
         SQLiteDatabase db = this.getReadableDatabase();
@@ -454,6 +424,105 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
         db.close();
 
         return foodName;
+    }
+
+    // 단백질 계산
+    public int[] proteinCaloriesFor7Days() {
+        SQLiteDatabase db = this.getReadableDatabase();
+        int[] proteinCaloriesArray = new int[7];
+
+        Calendar calendar = Calendar.getInstance();
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+
+        for (int i = 6; i >= 0; i--) {
+            String date = dateFormat.format(calendar.getTime());
+
+            Cursor cursor = db.rawQuery("SELECT SUM(protein) FROM intake_table " +
+                    "INNER JOIN food_table ON intake_table.foodname = food_table.foodname " +
+                    "WHERE substr(date, 1, 10) = ?;", new String[]{date});
+
+            if (cursor.moveToFirst()) {
+                float totalProteinGrams = cursor.getFloat(0);
+                int proteinCalories = (int) (totalProteinGrams * 4); // 1g 단백질이 4칼로리이므로, 총 단백질(g) * 4 = 단백질 칼로리
+                proteinCaloriesArray[i] = proteinCalories;
+            } else {
+                proteinCaloriesArray[i] = 0;
+            }
+
+            cursor.close();
+
+            calendar.add(Calendar.DAY_OF_YEAR, -1);
+        }
+
+        db.close();
+
+        return proteinCaloriesArray;
+    }
+
+    // 지방계산
+    public int[] fatCaloriesFor7Days() {
+        SQLiteDatabase db = this.getReadableDatabase();
+        int[] fatCaloriesArray = new int[7];
+
+        Calendar calendar = Calendar.getInstance();
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+
+        for (int i = 6; i >= 0; i--) {
+            String date = dateFormat.format(calendar.getTime());
+
+            Cursor cursor = db.rawQuery("SELECT SUM(saturated_fat + trans_fat) FROM intake_table " +
+                    "INNER JOIN food_table ON intake_table.foodname = food_table.foodname " +
+                    "WHERE substr(date, 1, 10) = ?;", new String[]{date});
+
+            if (cursor.moveToFirst()) {
+                float totalFatGrams = cursor.getFloat(0);
+                int fatCalories = (int) (totalFatGrams * 9); // 1g 지방이 9칼로리이므로, 총 지방(g) * 9 = 지방 칼로리
+                fatCaloriesArray[i] = fatCalories;
+            } else {
+                fatCaloriesArray[i] = 0;
+            }
+
+            cursor.close();
+
+            calendar.add(Calendar.DAY_OF_YEAR, -1);
+        }
+
+        db.close();
+
+        return fatCaloriesArray;
+    }
+
+    // 탄수화물 계산산
+   public int[] carbohydrateCaloriesFor7Days() {
+        SQLiteDatabase db = this.getReadableDatabase();
+        int[] carbohydrateCaloriesArray = new int[7];
+
+        Calendar calendar = Calendar.getInstance();
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+
+        for (int i = 6; i >= 0; i--) {
+            String date = dateFormat.format(calendar.getTime());
+
+            Cursor cursor = db.rawQuery("SELECT SUM(carbohydrate) FROM intake_table " +
+                    "INNER JOIN food_table ON intake_table.foodname = food_table.foodname " +
+                    "WHERE substr(date, 1, 10) = ?;", new String[]{date});
+
+            if (cursor.moveToFirst()) {
+                float totalCarbohydrateGrams = cursor.getFloat(0);
+                int carbohydrateCalories = (int) (totalCarbohydrateGrams * 4); // 1g 탄수화물이 4칼로리이므로, 총 탄수화물(g) * 4 = 탄수화물 칼로리
+                carbohydrateCaloriesArray[i] = carbohydrateCalories;
+            } else {
+                carbohydrateCaloriesArray[i] = 0;
+            }
+
+            cursor.close();
+
+            calendar.add(Calendar.DAY_OF_YEAR, -1);
+        }
+
+        db.close();
+
+        return carbohydrateCaloriesArray;
     }
 
     // user_table이 비어있는지 확인하는 함수

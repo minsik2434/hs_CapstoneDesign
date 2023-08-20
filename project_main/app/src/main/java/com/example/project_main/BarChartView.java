@@ -4,7 +4,6 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.graphics.Rect;
 import android.util.AttributeSet;
 import android.view.View;
 
@@ -21,11 +20,17 @@ public class BarChartView extends View {
     private static final int NUM_OF_DAYS = 7;
     private static final DateFormat DATE_FORMAT = new SimpleDateFormat("MM/dd", Locale.getDefault());
 
-    private Paint linePaint;
-    private Paint dotPaint;
+    private Paint carbohydratePaint;
+    private Paint proteinPaint;
+    private Paint fatPaint;
     private Paint textPaint;
+
     private int[] data;
-    private int[] weightData;
+    private int[] carbohydrateData;
+    private int[] proteinData;
+    private int[] fatData;
+    private int maxData;
+
     private String[] dates;
 
     private int paddingStart = 60;
@@ -44,14 +49,14 @@ public class BarChartView extends View {
     }
 
     private void init() {
-        linePaint = new Paint();
-        linePaint.setColor(Color.RED);
-        linePaint.setStyle(Paint.Style.STROKE);
-        linePaint.setStrokeWidth(3);
+        carbohydratePaint = new Paint();
+        carbohydratePaint.setColor(Color.RED);
 
-        dotPaint = new Paint();
-        dotPaint.setColor(Color.RED);
-        dotPaint.setStyle(Paint.Style.FILL);
+        proteinPaint = new Paint();
+        proteinPaint.setColor(Color.BLUE);
+
+        fatPaint = new Paint();
+        fatPaint.setColor(Color.MAGENTA);
 
         textPaint = new Paint();
         textPaint.setColor(Color.BLACK);
@@ -59,9 +64,14 @@ public class BarChartView extends View {
         textPaint.setTextAlign(Paint.Align.CENTER);
     }
 
-    public void setData(int[] data, int[] weightData) {
+    public void setData(int[] data, int[] carbohydrateData, int[] proteinData, int[] fatData) {
         this.data = data;
-        this.weightData = weightData;
+        this.carbohydrateData = carbohydrateData;
+        this.proteinData = proteinData;
+        this.fatData = fatData;
+
+        this.maxData = findMax(data);
+
         this.dates = calculateDates();
         invalidate();
     }
@@ -84,64 +94,41 @@ public class BarChartView extends View {
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
 
-        if (data != null && dates != null && weightData != null) {
+        if (data != null && dates != null && carbohydrateData != null && proteinData != null && fatData != null) {
             float width = getWidth() - paddingStart - paddingEnd;
             float height = getHeight() - paddingTop - paddingBottom;
 
             float barWidth = width / data.length;
-            int maxData = findMax(data);
-            float dataHeightRatio = height / maxData;
+            float dataHeightRatio = height / maxData * 2.0f; // 막대그래프 세로 길이
 
-            int maxWeightData = findMax(weightData);
-            float weightDataHeightRatio = height / maxWeightData;
+            float gapBetweenBars = barWidth * 0.1f; // 막대 사이의 간격
 
             for (int i = 0; i < data.length; i++) {
-                float left = paddingStart + i * barWidth;
-                float right = left + barWidth;
-                float bottom = getHeight() - paddingBottom;
-                float top = bottom - data[i] * dataHeightRatio;
+                float left = paddingStart + i * barWidth + gapBetweenBars / 2;
+                float right = left + barWidth - gapBetweenBars;
 
-                // Draw the bar (for the data)
-                Paint barPaint = new Paint();
-                barPaint.setColor(Color.BLUE);
-                canvas.drawRect(left, top, right, bottom, barPaint);
+                // 칼로리 데이터를 분할하여 탄수화물, 단백질, 지방 데이터로 표시
+                float carbohydrateTop = getHeight() - paddingBottom - carbohydrateData[i] * dataHeightRatio;
+                float proteinTop = carbohydrateTop - proteinData[i] * dataHeightRatio;
+                float fatTop = proteinTop - fatData[i] * dataHeightRatio;
 
-                // Draw value text for the data (at the middle of the bar)
+                // Draw the bars for each data type
+                canvas.drawRect(left, carbohydrateTop, right, getHeight() - paddingBottom, carbohydratePaint);
+                canvas.drawRect(left, proteinTop, right, carbohydrateTop, proteinPaint);
+                canvas.drawRect(left, fatTop, right, proteinTop, fatPaint);
+
+                // Draw value text for the data
                 String valueText = String.valueOf(data[i]);
-                Rect valueBounds = new Rect();
-                textPaint.getTextBounds(valueText, 0, valueText.length(), valueBounds);
                 float valueX = (left + right) / 2;
-                float valueY = top - valueBounds.height() / 2 - 10;
+                float valueY = fatTop - 10; // 막대의 상단에 표시
                 canvas.drawText(valueText, valueX, valueY, textPaint);
+            }
 
-                // Draw circle at each weight data point
-                float dotX = (left + right) / 2;
-                float dotY = getHeight() - paddingBottom - weightData[i] * weightDataHeightRatio;
-                canvas.drawCircle(dotX, dotY, 6, dotPaint);
-
-                // Draw line connecting weight data points
-                if (i > 0) {
-                    float prevX = paddingStart + (i - 1) * barWidth + barWidth / 2;
-                    float prevY = getHeight() - paddingBottom - weightData[i - 1] * weightDataHeightRatio;
-                    float currX = dotX;
-                    float currY = dotY;
-                    canvas.drawLine(prevX, prevY, currX, currY, linePaint);
-                }
-
-                // Draw value text for the weight data (above the line)
-                String weightText = String.valueOf(weightData[i]);
-                Rect weightBounds = new Rect();
-                textPaint.getTextBounds(weightText, 0, weightText.length(), weightBounds);
-                float weightX = dotX;
-                float weightY = dotY - weightBounds.height() - 5;
-                canvas.drawText(weightText, weightX, weightY, textPaint);
-
-                // Draw date text
+            // Draw date text
+            for (int i = 0; i < dates.length; i++) {
                 String dateText = dates[i];
-                Rect dateBounds = new Rect();
-                textPaint.getTextBounds(dateText, 0, dateText.length(), dateBounds);
-                float dateX = dotX;
-                float dateY = getHeight() - paddingBottom + dateBounds.height() + 10;
+                float dateX = paddingStart + i * barWidth + barWidth / 2;
+                float dateY = getHeight() - paddingBottom + 40;
                 canvas.drawText(dateText, dateX, dateY, textPaint);
             }
         }
