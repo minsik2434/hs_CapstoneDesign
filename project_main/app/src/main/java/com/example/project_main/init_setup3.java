@@ -13,13 +13,11 @@ import java.util.ArrayList;
 
 public class init_setup3 extends Activity {
 
-    Integer[] integerAllergy = {R.id.checkFowl, R.id.checkMilk, R.id.checkBuckwheat, R.id.checkPeanut, R.id.checkBean,
-            R.id.checkWheat, R.id.checkMackerel, R.id.checkcrab, R.id.checkShrimp, R.id.checkPork, R.id.checkPeach,
-            R.id.checkTomato, R.id.checkSulfurous, R.id.checkWalnut, R.id.checkChicken, R.id.checkBeef, R.id.checkSquid,
-            R.id.checkClam};
+    Integer[] integerAllergy = {R.id.checkMilk, R.id.checkFowl, R.id.checkShellfish, R.id.checkFish, R.id.checkNuts,
+            R.id.checkBean, R.id.checkWheat, R.id.checkPeanut};
     CheckBox[] checkAllergy = new CheckBox[integerAllergy.length];
 
-    Integer[] integerDisease = {R.id.diabetes,R.id.highBloodPressure,R.id.lowBloodPressure,R.id.r1};
+    Integer[] integerDisease = {R.id.diabetes,R.id.highBloodPressure,R.id.hyperlipidemia,R.id.obesity};
     CheckBox[] checkDisease = new CheckBox[integerDisease.length];
 
     Button btnNext3, btnPre3;
@@ -81,7 +79,6 @@ public class init_setup3 extends Activity {
 
         // 다음 버튼을 눌렀을 때
         btnNext3.setOnClickListener(new View.OnClickListener() {
-
 
             @Override
             public void onClick(View view) {

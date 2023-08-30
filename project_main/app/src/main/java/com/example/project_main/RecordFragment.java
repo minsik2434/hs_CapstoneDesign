@@ -13,14 +13,10 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 
-import androidx.activity.result.contract.ActivityResultContracts;
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 import androidx.core.app.NotificationCompat;
@@ -45,18 +41,15 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.zxing.integration.android.IntentIntegrator;
-import com.google.zxing.integration.android.IntentResult;
 
-import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 
 public class RecordFragment extends Fragment {
 
     private static final int CAMERA_PERMISSION_REQUEST_CODE = 200;
-
-
     Button barcodebtn, recordBtn,searchbtn;
     TextView recordFoodName, recordFoodKcal, recordFoodInfo;
     TextView raw_mtrl;
@@ -66,18 +59,16 @@ public class RecordFragment extends Fragment {
     TextView searchedFoodName;
     TextView searchedFoodKcal;
     TextView searchedFoodNutriInfo;
+    AllergyList allergyList = new AllergyList();
+    ArrayList<String> userAllergy = new ArrayList<>();
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_record, container, false);
 
-
-
-
         searchedFoodName = view.findViewById(R.id.recordFoodName);
         searchedFoodKcal = view.findViewById(R.id.recordFoodKcal);
         searchedFoodNutriInfo = view.findViewById(R.id.recordFoodInfo);
-
         searchbtn = (Button) view.findViewById(R.id.searchbtn);
         barcodebtn = view.findViewById(R.id.barcodeBtn);
         recordBtn = view.findViewById(R.id.recordBtn);
@@ -133,7 +124,6 @@ public class RecordFragment extends Fragment {
                 AlarmController alarmController = new AlarmController(getContext());
                 alarmController.cancelAlarm(002);
                 alarmController.setAlarm(001,0);
-
                 dbHelper.addIntake(nickname, foodname, date, time);
                 Intent intent = new Intent(getActivity(), MainActivity.class);
                 startActivity(intent);
@@ -180,17 +170,32 @@ public class RecordFragment extends Fragment {
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
 
         Handler handler = new Handler(Looper.getMainLooper());
-        String target = "대두";
+//        사용자 알레르기 정보 가져오기
+        MyDatabaseHelper dbHelper = new MyDatabaseHelper(getActivity().getApplicationContext());
+        ArrayList<Integer> userAllergyListNum = dbHelper.getUserAllergy(); //사용자 알레르기 번호 목록
+
+//        //알레르기 정보 가져오기
+        for(int i = 0; i < userAllergyListNum.size(); i++) {
+
+            for (int j = 0; j < allergyList.getAllergyArrayList(userAllergyListNum.get(i)).size(); j++) {
+                userAllergy.add(allergyList.getAllergyArrayList(userAllergyListNum.get(i)).get(j));
+            }
+        }
+
         if(resultCode == RESULT_OK) {
             String fn = data.getStringExtra("fname");
             String kcal = data.getStringExtra("kcal");
             String info = data.getStringExtra("foodinfo");
             String mtrl = data.getStringExtra("rawmtrl");
             SpannableString spannableString = new SpannableString(mtrl);
-            int startIndex = mtrl.indexOf(target);
-            if(startIndex != -1){
-                int endIndex = startIndex + target.length();
-                spannableString.setSpan(new ForegroundColorSpan(Color.RED),startIndex,endIndex,0);
+            for (int i = 0; i < userAllergy.size(); i++) {
+                int startIndex = mtrl.indexOf(userAllergy.get(i));
+
+                if (startIndex != -1) {
+                    int endIndex = startIndex + userAllergy.get(i).length();
+                    spannableString.setSpan(new ForegroundColorSpan(Color.RED), startIndex, endIndex, 0);
+
+                }
 
             }
             recordFoodName.setText(fn);

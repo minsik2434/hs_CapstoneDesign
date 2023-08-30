@@ -97,7 +97,6 @@ public class BarChartView extends View {
         if (data != null && dates != null && carbohydrateData != null && proteinData != null && fatData != null) {
             float width = getWidth() - paddingStart - paddingEnd;
             float height = getHeight() - paddingTop - paddingBottom;
-
             float barWidth = width / (data.length * 2); // 막대그래프를 더 얇게 만듦
             float dataHeightRatio = height / maxData * 2.0f; // 막대그래프 세로 길이
 
@@ -105,7 +104,6 @@ public class BarChartView extends View {
 
             for (int i = 0; i < data.length; i++) {
                 float x = i * gapBetweenBars + barWidth / 2 + paddingStart; // X 축 위치 계산
-
                 // 칼로리 데이터를 분할하여 탄수화물, 단백질, 지방 데이터로 표시
                 float carbohydrateTop = getHeight() - paddingBottom - carbohydrateData[i] * dataHeightRatio;
                 float proteinTop = carbohydrateTop - proteinData[i] * dataHeightRatio;
@@ -119,6 +117,7 @@ public class BarChartView extends View {
                 // Draw value text for the data
                 String valueText = String.valueOf(data[i]);
                 float valueX = x;
+
                 float valueY = fatTop - 10; // 막대의 상단에 표시
                 canvas.drawText(valueText, valueX, valueY, textPaint);
             }
@@ -129,6 +128,7 @@ public class BarChartView extends View {
                 float x = i * gapBetweenBars + barWidth / 2 + paddingStart; // X 축 위치 계산
                 float dateY = getHeight() - paddingBottom + 40;
                 canvas.drawText(dateText, x, dateY, textPaint);
+
             }
         }
     }

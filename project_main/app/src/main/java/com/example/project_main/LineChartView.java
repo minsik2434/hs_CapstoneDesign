@@ -5,6 +5,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Path;
+import android.graphics.Rect;
 import android.util.AttributeSet;
 import android.view.View;
 
@@ -62,7 +63,6 @@ public class LineChartView extends View {
         if (weightData != null) {
             float width = getWidth() - paddingStart - paddingEnd;
             float height = getHeight() - paddingTop - paddingBottom;
-
             float barWidth = width / (weightData.length * 2); // 막대그래프와 같은 X축을 사용하기 위해 수정
             float weightDataHeightRatio = height / maxWeightData * 0.8f;
 
@@ -84,6 +84,7 @@ public class LineChartView extends View {
                 // Display the value next to the data point
                 String valueText = String.valueOf(weightData[i]);
                 canvas.drawText(valueText, x, dotY - 10, textPaint);
+
             }
 
             // Draw line connecting weight data points
@@ -142,6 +143,7 @@ public class LineChartView extends View {
             String fatLabel = "지방";
             float fatLabelX = magentaLineEndX + 50; // Adjust the horizontal position
             canvas.drawText(fatLabel, fatLabelX, weightLabelY, textPaint);
+
 
 
         }

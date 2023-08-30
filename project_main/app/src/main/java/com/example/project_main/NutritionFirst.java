@@ -1,33 +1,13 @@
 package com.example.project_main;
-
-import android.app.Notification;
-import android.app.NotificationChannel;
-import android.app.NotificationManager;
-import android.app.PendingIntent;
-import android.content.Context;
-import android.content.Intent;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
+import android.content.res.ColorStateList;
 import android.graphics.Color;
-import android.media.MediaRouter;
-import android.os.Build;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.core.app.NotificationCompat;
 import androidx.fragment.app.Fragment;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
-import android.widget.Switch;
 import android.widget.TextView;
-import android.widget.Toast;
-
-import org.w3c.dom.Text;
-
 import java.util.ArrayList;
 
 public class NutritionFirst extends Fragment {
@@ -104,14 +84,15 @@ public class NutritionFirst extends Fragment {
         if (100 - totalCarbohydrate < 0){
             carboPercentage.setTextColor(Color.parseColor("#ff0000"));
 
+            progressbarCarbohydrate.setProgressTintList(ColorStateList.valueOf(Color.parseColor("#FF5D5D")));
         }
         else if (1000 - totalProtein < 0){
             proteinPercentage.setTextColor(Color.parseColor("#ff0000"));
-
+            progressbarProtein.setProgressTintList(ColorStateList.valueOf(Color.parseColor("#FF5D5D")));
         }
         else if (100 - totalProvince < 0){
             provincePercentage.setTextColor(Color.parseColor("#ff0000"));
-
+            progressbarProvince.setProgressTintList(ColorStateList.valueOf(Color.parseColor("#FF5D5D")));
         }
         else{
 

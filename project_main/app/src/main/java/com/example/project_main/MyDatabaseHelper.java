@@ -15,6 +15,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.lang.reflect.Array;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -346,6 +347,28 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
         db.close();
 
     }
+
+    // 사용자 알러지 가져오기
+    public ArrayList<Integer> getUserAllergy(){
+
+        SQLiteDatabase db = getReadableDatabase();
+        ArrayList<Integer> allergyNum= new ArrayList<>();
+
+        Cursor cursor = db.rawQuery("SELECT allergyID FROM allergy_user", null);
+        int recordCount = cursor.getCount();
+
+        for (int i = 0; i < recordCount; i++){
+            cursor.moveToNext();
+            allergyNum.add(cursor.getInt(0));
+        }
+
+        cursor.close();
+        db.close();
+
+        return allergyNum;
+    }
+
+
     String getNickname() {
         SQLiteDatabase db = getReadableDatabase();
         String result = "";
