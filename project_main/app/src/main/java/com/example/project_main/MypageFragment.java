@@ -1,5 +1,6 @@
 package com.example.project_main;
 
+import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -7,6 +8,8 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -29,10 +32,11 @@ public class MypageFragment extends Fragment {
     MyDatabaseHelper dbHelper;
     ArrayList<UserDto> userInfo = new ArrayList<>();
 
+    private RecyclerCustomAdapter adapter;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+
         View view = inflater.inflate(R.layout.fragment_mypage, container, false);
 
         TextView userProfileName = view.findViewById(R.id.userProfileName);
@@ -42,6 +46,24 @@ public class MypageFragment extends Fragment {
         TextView userProfileActivity = view.findViewById(R.id.userProfileActivity);
 
         ImageButton imgBtn = view.findViewById(R.id.mypageSettingsBtn);
+
+        //리사이클러뷰
+        RecyclerView recyclerView = view.findViewById(R.id.recyclerView);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
+        recyclerView.setLayoutManager(linearLayoutManager);
+        adapter = new RecyclerCustomAdapter();
+        recyclerView.setAdapter(adapter);
+
+        Alert_Data data = new Alert_Data();
+        data.setTimeline_text("12:00 PM");
+        data.setTimeline_resId(R.drawable.warning_icon);
+        data.setTimeline_cardview("테스트");
+
+        // 각 값이 들어간 data를 adapter에 추가합니다.
+        adapter.addItem(data);
+
+        // adapter의 값 갱신
+        adapter.notifyDataSetChanged();
 
         //DB Connect
         dbHelper = new MyDatabaseHelper(getActivity().getApplicationContext());
@@ -65,8 +87,7 @@ public class MypageFragment extends Fragment {
             }
         });
 
-
-
         return view;
     }
+
 }

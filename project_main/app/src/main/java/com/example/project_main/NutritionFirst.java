@@ -1,25 +1,13 @@
 package com.example.project_main;
-
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
+import android.content.res.ColorStateList;
 import android.graphics.Color;
-import android.media.MediaRouter;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
-import android.widget.Switch;
 import android.widget.TextView;
-import android.widget.Toast;
-
-import org.w3c.dom.Text;
-
 import java.util.ArrayList;
 
 public class NutritionFirst extends Fragment {
@@ -33,6 +21,7 @@ public class NutritionFirst extends Fragment {
     private ArrayList<RecodeSelectDto> intake_food = new ArrayList<RecodeSelectDto>();
     private ArrayList<UserDto> userInfo = new ArrayList<UserDto>();
 
+    public boolean overIngredient;
 
     String sql_sentence = "SELECT intake_table.foodname, manufacturer, classification, kcal, carbohydrate, protein, province, sugars, salt, cholesterol, saturated_fat, trans_fat  from intake_table join food_table on intake_table.foodname = food_table.foodname where substr(date,1,10) = date('now','localtime');";
 
@@ -94,14 +83,20 @@ public class NutritionFirst extends Fragment {
         //region code(탄단지 초과 섭취 시)
         if (100 - totalCarbohydrate < 0){
             carboPercentage.setTextColor(Color.parseColor("#ff0000"));
+
+            progressbarCarbohydrate.setProgressTintList(ColorStateList.valueOf(Color.parseColor("#FF5D5D")));
         }
         else if (1000 - totalProtein < 0){
             proteinPercentage.setTextColor(Color.parseColor("#ff0000"));
+            progressbarProtein.setProgressTintList(ColorStateList.valueOf(Color.parseColor("#FF5D5D")));
         }
         else if (100 - totalProvince < 0){
             provincePercentage.setTextColor(Color.parseColor("#ff0000"));
+            progressbarProvince.setProgressTintList(ColorStateList.valueOf(Color.parseColor("#FF5D5D")));
         }
-        else;
+        else{
+
+        };
         //endregion
 
         //region 남은 칼로리 표시. 초과하면 주의 알림. 2200은 권장칼로리 임시값

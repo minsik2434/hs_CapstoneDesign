@@ -7,6 +7,8 @@
     <uses-feature android:name="android.hardware.camera"/>
     <uses-feature android:name="android.hardware.camera.autofocus"/>
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+
     <application
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
@@ -36,7 +38,14 @@
         <activity android:name=".UserInfoReset" android:label="user_info_reset"/>
         <activity android:name=".UserInfoResetResult" android:label="user_info_reset_result"/>
         <activity android:name=".UserAllergyReset" android:label="user_info_reset_allergy"/>
-
+        <receiver
+            android:name=".AlarmReceiver"
+            android:enabled="true"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"></action>
+            </intent-filter>
+        </receiver>
        
     </application>
 

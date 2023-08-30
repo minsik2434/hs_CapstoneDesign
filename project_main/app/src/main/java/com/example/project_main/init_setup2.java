@@ -73,7 +73,6 @@ public class init_setup2 extends Activity {
                 startActivity(intent);
                 finish();
 
-
             }
         });
 

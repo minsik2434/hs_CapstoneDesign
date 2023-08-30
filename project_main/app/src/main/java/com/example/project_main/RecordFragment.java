@@ -6,19 +6,24 @@ import static android.app.Activity.RESULT_OK;
 import static com.google.zxing.integration.android.IntentIntegrator.REQUEST_CODE;
 
 import android.Manifest;
+import android.app.Notification;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 
-import androidx.activity.result.contract.ActivityResultContracts;
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
+import androidx.core.app.NotificationCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 
 import android.os.Handler;
@@ -30,17 +35,18 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.google.zxing.integration.android.IntentIntegrator;
-import com.google.zxing.integration.android.IntentResult;
 
-import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 
 public class RecordFragment extends Fragment {
@@ -51,22 +57,20 @@ public class RecordFragment extends Fragment {
     TextView raw_mtrl;
     RadioGroup timeToEat_group;
     RadioButton morningBtn, lunchBtn, dinnerBtn;
-
+    ImageView foodImg;
     TextView searchedFoodName;
     TextView searchedFoodKcal;
     TextView searchedFoodNutriInfo;
+    AllergyList allergyList = new AllergyList();
+    ArrayList<String> userAllergy = new ArrayList<>();
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_record, container, false);
 
-
-
-
         searchedFoodName = view.findViewById(R.id.recordFoodName);
         searchedFoodKcal = view.findViewById(R.id.recordFoodKcal);
         searchedFoodNutriInfo = view.findViewById(R.id.recordFoodInfo);
-
         searchbtn = (Button) view.findViewById(R.id.searchbtn);
         barcodebtn = view.findViewById(R.id.barcodeBtn);
         recordBtn = view.findViewById(R.id.recordBtn);
@@ -75,7 +79,7 @@ public class RecordFragment extends Fragment {
         recordFoodInfo = view.findViewById(R.id.recordFoodInfo);
         raw_mtrl = view.findViewById(R.id.raw_material_text);
         timeToEat_group = view.findViewById(R.id.timeToEat_group);
-
+        foodImg = view.findViewById(R.id.recordFoodImage);
         morningBtn = view.findViewById(R.id.morningBtn);
         lunchBtn = view.findViewById(R.id.lunchBtn);
         dinnerBtn = view.findViewById(R.id.dinnerBtn);
@@ -109,7 +113,6 @@ public class RecordFragment extends Fragment {
             @Override
             public void onClick(View v) {
 
-
                 String nickname = dbHelper.getNickname();
                 String foodname = recordFoodName.getText().toString();
                 String date = getCurrentDateTime();
@@ -120,10 +123,13 @@ public class RecordFragment extends Fragment {
                     return;
                 }
 
+                AlarmController alarmController = new AlarmController(getContext());
+                alarmController.cancelAlarm(002);
+                alarmController.setAlarm(001,0);
                 dbHelper.addIntake(nickname, foodname, date, time);
                 Intent intent = new Intent(getActivity(), MainActivity.class);
                 startActivity(intent);
-
+                getActivity().finish();
             }
         });
 
@@ -166,23 +172,63 @@ public class RecordFragment extends Fragment {
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
 
         Handler handler = new Handler(Looper.getMainLooper());
-        String target = "대두";
+//        사용자 알레르기 정보 가져오기
+        MyDatabaseHelper dbHelper = new MyDatabaseHelper(getActivity().getApplicationContext());
+        ArrayList<Integer> userAllergyListNum = dbHelper.getUserAllergy(); //사용자 알레르기 번호 목록
+
+//        //알레르기 정보 가져오기
+        for(int i = 0; i < userAllergyListNum.size(); i++) {
+
+            for (int j = 0; j < allergyList.getAllergyArrayList(userAllergyListNum.get(i)).size(); j++) {
+                userAllergy.add(allergyList.getAllergyArrayList(userAllergyListNum.get(i)).get(j));
+            }
+        }
+
         if(resultCode == RESULT_OK) {
             String fn = data.getStringExtra("fname");
             String kcal = data.getStringExtra("kcal");
             String info = data.getStringExtra("foodinfo");
             String mtrl = data.getStringExtra("rawmtrl");
-            SpannableString spannableString = new SpannableString(mtrl);
-            int startIndex = mtrl.indexOf(target);
-            if(startIndex != -1){
-                int endIndex = startIndex + target.length();
-                spannableString.setSpan(new ForegroundColorSpan(Color.RED),startIndex,endIndex,0);
+            String imgurl = data.getStringExtra("imgurl");
 
+            if(imgurl == null && mtrl == null){
+                foodImg.setImageResource(R.drawable.noimg);
+                raw_mtrl.setText("알 수 없음");
+            }
+            else if (imgurl == null){
+                foodImg.setImageResource(R.drawable.noimg);
+                SpannableString spannableString = new SpannableString(mtrl);
+                for (int i = 0; i < userAllergy.size(); i++) {
+                    int startIndex = mtrl.indexOf(userAllergy.get(i));
+
+                    if (startIndex != -1) {
+                        int endIndex = startIndex + userAllergy.get(i).length();
+                        spannableString.setSpan(new ForegroundColorSpan(Color.RED), startIndex, endIndex, 0);
+
+                    }
+                }
+                raw_mtrl.setText(spannableString);
+            }
+            else if(mtrl == null){
+                raw_mtrl.setText("알 수 없음");
+                Glide.with(this).load(imgurl).into(foodImg);
+            }
+            else{
+                SpannableString spannableString = new SpannableString(mtrl);
+                for (int i = 0; i < userAllergy.size(); i++) {
+                    int startIndex = mtrl.indexOf(userAllergy.get(i));
+                    if (startIndex != -1) {
+                        int endIndex = startIndex + userAllergy.get(i).length();
+                        spannableString.setSpan(new ForegroundColorSpan(Color.RED), startIndex, endIndex, 0);
+
+                    }
+                }
+                raw_mtrl.setText(spannableString);
+                Glide.with(this).load(imgurl).into(foodImg);
             }
             recordFoodName.setText(fn);
             recordFoodKcal.setText(kcal);
             recordFoodInfo.setText(info);
-            raw_mtrl.setText(spannableString);
         }
     }
 }

@@ -1,5 +1,6 @@
 package com.example.project_main;
 
+import android.content.res.ColorStateList;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
@@ -101,22 +102,27 @@ public class NutritionSecond extends Fragment {
         //region code(if overeaten, change color to red)
         if (100 - totalSugar < 0){
             sugarPercentage.setTextColor(Color.parseColor("#ff0000"));
+            progressbarSugar.setProgressTintList(ColorStateList.valueOf(Color.parseColor("#FF5D5D")));
             needAlert = 1;
         }
         else if (1000 - totalSalt < 0){
             saltPercentage.setTextColor(Color.parseColor("#ff0000"));
+            progressbarSalt.setProgressTintList(ColorStateList.valueOf(Color.parseColor("#FF5D5D")));
             needAlert = 1;
         }
         else if (100 - totalCholesterol < 0){
             cholPercentage.setTextColor(Color.parseColor("#ff0000"));
+            progressbarCholesterol.setProgressTintList(ColorStateList.valueOf(Color.parseColor("#FF5D5D")));
             needAlert = 1;
         }
         else if (100 - totalTransFat < 0){
             transFatPercentage.setTextColor(Color.parseColor("#ff0000"));
+            progressbarTransFat.setProgressTintList(ColorStateList.valueOf(Color.parseColor("#FF5D5D")));
             needAlert = 1;
         }
         else if (100 - totalSaturFat < 0){
             saturFatPercentage.setTextColor(Color.parseColor("#ff0000"));
+            progressbarSaturFat.setProgressTintList(ColorStateList.valueOf(Color.parseColor("#FF5D5D")));
             needAlert = 1;
         }
         else;
