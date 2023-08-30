@@ -80,8 +80,6 @@ public class API_function {
         return arr;
     }
 
-
-
     String dataSearchByPrdNo(String PrdNo) throws IOException {
         StringBuilder urlBuilder = new StringBuilder("http://apis.data.go.kr/B553748/CertImgListService/getCertImgListService"); /*URL*/
         urlBuilder.append("?" + URLEncoder.encode("serviceKey","UTF-8") + "="+HACCPKEY); /*Service Key*/
