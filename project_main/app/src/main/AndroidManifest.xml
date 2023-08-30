@@ -36,7 +36,14 @@
         <activity android:name=".UserInfoReset" android:label="user_info_reset"/>
         <activity android:name=".UserInfoResetResult" android:label="user_info_reset_result"/>
         <activity android:name=".UserAllergyReset" android:label="user_info_reset_allergy"/>
-
+        <receiver
+            android:name=".AlarmReceiver"
+            android:enabled="true"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"></action>
+            </intent-filter>
+        </receiver>
        
     </application>
 

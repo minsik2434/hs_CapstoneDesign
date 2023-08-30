@@ -1,13 +1,21 @@
 package com.example.project_main;
 
+import android.app.Notification;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
 import android.media.MediaRouter;
+import android.os.Build;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.app.NotificationCompat;
 import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
@@ -33,6 +41,7 @@ public class NutritionFirst extends Fragment {
     private ArrayList<RecodeSelectDto> intake_food = new ArrayList<RecodeSelectDto>();
     private ArrayList<UserDto> userInfo = new ArrayList<UserDto>();
 
+    public boolean overIngredient;
 
     String sql_sentence = "SELECT intake_table.foodname, manufacturer, classification, kcal, carbohydrate, protein, province, sugars, salt, cholesterol, saturated_fat, trans_fat  from intake_table join food_table on intake_table.foodname = food_table.foodname where substr(date,1,10) = date('now','localtime');";
 
@@ -94,14 +103,19 @@ public class NutritionFirst extends Fragment {
         //region code(탄단지 초과 섭취 시)
         if (100 - totalCarbohydrate < 0){
             carboPercentage.setTextColor(Color.parseColor("#ff0000"));
+
         }
         else if (1000 - totalProtein < 0){
             proteinPercentage.setTextColor(Color.parseColor("#ff0000"));
+
         }
         else if (100 - totalProvince < 0){
             provincePercentage.setTextColor(Color.parseColor("#ff0000"));
+
         }
-        else;
+        else{
+
+        };
         //endregion
 
         //region 남은 칼로리 표시. 초과하면 주의 알림. 2200은 권장칼로리 임시값

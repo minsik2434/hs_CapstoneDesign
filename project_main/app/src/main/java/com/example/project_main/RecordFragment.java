@@ -6,19 +6,28 @@ import static android.app.Activity.RESULT_OK;
 import static com.google.zxing.integration.android.IntentIntegrator.REQUEST_CODE;
 
 import android.Manifest;
+import android.app.Notification;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
+import androidx.core.app.NotificationCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 
 import android.os.Handler;
@@ -46,6 +55,8 @@ import java.util.Date;
 public class RecordFragment extends Fragment {
 
     private static final int CAMERA_PERMISSION_REQUEST_CODE = 200;
+
+
     Button barcodebtn, recordBtn,searchbtn;
     TextView recordFoodName, recordFoodKcal, recordFoodInfo;
     TextView raw_mtrl;
@@ -109,7 +120,6 @@ public class RecordFragment extends Fragment {
             @Override
             public void onClick(View v) {
 
-
                 String nickname = dbHelper.getNickname();
                 String foodname = recordFoodName.getText().toString();
                 String date = getCurrentDateTime();
@@ -120,9 +130,14 @@ public class RecordFragment extends Fragment {
                     return;
                 }
 
+                AlarmController alarmController = new AlarmController(getContext());
+//                alarmController.cancelAlarm(002);
+//                alarmController.setAlarm(001,0);
+
                 dbHelper.addIntake(nickname, foodname, date, time);
                 Intent intent = new Intent(getActivity(), MainActivity.class);
                 startActivity(intent);
+
 
             }
         });
