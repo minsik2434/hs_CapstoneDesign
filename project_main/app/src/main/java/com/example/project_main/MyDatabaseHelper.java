@@ -573,8 +573,5 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
                 "weight = "+ weight +",\n" +
                 "activity = '"+ activity +"',\n" +
                 "recommended_kcal = "+ recommendKcal+" ;");
-
     }
-
-
 }
