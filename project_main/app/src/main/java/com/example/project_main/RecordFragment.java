@@ -35,11 +35,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.google.zxing.integration.android.IntentIntegrator;
 
 import java.text.SimpleDateFormat;
@@ -55,7 +57,7 @@ public class RecordFragment extends Fragment {
     TextView raw_mtrl;
     RadioGroup timeToEat_group;
     RadioButton morningBtn, lunchBtn, dinnerBtn;
-
+    ImageView foodImg;
     TextView searchedFoodName;
     TextView searchedFoodKcal;
     TextView searchedFoodNutriInfo;
@@ -77,7 +79,7 @@ public class RecordFragment extends Fragment {
         recordFoodInfo = view.findViewById(R.id.recordFoodInfo);
         raw_mtrl = view.findViewById(R.id.raw_material_text);
         timeToEat_group = view.findViewById(R.id.timeToEat_group);
-
+        foodImg = view.findViewById(R.id.recordFoodImage);
         morningBtn = view.findViewById(R.id.morningBtn);
         lunchBtn = view.findViewById(R.id.lunchBtn);
         dinnerBtn = view.findViewById(R.id.dinnerBtn);
@@ -127,7 +129,7 @@ public class RecordFragment extends Fragment {
                 dbHelper.addIntake(nickname, foodname, date, time);
                 Intent intent = new Intent(getActivity(), MainActivity.class);
                 startActivity(intent);
-
+                getActivity().finish();
             }
         });
 
@@ -187,21 +189,46 @@ public class RecordFragment extends Fragment {
             String kcal = data.getStringExtra("kcal");
             String info = data.getStringExtra("foodinfo");
             String mtrl = data.getStringExtra("rawmtrl");
-            SpannableString spannableString = new SpannableString(mtrl);
-            for (int i = 0; i < userAllergy.size(); i++) {
-                int startIndex = mtrl.indexOf(userAllergy.get(i));
+            String imgurl = data.getStringExtra("imgurl");
 
-                if (startIndex != -1) {
-                    int endIndex = startIndex + userAllergy.get(i).length();
-                    spannableString.setSpan(new ForegroundColorSpan(Color.RED), startIndex, endIndex, 0);
+            if(imgurl == null && mtrl == null){
+                foodImg.setImageResource(R.drawable.noimg);
+                raw_mtrl.setText("알 수 없음");
+            }
+            else if (imgurl == null){
+                foodImg.setImageResource(R.drawable.noimg);
+                SpannableString spannableString = new SpannableString(mtrl);
+                for (int i = 0; i < userAllergy.size(); i++) {
+                    int startIndex = mtrl.indexOf(userAllergy.get(i));
 
+                    if (startIndex != -1) {
+                        int endIndex = startIndex + userAllergy.get(i).length();
+                        spannableString.setSpan(new ForegroundColorSpan(Color.RED), startIndex, endIndex, 0);
+
+                    }
                 }
+                raw_mtrl.setText(spannableString);
+            }
+            else if(mtrl == null){
+                raw_mtrl.setText("알 수 없음");
+                Glide.with(this).load(imgurl).into(foodImg);
+            }
+            else{
+                SpannableString spannableString = new SpannableString(mtrl);
+                for (int i = 0; i < userAllergy.size(); i++) {
+                    int startIndex = mtrl.indexOf(userAllergy.get(i));
+                    if (startIndex != -1) {
+                        int endIndex = startIndex + userAllergy.get(i).length();
+                        spannableString.setSpan(new ForegroundColorSpan(Color.RED), startIndex, endIndex, 0);
 
+                    }
+                }
+                raw_mtrl.setText(spannableString);
+                Glide.with(this).load(imgurl).into(foodImg);
             }
             recordFoodName.setText(fn);
             recordFoodKcal.setText(kcal);
             recordFoodInfo.setText(info);
-            raw_mtrl.setText(spannableString);
         }
     }
 }

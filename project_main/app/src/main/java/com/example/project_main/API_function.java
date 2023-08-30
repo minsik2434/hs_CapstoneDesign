@@ -225,6 +225,7 @@ public class API_function {
     public String[] itemsByPrdNmParser(String jsonString,String pnm) {  //음식 이름 입력해서 그 음식이름과 일치하는 음식 포함성분 가져오기
         String rawmtrl = null; //원재료
         String prdNm = null;
+        String imgurl = null;
         String[] arraysum = new String[3];
         try {
             JSONObject jsonObject = new JSONObject(jsonString);
@@ -240,16 +241,18 @@ public class API_function {
                     if(prdNm.equals(pnm)==true) {
                         System.out.println(prdNm);
                         rawmtrl = item.optString("rawmtrl");
-                        System.out.println(rawmtrl);
+                        imgurl = item.optString("imgurl1");
                         break;
                     }
                 }
             }
             arraysum[0] = rawmtrl;
+            arraysum[1] = imgurl;
 
         } catch (JSONException e) {
             e.printStackTrace();
-            System.out.println("json오류");
+            arraysum[0] = "error";
+            arraysum[1] = "error";
         }
         return arraysum;
     }
