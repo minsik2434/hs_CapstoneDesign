@@ -13,6 +13,7 @@
             android:layout_height="wrap_content"
             android:layout_margin="5dp"
             android:orientation="horizontal">
+
             <EditText
                 android:inputType="text"
                 android:imeOptions="actionSearch"
@@ -21,7 +22,8 @@
                 android:background="@drawable/border"
                 android:drawableStart="@drawable/glassbtn"
                 android:layout_width="350dp"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"/>
+
             <ImageButton
                 android:layout_width="20dp"
                 android:layout_height="20dp"

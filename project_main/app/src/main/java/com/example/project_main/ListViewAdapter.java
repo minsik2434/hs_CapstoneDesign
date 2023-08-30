@@ -61,6 +61,7 @@ public class ListViewAdapter extends BaseAdapter {
     public void addItem(String name, String kcal, String info) {
         ListViewItem item = new ListViewItem(name,kcal,info);
         listViewItemList.add(item);
+
     }
 
     public void clearItem(){

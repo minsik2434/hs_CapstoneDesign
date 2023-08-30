@@ -11,6 +11,4 @@ public class CalendarDto {
         this.overeatDate = overeatDate;
     }
 
-
-
 }

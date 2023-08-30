@@ -1,5 +1,6 @@
 package com.example.project_main;
 
+import android.content.res.ColorStateList;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
@@ -94,12 +95,15 @@ public class NutritionFirst extends Fragment {
         //region code(탄단지 초과 섭취 시)
         if (100 - totalCarbohydrate < 0){
             carboPercentage.setTextColor(Color.parseColor("#ff0000"));
+            progressbarCarbohydrate.setProgressTintList(ColorStateList.valueOf(Color.parseColor("#FF5D5D")));
         }
         else if (1000 - totalProtein < 0){
             proteinPercentage.setTextColor(Color.parseColor("#ff0000"));
+            progressbarProtein.setProgressTintList(ColorStateList.valueOf(Color.parseColor("#FF5D5D")));
         }
         else if (100 - totalProvince < 0){
             provincePercentage.setTextColor(Color.parseColor("#ff0000"));
+            progressbarProvince.setProgressTintList(ColorStateList.valueOf(Color.parseColor("#FF5D5D")));
         }
         else;
         //endregion

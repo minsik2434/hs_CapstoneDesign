@@ -56,6 +56,7 @@ public class TimeState extends Fragment {
         //음식 배열에 정보 추가
         for (int i = 0; i < timeList.length; i++) {
             //정보 추가
+
             String sql_sentence = "SELECT intake_table.foodname, manufacturer, classification, kcal, carbohydrate, protein, province, sugars, salt, cholesterol, saturated_fat, trans_fat  from intake_table join food_table on intake_table.foodname = food_table.foodname where substr(date,1,10) = date('now','localtime')and time= '"+timeList[i]+"';";
             intake_food = dbHelper.executeQuerySearchIntakeFoodToday(sql_sentence);
             //탄단지 정보 종합

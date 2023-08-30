@@ -18,7 +18,7 @@ public class API_function {
 
 
     String Barcodekey = "";
-    String HACCPKEY = "";
+    String HACCPKEY = "Xd2Yy7OLRNMYdBz3BThVsTzQnoBlWeeB4ClMz52gNBB%2FNDXpxuRpEzHUDdRE8X%2By48oE65X%2FjDB9zpzmCt6qiw%3D%3D";
 
     String string_data;
     TextView text;
@@ -196,6 +196,64 @@ public class API_function {
             e.printStackTrace();
         }
         return arr;
+    }
+
+    // 음식 이름으로 해썹 api 검색해 데이터 가져오기
+    String dataSearchByPrdNm(String PrdNm) throws IOException {
+        StringBuilder urlBuilder = new StringBuilder("http://apis.data.go.kr/B553748/CertImgListService/getCertImgListService"); /*URL*/
+        urlBuilder.append("?" + URLEncoder.encode("serviceKey","UTF-8") + "="+HACCPKEY); /*Service Key*/
+        urlBuilder.append("&" + URLEncoder.encode("prdlstNm","UTF-8") + "=" + URLEncoder.encode(PrdNm, "UTF-8")); /*제품에 부여되는 고유식별번호*/
+        urlBuilder.append("&" + URLEncoder.encode("returnType","UTF-8") + "=" + URLEncoder.encode("json", "UTF-8")); /*결과 응답 형식*/
+        URL url = new URL(urlBuilder.toString());
+        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+        conn.setRequestMethod("GET");
+        conn.setRequestProperty("Content-type", "application/json");
+        BufferedReader rd;
+        if(conn.getResponseCode() >= 200 && conn.getResponseCode() <= 300) {
+            rd = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+        } else {
+            rd = new BufferedReader(new InputStreamReader(conn.getErrorStream()));
+        }
+        StringBuilder sb = new StringBuilder();
+        String line;
+        while ((line = rd.readLine()) != null) {
+            sb.append(line);
+        }
+        rd.close();
+        conn.disconnect();
+        return sb.toString();
+    }
+
+    public String[] itemsByPrdNmParser(String jsonString,String pnm) {  //음식 이름 입력해서 그 음식이름과 일치하는 음식 포함성분 가져오기
+        String rawmtrl = null; //원재료
+        String prdNm = null;
+        String[] arraysum = new String[3];
+        try {
+            JSONObject jsonObject = new JSONObject(jsonString);
+            JSONObject body = jsonObject.getJSONObject("body"); // body키의 값들
+            JSONArray items = body.getJSONArray("items"); // body키의 값들(items,totalCount...등) 중 items키의 값들 JSONArray를 가져옴.
+
+            JSONObject json = null;
+            for(int i=0; i<items.length(); i++){
+                json = items.getJSONObject(i);
+                if(json != null){
+                    JSONObject item = json.getJSONObject("item");
+                    prdNm = item.optString("prdlstNm");
+                    if(prdNm.equals(pnm)==true) {
+                        System.out.println(prdNm);
+                        rawmtrl = item.optString("rawmtrl");
+                        System.out.println(rawmtrl);
+                        break;
+                    }
+                }
+            }
+            arraysum[0] = rawmtrl;
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+            System.out.println("json오류");
+        }
+        return arraysum;
     }
 
 }
