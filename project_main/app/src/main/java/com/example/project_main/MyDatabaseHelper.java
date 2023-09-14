@@ -154,12 +154,11 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
 
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.rawQuery(sql_sentence,null);
-
+        RecodeSelectDto test = new RecodeSelectDto();
         int recordCount = cursor.getCount();
 
         for (int i = 0; i < recordCount; i++){
             cursor.moveToNext();
-            RecodeSelectDto test = new RecodeSelectDto();
 
             test.setFoodName(cursor.getString(0));
             test.setManufacturer(cursor.getString(1));
@@ -175,6 +174,7 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
             test.setTrans_fat(cursor.getFloat(11));
             intake_food.add(test);
         }
+
         cursor.close();
         db.close();
         return intake_food;
