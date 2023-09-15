@@ -63,36 +63,89 @@ public class LineChartView extends View {
         if (weightData != null) {
             float width = getWidth() - paddingStart - paddingEnd;
             float height = getHeight() - paddingTop - paddingBottom;
-
-            float barWidth = width / weightData.length;
+            float barWidth = width / (weightData.length * 2); // 막대그래프와 같은 X축을 사용하기 위해 수정
             float weightDataHeightRatio = height / maxWeightData * 0.8f;
 
-            float gapBetweenBars = barWidth * 0.1f;
+            float gapBetweenBars = barWidth * 2.0f; // 막대와 선 사이의 간격을 더 넓게 조정
 
             Path weightPath = new Path();
             for (int i = 0; i < weightData.length; i++) {
-                float dotX = paddingStart + i * barWidth + barWidth / 2;
+                float x = i * gapBetweenBars + barWidth / 2 + paddingStart; // X 축 위치 계산
                 float dotY = getHeight() - paddingBottom - weightData[i] * weightDataHeightRatio;
                 if (i == 0) {
-                    weightPath.moveTo(dotX, dotY);
+                    weightPath.moveTo(x, dotY);
                 } else {
-                    weightPath.lineTo(dotX, dotY);
+                    weightPath.lineTo(x, dotY);
                 }
 
                 // Draw circle at each weight data point
-                canvas.drawCircle(dotX, dotY, 6, dotPaint);
+                canvas.drawCircle(x, dotY, 6, dotPaint);
 
-                // Draw value text for the weight data
-                String weightText = String.valueOf(weightData[i]) + " kg";
-                Rect weightBounds = new Rect();
-                textPaint.getTextBounds(weightText, 0, weightText.length(), weightBounds);
-                float weightX = dotX;
-                float weightY = dotY - weightBounds.height() * 0.7f; // 텍스트를 약간 위로 이동하여 데이터 포인트와 가깝게
-                canvas.drawText(weightText, weightX, weightY, textPaint);
+                // Display the value next to the data point
+                String valueText = String.valueOf(weightData[i]);
+                canvas.drawText(valueText, x, dotY - 10, textPaint);
+
             }
 
             // Draw line connecting weight data points
             canvas.drawPath(weightPath, linePaint);
+
+            // Draw a slightly thicker green line just above the "몸무게" text
+            float greenLineStartX = paddingStart + 20;
+            float weightLabelY = paddingTop + 50; // Y position of the "몸무게" text
+            float greenLineStartY = weightLabelY - 10; // Slightly above the "몸무게" text
+            float greenLineEndX = paddingStart + 80;
+            float greenLineEndY = weightLabelY - 10; // Slightly above the "몸무게" text
+            linePaint.setStrokeWidth(5); // Set thicker line width
+            canvas.drawLine(greenLineStartX, greenLineStartY, greenLineEndX, greenLineEndY, linePaint);
+
+            // Draw "몸무게" text
+            String weightLabel = "몸무게";
+            float weightLabelX = greenLineEndX + 50; // Adjust the horizontal position
+            canvas.drawText(weightLabel, weightLabelX, weightLabelY, textPaint);
+
+            // Draw a red line just above the "몸무게" text
+            float redLineStartX = paddingStart + 190; // X position of the red line start
+            float redLineStartY = weightLabelY - 10; // Slightly above the "몸무게" text
+            float redLineEndX = paddingStart + 250; // X position of the red line end
+            float redLineEndY = weightLabelY - 10; // Slightly above the "몸무게" text
+            linePaint.setColor(Color.RED); // Set line color to red
+            canvas.drawLine(redLineStartX, redLineStartY, redLineEndX, redLineEndY, linePaint);
+
+            // Draw "탄수화물" text
+            String carbLabel = "탄수화물";
+            float carbLabelX = redLineEndX + 70; // Adjust the horizontal position
+            canvas.drawText(carbLabel, carbLabelX, weightLabelY, textPaint);
+
+
+            // Draw a blue line just above the "단백질" text
+            float blueLineStartX = paddingStart + 400; // X position of the blue line start (Adjusted)
+            float blueLineStartY = weightLabelY - 10; // Slightly above the "단백질" text
+            float blueLineEndX = paddingStart + 460; // X position of the blue line end (Adjusted)
+            float blueLineEndY = weightLabelY - 10; // Slightly above the "단백질" text
+            linePaint.setColor(Color.BLUE); // Set line color to blue
+            canvas.drawLine(blueLineStartX, blueLineStartY, blueLineEndX, blueLineEndY, linePaint);
+
+            // Draw "단백질" text
+            String proteinLabel = "단백질";
+            float proteinLabelX = blueLineEndX + 50; // Adjust the horizontal position
+            canvas.drawText(proteinLabel, proteinLabelX, weightLabelY, textPaint);
+
+            // Draw a magenta line just above the "지방" text
+            float magentaLineStartX = paddingStart + 580; // X position of the magenta line start (Adjusted)
+            float magentaLineStartY = weightLabelY - 10; // Slightly above the "지방" text
+            float magentaLineEndX = paddingStart + 640; // X position of the magenta line end (Adjusted)
+            float magentaLineEndY = weightLabelY - 10; // Slightly above the "지방" text
+            linePaint.setColor(Color.MAGENTA); // Set line color to magenta
+            canvas.drawLine(magentaLineStartX, magentaLineStartY, magentaLineEndX, magentaLineEndY, linePaint);
+
+            // Draw "지방" text
+            String fatLabel = "지방";
+            float fatLabelX = magentaLineEndX + 50; // Adjust the horizontal position
+            canvas.drawText(fatLabel, fatLabelX, weightLabelY, textPaint);
+
+
+
         }
     }
 

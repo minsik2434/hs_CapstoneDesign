@@ -92,6 +92,19 @@
                 />
         </TableRow>
 
+        <TableRow>
+
+            <CheckBox
+                android:id="@+id/checkMeat"
+                android:text="육류"
+                android:background="@color/grayColor"
+                android:layout_width="81dp"
+                android:layout_height="46dp"
+                android:layout_margin="10dp"
+                />
+
+        </TableRow>
+
     </TableLayout>
 
 

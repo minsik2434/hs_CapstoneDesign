@@ -87,6 +87,7 @@ public class SearchActivity extends Activity {
                 Intent intent = new Intent(getApplicationContext(),RecordFragment.class);
                 String fn = listViewItem.getFoodName();
                 final String[] mtrl = new String[1];
+                final String[] imgurl = new String[1];
                 new Thread(new Runnable() {
                     @Override
                     public void run() {
@@ -94,10 +95,12 @@ public class SearchActivity extends Activity {
                             String json = api.dataSearchByPrdNm(fn);
                             String[] PrdNmAndPrdNoData = api.itemsByPrdNmParser(json,fn);
                             mtrl[0] = PrdNmAndPrdNoData[0];
+                            imgurl[0] = PrdNmAndPrdNoData[1];
                             intent.putExtra("fname", listViewItem.getFoodName());
                             intent.putExtra("kcal",listViewItem.getFoodKcal());
                             intent.putExtra("foodinfo",listViewItem.getFoodInfo());
                             intent.putExtra("rawmtrl",mtrl[0]);
+                            intent.putExtra("imgurl",imgurl[0]);
                             setResult(RESULT_OK,intent);
                             finish();
                         } catch (IOException e) {

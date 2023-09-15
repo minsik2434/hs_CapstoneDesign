@@ -12,7 +12,7 @@ import androidx.annotation.Nullable;
 public class UserAllergyReset extends Activity {
 
     Integer[] integerAllergy = {R.id.checkMilk, R.id.checkFowl, R.id.checkShellfish, R.id.checkFish, R.id.checkNuts,
-            R.id.checkBean, R.id.checkWheat, R.id.checkPeanut};
+            R.id.checkBean, R.id.checkWheat, R.id.checkPeanut, R.id.checkMeat};
     CheckBox[] checkAllergy = new CheckBox[integerAllergy.length];
 
     Integer[] integerDisease = {R.id.diabetes,R.id.highBloodPressure,R.id.hyperlipidemia,R.id.obesity};
@@ -59,7 +59,10 @@ public class UserAllergyReset extends Activity {
             @Override
             public void onClick(View view) {
 
-                //Test
+                //DB 알러지 초기화
+                dbHelper.deleteAllRows("allergy");
+                //DB 지병 초기화
+                dbHelper.deleteAllRows("disease");
                 //DB에 알러지 추가
                 addAllergies();
                 //DB에 지병 추가
@@ -78,10 +81,8 @@ public class UserAllergyReset extends Activity {
             }
 
         });
-
     }
 
-    //Test
     // 알러지를 테이블에 추가
     void addAllergies() {
         for (int i = 0; i < checkAllergy.length; i++) {

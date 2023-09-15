@@ -30,6 +30,10 @@ public class AllergyList {
             "ground nuts", "가수분해 땅콩 단백질", "마델나스", "혼합 견과류", "껍질을 까지 않은 땅콩", "땅콩 맛 견과류", "견과류 조각", "견과육", "땅콩 버터", "땅콩 버터 칩",
             "땅콩 버터 소량", "땅콩 밀가루", "땅콩 페이스트", "땅콩 소스", "땅콩 시럽", "스페인 땅콩", "버지니아 땅콩"};
 
+    private final String[] meatList = {"돼지고기","쇠고기","닭고기","닭정육","오리고기","양고기","염소","유산양","식육","포장육","식육가공품"};
+
+
+
     private final ArrayList<String> milkArrayList = new ArrayList<>(Arrays.asList(milkList));
     private final ArrayList<String> eggsArrayList = new ArrayList<>(Arrays.asList(eggsList));
     private final ArrayList<String> shellfishArrayList = new ArrayList<>(Arrays.asList(shellfishList));
@@ -38,6 +42,7 @@ public class AllergyList {
     private final ArrayList<String> beanArrayList = new ArrayList<>(Arrays.asList(beanList));
     private final ArrayList<String> wheatArrayList = new ArrayList<>(Arrays.asList(wheatList));
     private final ArrayList<String> peanutArrayList = new ArrayList<>(Arrays.asList(peanutList));
+    private final ArrayList<String> meatArrayList = new ArrayList<>(Arrays.asList(meatList));
 
     public ArrayList<String> getAllergyArrayList(int allergyNum){
 
@@ -68,6 +73,10 @@ public class AllergyList {
             case 7:
                 allergy = peanutArrayList;
                 break;
+            case 8:
+                allergy = meatArrayList;
+                break;
+
         }
         return allergy;
     }
