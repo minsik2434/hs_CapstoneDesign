@@ -79,8 +79,6 @@ public class UserInfoResetResult extends Activity {
                 finish();
             }
         });
-
-
     }
 
     // 칼로리 계산식 (통합 필요)

@@ -14,7 +14,7 @@ import java.util.ArrayList;
 public class init_setup3 extends Activity {
 
     Integer[] integerAllergy = {R.id.checkMilk, R.id.checkFowl, R.id.checkShellfish, R.id.checkFish, R.id.checkNuts,
-            R.id.checkBean, R.id.checkWheat, R.id.checkPeanut};
+            R.id.checkBean, R.id.checkWheat, R.id.checkPeanut, R.id.checkMeat};
     CheckBox[] checkAllergy = new CheckBox[integerAllergy.length];
 
     Integer[] integerDisease = {R.id.diabetes,R.id.highBloodPressure,R.id.hyperlipidemia,R.id.obesity};
@@ -52,11 +52,15 @@ public class init_setup3 extends Activity {
         String weight = intent.getStringExtra("weight");
         String sex = intent.getStringExtra("sex");
 
-
         // 이전 버튼을 눌렀을 때
         btnPre3.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
+                //DB 알러지 초기화
+                allergyDB.deleteAllRows("allergy");
+                //DB 지병 초기화
+                diseaseDB.deleteAllRows("disease");
                 //DB에 알러지 추가
                 addAllergies();
                 //DB에 지병 추가
@@ -83,6 +87,10 @@ public class init_setup3 extends Activity {
             @Override
             public void onClick(View view) {
 
+                //DB 알러지 초기화
+                allergyDB.deleteAllRows("allergy");
+                //DB 지병 초기화
+                diseaseDB.deleteAllRows("disease");
                 //DB에 알러지 추가
                 addAllergies();
                 //DB에 지병 추가

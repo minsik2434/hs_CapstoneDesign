@@ -105,11 +105,11 @@ public class BarChartView extends View {
             float height = getHeight() - paddingTop - paddingBottom;
             float barWidth = width / (data.length * 2.5f);
             float dataHeightRatio = height / maxData * 1.5f;
-
             float gapBetweenBars = barWidth * 2.5f;
 
             for (int i = 0; i < data.length; i++) {
                 float x = i * gapBetweenBars + barWidth / 2 + paddingStart;
+
                 float carbohydrateTop = getHeight() - paddingBottom - carbohydrateData[i] * dataHeightRatio;
                 float proteinTop = carbohydrateTop - proteinData[i] * dataHeightRatio;
                 float fatTop = proteinTop - fatData[i] * dataHeightRatio;
@@ -117,7 +117,6 @@ public class BarChartView extends View {
                 // 칼로리 데이터 그리기
                 canvas.drawRect(x - barWidth / 2, carbohydrateTop, x + barWidth / 2, getHeight() - paddingBottom, carbohydratePaint);
                 canvas.drawRect(x - barWidth / 2, proteinTop, x + barWidth / 2, carbohydrateTop, proteinPaint);
-
                 // 지방 바의 상단 두 모서리에 둥근 모양 효과 적용
                 Path fatTopPath = new Path();
                 fatTopPath.moveTo(x - barWidth / 2, fatTop);
@@ -132,6 +131,7 @@ public class BarChartView extends View {
                 String valueText = String.valueOf(data[i]);
                 float valueX = x;
                 float valueY = fatTop - 10;
+
                 canvas.drawText(valueText, valueX, valueY, textPaint);
             }
 
@@ -141,6 +141,7 @@ public class BarChartView extends View {
                 float x = i * gapBetweenBars + barWidth / 2 + paddingStart;
                 float dateY = getHeight() - paddingBottom + 40;
                 canvas.drawText(dateText, x, dateY, textPaint);
+
             }
         }
     }

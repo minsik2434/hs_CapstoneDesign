@@ -368,6 +368,26 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
         return allergyNum;
     }
 
+    //사용자 지병 가져오기
+    public ArrayList<Integer> getUserDisease(){
+
+        SQLiteDatabase db = getReadableDatabase();
+        ArrayList<Integer> diseaseNum= new ArrayList<>();
+
+        Cursor cursor = db.rawQuery("SELECT diseaseID FROM disease_user", null);
+        int recordCount = cursor.getCount();
+
+        for (int i = 0; i < recordCount; i++){
+            cursor.moveToNext();
+            diseaseNum.add(cursor.getInt(0));
+        }
+
+        cursor.close();
+        db.close();
+
+        return diseaseNum;
+    }
+
 
     String getNickname() {
         SQLiteDatabase db = getReadableDatabase();
