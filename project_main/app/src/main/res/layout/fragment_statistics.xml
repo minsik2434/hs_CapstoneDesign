@@ -7,7 +7,6 @@
     android:orientation="vertical"
     tools:context=".MainActivity">
 
-
     <FrameLayout
         android:layout_margin="10dp"
         android:layout_gravity="center"
@@ -33,20 +32,32 @@
 
     </FrameLayout>
 
-    <!-- 그래프 -->
 
-    <com.example.project_main.LineChartView
-        android:id="@+id/lineChart"
+    <FrameLayout
+        android:layout_margin="5dp"
+        android:layout_gravity="center"
         android:layout_width="match_parent"
-        android:layout_marginTop="-50dp"
-        android:layout_height="200dp" />
+        android:layout_height="300dp"
+        android:layout_marginTop="-100dp">
 
+        <androidx.viewpager2.widget.ViewPager2
+            android:id="@+id/second_viewpager"
+            android:layout_gravity="center"
+            android:clipToPadding="false"
+            android:clipChildren="false"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="fitXY"
+            android:layout_marginBottom="10dp"
+            android:orientation="vertical" />
 
-    <com.example.project_main.BarChartView
-        android:id="@+id/barChart"
-        android:layout_width="match_parent"
-        android:layout_marginTop="-170dp"
-        android:layout_height="300dp" />
+        <me.relex.circleindicator.CircleIndicator3
+            android:id="@+id/second_indicator"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:layout_marginBottom="10dp"
+            android:layout_gravity="bottom"/>
 
+    </FrameLayout>
 
 </LinearLayout>
