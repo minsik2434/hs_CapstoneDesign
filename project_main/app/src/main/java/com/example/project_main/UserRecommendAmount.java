@@ -71,7 +71,6 @@ public class UserRecommendAmount {
         return recommendNutriArray;
     }
 
-
     //계산
     private void calculateRecommendNutri(int disease, int age, float height, float weight, String sex, String activity){
 
@@ -85,10 +84,10 @@ public class UserRecommendAmount {
                 protein = (float) calProtein(kcal);
                 province = (float) calProvince(kcal);
                 //당(성별)
-                if(sex.equals("male")){
+                if(sex.equals("남성")){
                     sugars = 36;
                 }
-                else if (sex.equals("female")){
+                else if (sex.equals("여성")){
                     sugars = 24;
                 }
                 salt = 2400;
@@ -98,9 +97,9 @@ public class UserRecommendAmount {
                 break;
             //당뇨
             case 1:
-                if(sex.equals("male"))
+                if(sex.equals("남성"))
                     avgWeight = (Math.pow(height/100,2) * 22);
-                else if(sex.equals("female"))
+                else if(sex.equals("여성"))
                     avgWeight = (Math.pow(height/100,2) * 21);
 
                 if(activity.equals("운동 안함") || activity.equals("운동 거의 안함"))
@@ -125,9 +124,9 @@ public class UserRecommendAmount {
                 carbohydrate = kcal * 0.55f;
                 protein = kcal * 0.18f;
                 province = kcal * 0.27f;
-                if (sex.equals("male"))
+                if (sex.equals("남성"))
                     sugars = 36;
-                else if (sex.equals("female"))
+                else if (sex.equals("여성"))
                     sugars = 25;
                 salt = 2300;
                 cholesterol = 150;
@@ -136,9 +135,9 @@ public class UserRecommendAmount {
                 break;
             //고지혈증
             case 3:
-                if(sex.equals("male"))
+                if(sex.equals("남성"))
                     kcal = (int) (Math.pow(height/100,2) * 22 * 30);
-                else if(sex.equals("female"))
+                else if(sex.equals("여성"))
                     kcal = (int) (Math.pow(height/100,2) * 21 * 30);
                 carbohydrate = kcal * 0.5f;
                 protein = kcal * 0.15f;

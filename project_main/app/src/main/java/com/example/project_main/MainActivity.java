@@ -50,6 +50,7 @@ import java.net.URL;
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
+
     MainFragment fragment_main;
     RecordFragment fragment_record;
     StatisticsTabFragment fragment_statistics;
@@ -195,51 +196,37 @@ public class MainActivity extends AppCompatActivity {
                     public void run() {
                         try {
 
-                            boolean searchOK = true;
-
                             API_function api_function = new API_function();
 
-                            String dataBybarcode = api_function.dataSearchByBarcode(barcode); //바코드로 바코드 api json
+                            String dataBybarcode = api_function.dataSearchByBarcode(barcode);
                             System.out.println("dataBybarcode : " + dataBybarcode);
-                            String[] PrdNmAndPrdNoData = api_function.itemsByBarcodeJsonParser(dataBybarcode); //바코드 json파일로 음식 이름, 품목번호
-                            System.out.println("PrdNmAndPrdNoData : " + PrdNmAndPrdNoData[0] + PrdNmAndPrdNoData[1]);// 오류시 null
+                            String[] PrdNmAndPrdNoData = api_function.itemsByBarcodeJsonParser(dataBybarcode);
+                            System.out.println("PrdNmAndPrdNoData : " + PrdNmAndPrdNoData[0] + PrdNmAndPrdNoData[1]);
                             foodName = PrdNmAndPrdNoData[0];
 
-                            if(foodName != null){
+                            String dataByPrdNo = api_function.dataSearchByPrdNo(PrdNmAndPrdNoData[1]);
+                            System.out.println("dataByPrdNo : " + dataByPrdNo);
+                            String[] PrdRawmtrlAndPrdImgData = api_function.itemsByPrdNoJsonParser(dataByPrdNo);
+                            System.out.println("PrdRawmtrlAndPrdImgData : " + PrdRawmtrlAndPrdImgData[0] + PrdRawmtrlAndPrdImgData[1]);
+                            foodRaw_material = PrdRawmtrlAndPrdImgData[0];
+                            foodImg = PrdRawmtrlAndPrdImgData[1];
 
-                                String dataByPrdNo = api_function.dataSearchByPrdNo(PrdNmAndPrdNoData[1]); //품목보고번호로 해썹데이터
-                                System.out.println("dataByPrdNo : " + dataByPrdNo);
-                                String[] PrdRawmtrlAndPrdImgData = api_function.itemsByPrdNoJsonParser(dataByPrdNo); //원재료 이미지
-                                System.out.println("PrdRawmtrlAndPrdImgData : " + PrdRawmtrlAndPrdImgData[0] + PrdRawmtrlAndPrdImgData[1]);
-                                foodRaw_material = PrdRawmtrlAndPrdImgData[0];
-                                foodImg = PrdRawmtrlAndPrdImgData[1];
 
-                                String sql_sentence = "select foodname, manufacturer, classification, kcal, carbohydrate, protein, province, sugars, salt, cholesterol, saturated_fat, trans_fat from food_table where foodname = '"+foodName+"';";
-                                ArrayList<RecodeSelectDto> recode_list = new ArrayList<RecodeSelectDto>();
-                                recode_list = dbHelper.executeQuerySearchIntakeFoodToday(sql_sentence);
 
-                                try {
+                            String sql_sentence = "select foodname, manufacturer, classification, kcal, carbohydrate, protein, province, sugars, salt, cholesterol, saturated_fat, trans_fat from food_table where foodname = '"+foodName+"';";
+                            ArrayList<RecodeSelectDto> recode_list = new ArrayList<RecodeSelectDto>();
+                            recode_list = dbHelper.executeQuerySearchIntakeFoodToday(sql_sentence);
+                            foodKcal = (int) recode_list.get(0).getKcal();
+                            foodCarbohydrate = recode_list.get(0).getCarbohydrate();
+                            foodProtein = recode_list.get(0).getProtein();
+                            foodProvince = recode_list.get(0).getProvince();
 
-                                    foodKcal = (int) recode_list.get(0).getKcal();
-                                    foodCarbohydrate = recode_list.get(0).getCarbohydrate();
-                                    foodProtein = recode_list.get(0).getProtein();
-                                    foodProvince = recode_list.get(0).getProvince();
-                                    searchOK = true;
-                                }
-                                catch(Exception e){
-                                    searchOK= false;
-                                }
-                            }
-                            else{
-                                searchOK = false;
-                            }
 
-                            if (searchOK)
-                            {
-                                runOnUiThread(new Runnable() {
-                                    @Override
-                                    public void run() {
-
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    if (foodName != null)
+                                    {
                                         //음식 탄단지 정보 저장
                                         String foodInfo = "탄수화물 " + foodCarbohydrate + "g" + " 단백질 " + foodProtein + "g" + " 지방 " + foodProvince + "g";
                                         //이미지 저장해야 함
@@ -249,9 +236,8 @@ public class MainActivity extends AppCompatActivity {
                                         searchedFoodNutriInfo.setText(foodInfo);
                                         raw_material_text.setText(foodRaw_material);
                                     }
-                                });
-                            }
-
+                                }
+                            });
 
                         } catch (IOException e) {
                             e.printStackTrace();

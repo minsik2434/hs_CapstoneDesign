@@ -5,6 +5,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Path;
+import android.graphics.Rect;
 import android.util.AttributeSet;
 import android.view.View;
 
@@ -14,14 +15,14 @@ public class LineChartView extends View {
 
     private Paint linePaint;
     private Paint dotPaint;
-    private Paint textPaint;
+    private Paint textPaint; // Add this line to declare the textPaint variable
     private int[] weightData;
     private int maxWeightData;
 
     private int paddingStart = 60;
     private int paddingTop = 60;
     private int paddingEnd = 60;
-    private int paddingBottom = 0;
+    private int paddingBottom = 80;
 
     public LineChartView(Context context) {
         super(context);
@@ -43,7 +44,7 @@ public class LineChartView extends View {
         dotPaint.setColor(Color.GREEN);
         dotPaint.setStyle(Paint.Style.FILL);
 
-        textPaint = new Paint();
+        textPaint = new Paint(); // Initialize the textPaint variable
         textPaint.setColor(Color.BLACK);
         textPaint.setTextSize(30);
         textPaint.setTextAlign(Paint.Align.CENTER);
@@ -62,14 +63,14 @@ public class LineChartView extends View {
         if (weightData != null) {
             float width = getWidth() - paddingStart - paddingEnd;
             float height = getHeight() - paddingTop - paddingBottom;
-            float barWidth = width / (weightData.length * 2);
+            float barWidth = width / (weightData.length * 2); // 막대그래프와 같은 X축을 사용하기 위해 수정
             float weightDataHeightRatio = height / maxWeightData * 0.8f;
 
-            float gapBetweenBars = barWidth * 2.0f;
+            float gapBetweenBars = barWidth * 2.0f; // 막대와 선 사이의 간격을 더 넓게 조정
 
             Path weightPath = new Path();
             for (int i = 0; i < weightData.length; i++) {
-                float x = i * gapBetweenBars + barWidth / 2 + paddingStart;
+                float x = i * gapBetweenBars + barWidth / 2 + paddingStart; // X 축 위치 계산
                 float dotY = getHeight() - paddingBottom - weightData[i] * weightDataHeightRatio;
                 if (i == 0) {
                     weightPath.moveTo(x, dotY);
@@ -77,12 +78,16 @@ public class LineChartView extends View {
                     weightPath.lineTo(x, dotY);
                 }
 
+                // Draw circle at each weight data point
                 canvas.drawCircle(x, dotY, 6, dotPaint);
 
+                // Display the value next to the data point
                 String valueText = String.valueOf(weightData[i]);
                 canvas.drawText(valueText, x, dotY - 10, textPaint);
+
             }
 
+            // Draw line connecting weight data points
             canvas.drawPath(weightPath, linePaint);
 
             // Draw a slightly thicker green line just above the "몸무게" text
@@ -152,5 +157,39 @@ public class LineChartView extends View {
             }
         }
         return max;
+    }
+
+    @Override
+    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        int desiredWidth = getSuggestedMinimumWidth() + paddingStart + paddingEnd;
+        int desiredHeight = getSuggestedMinimumHeight() + paddingTop + paddingBottom;
+
+        int widthMode = MeasureSpec.getMode(widthMeasureSpec);
+        int widthSize = MeasureSpec.getSize(widthMeasureSpec);
+        int heightMode = MeasureSpec.getMode(heightMeasureSpec);
+        int heightSize = MeasureSpec.getSize(heightMeasureSpec);
+
+        int measuredWidth;
+        int measuredHeight;
+
+        // Measure Width
+        if (widthMode == MeasureSpec.EXACTLY) {
+            measuredWidth = widthSize;
+        } else if (widthMode == MeasureSpec.AT_MOST) {
+            measuredWidth = Math.min(desiredWidth, widthSize);
+        } else {
+            measuredWidth = desiredWidth;
+        }
+
+        // Measure Height
+        if (heightMode == MeasureSpec.EXACTLY) {
+            measuredHeight = heightSize;
+        } else if (heightMode == MeasureSpec.AT_MOST) {
+            measuredHeight = Math.min(desiredHeight, heightSize);
+        } else {
+            measuredHeight = desiredHeight;
+        }
+
+        setMeasuredDimension(measuredWidth, measuredHeight);
     }
 }

@@ -3,9 +3,7 @@ package com.example.project_main;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
-import android.graphics.CornerPathEffect;
 import android.graphics.Paint;
-import android.graphics.Path;
 import android.util.AttributeSet;
 import android.view.View;
 
@@ -40,9 +38,6 @@ public class BarChartView extends View {
     private int paddingEnd = 60;
     private int paddingBottom = 80;
 
-    // 투명도 변수 추가
-    private int alphaValue = 100; // 0 (완전 투명) to 255 (완전 불투명)
-
     public BarChartView(Context context) {
         super(context);
         init();
@@ -55,14 +50,13 @@ public class BarChartView extends View {
 
     private void init() {
         carbohydratePaint = new Paint();
-        carbohydratePaint.setColor(Color.argb(alphaValue, 255, 0, 0)); // 빨간색
+        carbohydratePaint.setColor(Color.RED);
 
         proteinPaint = new Paint();
-        proteinPaint.setColor(Color.argb(alphaValue, 0, 0, 255)); // 파란색
+        proteinPaint.setColor(Color.BLUE);
 
         fatPaint = new Paint();
-        fatPaint.setColor(Color.argb(alphaValue, 255, 0, 255)); // 마젠타색
-        fatPaint.setPathEffect(new CornerPathEffect(10)); // 지방 바에 둥근 모서리 효과 적용
+        fatPaint.setColor(Color.MAGENTA);
 
         textPaint = new Paint();
         textPaint.setColor(Color.BLACK);
@@ -70,16 +64,16 @@ public class BarChartView extends View {
         textPaint.setTextAlign(Paint.Align.CENTER);
     }
 
-    public void setData(int[] data, int[] carbohydrateData, int[] proteinData, int[] fatData, String[] dates) {
+    public void setData(int[] data, int[] carbohydrateData, int[] proteinData, int[] fatData) {
         this.data = data;
         this.carbohydrateData = carbohydrateData;
         this.proteinData = proteinData;
         this.fatData = fatData;
-        this.dates = dates; // 날짜 배열 설정
 
         this.maxData = findMax(data);
 
-        invalidate(); // 다시 그리도록 요청
+        this.dates = calculateDates();
+        invalidate();
     }
 
     private String[] calculateDates() {
@@ -103,42 +97,35 @@ public class BarChartView extends View {
         if (data != null && dates != null && carbohydrateData != null && proteinData != null && fatData != null) {
             float width = getWidth() - paddingStart - paddingEnd;
             float height = getHeight() - paddingTop - paddingBottom;
-            float barWidth = width / (data.length * 2.5f);
-            float dataHeightRatio = height / maxData * 1.5f;
-            float gapBetweenBars = barWidth * 2.5f;
+            float barWidth = width / (data.length * 2); // 막대그래프를 더 얇게 만듦
+            float dataHeightRatio = height / maxData * 2.0f; // 막대그래프 세로 길이
+
+            float gapBetweenBars = barWidth * 2.0f; // 막대 사이의 간격을 더 넓게 조정
 
             for (int i = 0; i < data.length; i++) {
-                float x = i * gapBetweenBars + barWidth / 2 + paddingStart;
-
+                float x = i * gapBetweenBars + barWidth / 2 + paddingStart; // X 축 위치 계산
+                // 칼로리 데이터를 분할하여 탄수화물, 단백질, 지방 데이터로 표시
                 float carbohydrateTop = getHeight() - paddingBottom - carbohydrateData[i] * dataHeightRatio;
                 float proteinTop = carbohydrateTop - proteinData[i] * dataHeightRatio;
                 float fatTop = proteinTop - fatData[i] * dataHeightRatio;
 
-                // 칼로리 데이터 그리기
+                // Draw the bars for each data type
                 canvas.drawRect(x - barWidth / 2, carbohydrateTop, x + barWidth / 2, getHeight() - paddingBottom, carbohydratePaint);
                 canvas.drawRect(x - barWidth / 2, proteinTop, x + barWidth / 2, carbohydrateTop, proteinPaint);
-                // 지방 바의 상단 두 모서리에 둥근 모양 효과 적용
-                Path fatTopPath = new Path();
-                fatTopPath.moveTo(x - barWidth / 2, fatTop);
-                fatTopPath.lineTo(x + barWidth / 2, fatTop);
-                fatTopPath.lineTo(x + barWidth / 2, proteinTop);
-                fatTopPath.lineTo(x - barWidth / 2, proteinTop);
-                fatTopPath.close();
+                canvas.drawRect(x - barWidth / 2, fatTop, x + barWidth / 2, proteinTop, fatPaint);
 
-                canvas.drawPath(fatTopPath, fatPaint);
-
-                // 데이터 값 표시
+                // Draw value text for the data
                 String valueText = String.valueOf(data[i]);
                 float valueX = x;
-                float valueY = fatTop - 10;
 
+                float valueY = fatTop - 10; // 막대의 상단에 표시
                 canvas.drawText(valueText, valueX, valueY, textPaint);
             }
 
-            // 날짜 텍스트 그리기
+            // Draw date text
             for (int i = 0; i < dates.length; i++) {
                 String dateText = dates[i];
-                float x = i * gapBetweenBars + barWidth / 2 + paddingStart;
+                float x = i * gapBetweenBars + barWidth / 2 + paddingStart; // X 축 위치 계산
                 float dateY = getHeight() - paddingBottom + 40;
                 canvas.drawText(dateText, x, dateY, textPaint);
 
@@ -169,6 +156,7 @@ public class BarChartView extends View {
         int measuredWidth;
         int measuredHeight;
 
+        // Measure Width
         if (widthMode == MeasureSpec.EXACTLY) {
             measuredWidth = widthSize;
         } else if (widthMode == MeasureSpec.AT_MOST) {
@@ -177,6 +165,7 @@ public class BarChartView extends View {
             measuredWidth = desiredWidth;
         }
 
+        // Measure Height
         if (heightMode == MeasureSpec.EXACTLY) {
             measuredHeight = heightSize;
         } else if (heightMode == MeasureSpec.AT_MOST) {

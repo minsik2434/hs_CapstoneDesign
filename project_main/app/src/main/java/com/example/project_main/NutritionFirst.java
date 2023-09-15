@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import java.util.ArrayList;
 
 public class NutritionFirst extends Fragment {
@@ -22,9 +23,9 @@ public class NutritionFirst extends Fragment {
     private ArrayList<RecodeSelectDto> intake_food = new ArrayList<RecodeSelectDto>();
     private ArrayList<UserDto> userInfo = new ArrayList<UserDto>();
 
-
     UserRecommendAmount userRecAmount;
     private ArrayList<NutritionDto> nutriInfo = new ArrayList<>();
+
     private ArrayList<Integer> userDisease = new ArrayList<>();
     private ArrayList<Integer> userDiseaseListNum = new ArrayList<>();
 
@@ -92,7 +93,7 @@ public class NutritionFirst extends Fragment {
             totalProvince += intake_food.get(i).getProvince();
         }
 
-        //프로그레스 바 설정. 2200.0f 는 임시값. (총 먹은 칼로리/권장 칼로리)
+//        //프로그레스 바 설정. 2200.0f 는 임시값. (총 먹은 칼로리/권장 칼로리)
         mainCircleProgressbar.setProgress( Math.round( (totalKcal/nutriInfo.get(0).getKcal())*100) ) ;
         progressbarCarbohydrate.setProgress( Math.round( (totalCarbohydrate/nutriInfo.get(0).getCarbohydrate())*100 ) );
         progressbarProtein.setProgress( Math.round( (totalProtein/nutriInfo.get(0).getProtein())*100 ) );
@@ -107,7 +108,6 @@ public class NutritionFirst extends Fragment {
         //region code(탄단지 초과 섭취 시)
         if (nutriInfo.get(0).getCarbohydrate() - totalCarbohydrate < 0){
             carboPercentage.setTextColor(Color.parseColor("#ff0000"));
-
             progressbarCarbohydrate.setProgressTintList(ColorStateList.valueOf(Color.parseColor("#FF5D5D")));
         }
         else if (nutriInfo.get(0).getProtein() - totalProtein < 0){

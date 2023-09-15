@@ -17,7 +17,7 @@ import java.util.HashMap;
 public class API_function {
 
 
-    String Barcodekey = "78d4923e65234bd4994c";
+    String Barcodekey = "";
     String HACCPKEY = "Xd2Yy7OLRNMYdBz3BThVsTzQnoBlWeeB4ClMz52gNBB%2FNDXpxuRpEzHUDdRE8X%2By48oE65X%2FjDB9zpzmCt6qiw%3D%3D";
 
     String string_data;
@@ -75,9 +75,7 @@ public class API_function {
 
 
         } catch (JSONException e) {
-            arr[0] = null;
-            arr[1] = null;
-            return arr;
+            e.printStackTrace();
         }
         return arr;
     }

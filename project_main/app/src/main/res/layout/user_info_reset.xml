@@ -147,7 +147,7 @@
                         android:layout_weight="1"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="male"
+                        android:text="남성"
                         android:layout_marginRight="20dp"/>
 
                     <RadioButton
@@ -155,7 +155,7 @@
                         android:layout_weight="1"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="female"/>
+                        android:text="여성"/>
 
                 </RadioGroup>
 
