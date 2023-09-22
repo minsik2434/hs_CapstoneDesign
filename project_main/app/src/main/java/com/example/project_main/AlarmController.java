@@ -7,6 +7,8 @@ import android.content.Intent;
 import android.os.SystemClock;
 import android.util.Log;
 
+import java.util.Calendar;
+
 public class AlarmController {
     private static final String TAG = "AlarmController";
     private Context context;
@@ -26,9 +28,15 @@ public class AlarmController {
 
         PendingIntent alarmIntent = PendingIntent.getBroadcast(context, reqCode, intent, PendingIntent.FLAG_IMMUTABLE);
 
-        alarmMgr.set(AlarmManager.ELAPSED_REALTIME_WAKEUP,
+        //특정 시간 설정해서 알림
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(2023, 9 - 1, 22, 14, 0);
+        alarmMgr.set(AlarmManager.ELAPSED_REALTIME_WAKEUP, calendar.getTimeInMillis(), alarmIntent);
+
+        //특정 시간에서 +n분 후 알림
+        /*alarmMgr.set(AlarmManager.ELAPSED_REALTIME_WAKEUP,
                 SystemClock.elapsedRealtime() +
-                        60* 1000 *timeMill, alarmIntent);
+                        60* 1000 *timeMill, alarmIntent);*/
     }
 
     public void cancelAlarm(int reqCode) {
@@ -40,4 +48,5 @@ public class AlarmController {
             alarmMgr.cancel(alarmIntent);
         }
     }
+
 }

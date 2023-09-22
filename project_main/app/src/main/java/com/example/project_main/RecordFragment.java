@@ -14,6 +14,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
 
@@ -126,6 +127,7 @@ public class RecordFragment extends Fragment {
                 AlarmController alarmController = new AlarmController(getContext());
                 alarmController.cancelAlarm(002);
                 alarmController.setAlarm(001,0);
+                dbHelper.addUserTimeline(nickname, "test2", getResources().getDrawable(R.drawable.warning_icon2));
                 dbHelper.addIntake(nickname, foodname, date, time);
                 Intent intent = new Intent(getActivity(), MainActivity.class);
                 startActivity(intent);

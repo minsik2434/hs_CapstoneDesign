@@ -92,13 +92,11 @@ public class MainActivity extends AppCompatActivity {
 //        dbHelper.deleteAllRows("disease");
 //        dbHelper.deleteAllRows("disease_user");
 
-
         if (isUserTableEmpty) {
             Intent intent = new Intent(MainActivity.this, init_setup1.class);
             startActivity(intent);
             finish(); // 현재 액티비티를 종료하여 뒤로가기 버튼으로 다시 이 액티비티로 돌아오지 않도록 합니다.
         }
-
 
         //fragment 추가
         fragment_main = new MainFragment();

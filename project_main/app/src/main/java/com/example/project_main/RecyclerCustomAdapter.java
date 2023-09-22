@@ -62,7 +62,7 @@ public class RecyclerCustomAdapter extends RecyclerView.Adapter<RecyclerCustomAd
 
         void onBind(Alert_Data data) {
             textView.setText(data.getTimeline_text());
-            imageView.setImageResource(data.getTimeline_resId());
+            imageView.setImageBitmap(data.getTimeline_resId());
             cardView.setText(data.getTimeline_cardview());
         }
     }
