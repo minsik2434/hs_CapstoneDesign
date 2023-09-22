@@ -4,18 +4,19 @@
     android:toDegrees="270">
 
     <shape
-        android:innerRadiusRatio="3.0"
+        android:innerRadiusRatio="2.5"
         android:shape="ring"
         android:thickness="15dp"
         android:useLevel="true">
 
         <gradient
             android:angle="0"
-            android:endColor="#002C9A"
-            android:centerColor="#002C9A"
-            android:startColor="#002C9A"
+            android:endColor="#007BFF"
+            android:centerColor="#007BFF"
+            android:startColor="#007BFF"
             android:type="sweep"
             android:useLevel="false"/>
+
     </shape>
 
 </rotate>

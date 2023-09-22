@@ -10,6 +10,7 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -46,7 +47,12 @@ public class NutritionSecond extends Fragment {
     private TextView cholPercentage;
     private TextView transFatPercentage;
     private TextView saturFatPercentage;
-    private TextView remainNutri2;
+
+    private ImageView sugarStatus;
+    private ImageView saltStatus;
+    private ImageView cholesterolStatus;
+    private ImageView transfatStatus;
+    private ImageView saturfatStatus;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -65,7 +71,13 @@ public class NutritionSecond extends Fragment {
         cholPercentage = view.findViewById(R.id.cholNutri2Text);
         transFatPercentage = view.findViewById(R.id.transFatNutri2Text);
         saturFatPercentage = view.findViewById(R.id.saturFatFatNutri2Text);
-        remainNutri2 = view.findViewById(R.id.remainNutri2);
+
+        sugarStatus = view.findViewById(R.id.sugarStatus);
+        saltStatus = view.findViewById(R.id.saltStatus);
+        cholesterolStatus = view.findViewById(R.id.cholesterolStatus);
+        transfatStatus = view.findViewById(R.id.transfatStatus);
+        saturfatStatus = view.findViewById(R.id.saturfatStatus);
+
         //endregion
 
         //DB Connect
@@ -97,7 +109,6 @@ public class NutritionSecond extends Fragment {
         Float totalCholesterol=0.0f;
         Float totalTransFat=0.0f;
         Float totalSaturFat=0.0f;
-        int needAlert=0;
 
         //총합
         for (int i = 0; i < intake_food.size(); i++)
@@ -110,11 +121,12 @@ public class NutritionSecond extends Fragment {
         }
 
         //프로그레스 바 설정. (총 먹은 양/권장량)
-        progressbarSugar.setProgress( Math.round( (totalSugar/nutriInfo.get(0).getSugars())*100 ) );
-        progressbarSalt.setProgress( Math.round( (totalSalt/nutriInfo.get(0).getSalt())*100 ) );
-        progressbarCholesterol.setProgress( Math.round( (totalCholesterol/nutriInfo.get(0).getCholesterol())*100 ) );
-        progressbarTransFat.setProgress( Math.round( (totalTransFat/nutriInfo.get(0).getTrans_fat())*100 ) );
-        progressbarSaturFat.setProgress( Math.round( (totalSaturFat/nutriInfo.get(0).getSaturated_fat())*100 ) );
+            progressbarSugar.setProgress( Math.round( (totalSugar/nutriInfo.get(0).getSugars())*100 ) );
+            progressbarSalt.setProgress( Math.round( (totalSalt/nutriInfo.get(0).getSalt())*100 ) );
+            progressbarCholesterol.setProgress( Math.round( (totalCholesterol/nutriInfo.get(0).getCholesterol())*100 ) );
+            progressbarTransFat.setProgress( Math.round( (totalTransFat/nutriInfo.get(0).getTrans_fat())*100 ) );
+            progressbarSaturFat.setProgress( Math.round( (totalSaturFat/nutriInfo.get(0).getSaturated_fat())*100 ) );
+
 
         //총섭취량/권장섭취량 텍스트 설정. 권장섭취량은 임시값
 
@@ -129,33 +141,27 @@ public class NutritionSecond extends Fragment {
         if (nutriInfo.get(0).getSugars() - totalSugar < 0){
             sugarPercentage.setTextColor(Color.parseColor("#ff0000"));
             progressbarSugar.setProgressTintList(ColorStateList.valueOf(Color.parseColor("#FF5D5D")));
-            needAlert = 1;
+            sugarStatus.setImageResource(R.drawable.caution_cutout);
         }
-        else if (nutriInfo.get(0).getSalt() - totalSalt < 0){
+        if (nutriInfo.get(0).getSalt() - totalSalt < 0){
             saltPercentage.setTextColor(Color.parseColor("#ff0000"));
             progressbarSalt.setProgressTintList(ColorStateList.valueOf(Color.parseColor("#FF5D5D")));
-            needAlert = 1;
+            saltStatus.setImageResource(R.drawable.caution_cutout);
         }
-        else if (nutriInfo.get(0).getCholesterol() - totalCholesterol < 0){
+        if (nutriInfo.get(0).getCholesterol() - totalCholesterol < 0){
             cholPercentage.setTextColor(Color.parseColor("#ff0000"));
             progressbarCholesterol.setProgressTintList(ColorStateList.valueOf(Color.parseColor("#FF5D5D")));
-            needAlert = 1;
+            cholesterolStatus.setImageResource(R.drawable.caution_cutout);
         }
-        else if (nutriInfo.get(0).getTrans_fat() - totalTransFat < 0){
+        if (nutriInfo.get(0).getTrans_fat() - totalTransFat < 0){
             transFatPercentage.setTextColor(Color.parseColor("#ff0000"));
             progressbarTransFat.setProgressTintList(ColorStateList.valueOf(Color.parseColor("#FF5D5D")));
-            needAlert = 1;
+            transfatStatus.setImageResource(R.drawable.caution_cutout);
         }
-        else if (nutriInfo.get(0).getSaturated_fat() - totalSaturFat < 0){
+        if (nutriInfo.get(0).getSaturated_fat() - totalSaturFat < 0){
             saturFatPercentage.setTextColor(Color.parseColor("#ff0000"));
             progressbarSaturFat.setProgressTintList(ColorStateList.valueOf(Color.parseColor("#FF5D5D")));
-            needAlert = 1;
-        }
-        else;
-
-        if (needAlert == 1){
-            remainNutri2.setText("초과하여 먹은 성분이 있습니다." + "\n주의해주세요!");
-            remainNutri2.setBackgroundResource(R.drawable.main_food_alert_yellow);
+            saturfatStatus.setImageResource(R.drawable.caution_cutout);
         }
         //endregion
 

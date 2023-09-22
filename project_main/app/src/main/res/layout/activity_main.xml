@@ -30,7 +30,6 @@
         android:layout_height="wrap_content"
         android:layout_marginRight="16dp"
         android:background="@android:color/transparent"
-        app:labelVisibilityMode="labeled"
         app:itemIconTint="@color/bottom_item_background"
         app:itemTextColor="@color/bottom_item_background"
         app:itemIconSize="25dp"/>

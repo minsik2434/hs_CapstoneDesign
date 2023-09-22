@@ -3,6 +3,7 @@ package com.example.project_main;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.CornerPathEffect;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.util.AttributeSet;
@@ -53,13 +54,14 @@ public class BarChartView extends View {
 
     private void init() {
         carbohydratePaint = new Paint();
-        carbohydratePaint.setColor(Color.RED);
+        carbohydratePaint.setColor(Color.argb(alphaValue, 255, 0, 0)); // 빨간색
 
         proteinPaint = new Paint();
-        proteinPaint.setColor(Color.BLUE);
+        proteinPaint.setColor(Color.argb(alphaValue, 0, 0, 255)); // 파란색
 
         fatPaint = new Paint();
-        fatPaint.setColor(Color.MAGENTA);
+        fatPaint.setColor(Color.argb(alphaValue, 255, 0, 255)); // 마젠타색
+        fatPaint.setPathEffect(new CornerPathEffect(10)); // 지방 바에 둥근 모서리 효과 적용
 
         textPaint = new Paint();
         textPaint.setColor(Color.BLACK);
@@ -100,7 +102,6 @@ public class BarChartView extends View {
         if (data != null && dates != null && carbohydrateData != null && proteinData != null && fatData != null) {
             float width = getWidth() - paddingStart - paddingEnd;
             float height = getHeight() - paddingTop - paddingBottom;
-
             int numBars = data.length;
             float barWidth = width / (numBars * 4); // 막대그래프의 너비 계산
             float dataHeightRatio = height / maxData * 1.5f;
@@ -108,9 +109,11 @@ public class BarChartView extends View {
             for (int i = 0; i < numBars; i++) {
                 float barSpacing = 70; // 막대 그래프들 사이의 원하는 간격 설정
                 float x = i * (barWidth * 2 + barSpacing) + paddingStart + barSpacing / 2; // x 위치 계산 (가운데 정렬)
+
                 float carbohydrateTop = getHeight() - paddingBottom - carbohydrateData[i] * dataHeightRatio;
                 float proteinTop = carbohydrateTop - proteinData[i] * dataHeightRatio;
                 float fatTop = proteinTop - fatData[i] * dataHeightRatio;
+
                 canvas.drawRect(x, carbohydrateTop, x + barWidth, getHeight() - paddingBottom, carbohydratePaint);
                 canvas.drawRect(x, proteinTop, x + barWidth, carbohydrateTop, proteinPaint);
 
@@ -127,6 +130,7 @@ public class BarChartView extends View {
                 float valueX = x + barWidth / 2;
                 float valueY = fatTop - 10;
                 canvas.drawText(valueText, valueX, valueY, textPaint);
+
                 String dateText = dates[i];
                 float dateX = x + barWidth / 2;
                 float dateY = getHeight() - paddingBottom + 40;
@@ -160,7 +164,6 @@ public class BarChartView extends View {
         int measuredWidth;
         int measuredHeight;
 
-        // Measure Width
         if (widthMode == MeasureSpec.EXACTLY) {
             measuredWidth = widthSize;
         } else if (widthMode == MeasureSpec.AT_MOST) {
@@ -169,7 +172,6 @@ public class BarChartView extends View {
             measuredWidth = desiredWidth;
         }
 
-        // Measure Height
         if (heightMode == MeasureSpec.EXACTLY) {
             measuredHeight = heightSize;
         } else if (heightMode == MeasureSpec.AT_MOST) {
