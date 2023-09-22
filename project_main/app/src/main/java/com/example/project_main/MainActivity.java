@@ -27,6 +27,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TabHost;
 import android.widget.TextView;
@@ -179,7 +180,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
 
-        ImageView foodImageView = findViewById(R.id.recordFoodImage);
+        ImageButton foodImageView = findViewById(R.id.recordFoodImage);
         TextView searchedFoodName = findViewById(R.id.recordFoodName);
         TextView searchedFoodKcal = findViewById(R.id.recordFoodKcal);
         TextView searchedFoodNutriInfo = findViewById(R.id.recordFoodInfo);
@@ -239,7 +240,6 @@ public class MainActivity extends AppCompatActivity {
                                 runOnUiThread(new Runnable() {
                                     @Override
                                     public void run() {
-
                                         //음식 탄단지 정보 저장
                                         String foodInfo = "탄수화물 " + foodCarbohydrate + "g" + " 단백질 " + foodProtein + "g" + " 지방 " + foodProvince + "g";
                                         //이미지 저장해야 함

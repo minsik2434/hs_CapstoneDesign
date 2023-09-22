@@ -6,6 +6,8 @@ import static android.app.Activity.RESULT_OK;
 import static com.google.zxing.integration.android.IntentIntegrator.REQUEST_CODE;
 
 import android.Manifest;
+import android.app.AlertDialog;
+import android.app.DatePickerDialog;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
@@ -14,6 +16,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.os.Bundle;
 
@@ -34,7 +37,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
@@ -47,12 +52,14 @@ import com.google.zxing.integration.android.IntentIntegrator;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.Locale;
 
 public class RecordFragment extends Fragment {
 
     private static final int CAMERA_PERMISSION_REQUEST_CODE = 200;
-    Button barcodebtn, recordBtn,searchbtn;
+    Button recordBtn;
     TextView recordFoodName, recordFoodKcal, recordFoodInfo;
     TextView raw_mtrl;
     RadioGroup timeToEat_group;
@@ -64,6 +71,11 @@ public class RecordFragment extends Fragment {
     AllergyList allergyList = new AllergyList();
     ArrayList<String> userAllergy = new ArrayList<>();
 
+
+    private Button dateButton;
+    private TextView dateTextView;
+    private Calendar selectedDate = Calendar.getInstance();
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_record, container, false);
@@ -71,8 +83,6 @@ public class RecordFragment extends Fragment {
         searchedFoodName = view.findViewById(R.id.recordFoodName);
         searchedFoodKcal = view.findViewById(R.id.recordFoodKcal);
         searchedFoodNutriInfo = view.findViewById(R.id.recordFoodInfo);
-        searchbtn = (Button) view.findViewById(R.id.searchbtn);
-        barcodebtn = view.findViewById(R.id.barcodeBtn);
         recordBtn = view.findViewById(R.id.recordBtn);
         recordFoodName = view.findViewById(R.id.recordFoodName);
         recordFoodKcal = view.findViewById(R.id.recordFoodKcal);
@@ -86,24 +96,71 @@ public class RecordFragment extends Fragment {
 
         MyDatabaseHelper dbHelper = new MyDatabaseHelper(getActivity().getApplicationContext());
 
-        barcodebtn.setOnClickListener(new View.OnClickListener() {
+
+        dateButton = view.findViewById(R.id.dateButton);
+        dateTextView = view.findViewById(R.id.dateTextView);
+
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yy년 MM월 dd일", Locale.KOREA);
+        dateTextView.setText(dateFormat.format(selectedDate.getTime()));
+
+        dateButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (ContextCompat.checkSelfPermission(requireActivity(), android.Manifest.permission.CAMERA)
-                        == PackageManager.PERMISSION_GRANTED) {
-                    startBarcodeScanner();
-                } else {
-                    ActivityCompat.requestPermissions(requireActivity(),
-                            new String[]{Manifest.permission.CAMERA}, CAMERA_PERMISSION_REQUEST_CODE);
-                }
+                showDatePickerDialog();
             }
         });
 
-        searchbtn.setOnClickListener(new View.OnClickListener() {
+
+
+        foodImg.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(getActivity(),SearchActivity.class);
-                startActivityForResult(intent,0);
+            public void onClick(View v) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                View customLayout = getLayoutInflater().inflate(R.layout.record_popup, null);
+                builder.setView(customLayout);
+
+                AlertDialog dialog = builder.create(); // AlertDialog를 final로 선언
+
+                Button barcodebtn = customLayout.findViewById(R.id.barcodeBtn);
+                barcodebtn.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        // 팝업 닫기
+                        dialog.dismiss();
+                        if (ContextCompat.checkSelfPermission(requireActivity(), android.Manifest.permission.CAMERA)
+                                == PackageManager.PERMISSION_GRANTED) {
+                            startBarcodeScanner();
+                        } else {
+                            ActivityCompat.requestPermissions(requireActivity(),
+                                    new String[]{Manifest.permission.CAMERA}, CAMERA_PERMISSION_REQUEST_CODE);
+                        }
+                    }
+                });
+
+                Button searchbtn = customLayout.findViewById(R.id.searchbtn);
+                searchbtn.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        // 팝업 닫기
+                        dialog.dismiss();
+                        Intent intent = new Intent(getActivity(), SearchActivity.class);
+                        startActivityForResult(intent, 0);
+                    }
+                });
+
+                Button button3 = customLayout.findViewById(R.id.button3);
+                button3.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        // 팝업 닫기
+                        dialog.dismiss();
+                        Toast.makeText(getActivity(), "3번 버튼이 눌림", Toast.LENGTH_SHORT).show();
+                    }
+                });
+
+                dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
+                dialog.show();
             }
         });
 
@@ -126,6 +183,8 @@ public class RecordFragment extends Fragment {
                 AlarmController alarmController = new AlarmController(getContext());
                 alarmController.cancelAlarm(002);
                 alarmController.setAlarm(001,0);
+
+
                 dbHelper.addIntake(nickname, foodname, date, time);
                 Intent intent = new Intent(getActivity(), MainActivity.class);
                 startActivity(intent);
@@ -165,7 +224,7 @@ public class RecordFragment extends Fragment {
             return dinnerBtn.getText().toString();
         }
 
-        return ""; // 기본 빈 시간 문자열로 설정합니다.
+        return "";
     }
 
     @Override
@@ -194,6 +253,7 @@ public class RecordFragment extends Fragment {
             if(imgurl == null && mtrl == null){
                 foodImg.setImageResource(R.drawable.noimg);
                 raw_mtrl.setText("알 수 없음");
+
             }
             else if (imgurl == null){
                 foodImg.setImageResource(R.drawable.noimg);
@@ -231,4 +291,35 @@ public class RecordFragment extends Fragment {
             recordFoodInfo.setText(info);
         }
     }
+
+
+
+    // DatePickerDialog를 표시하는 메서드
+    private void showDatePickerDialog() {
+        int year = selectedDate.get(Calendar.YEAR);
+        int month = selectedDate.get(Calendar.MONTH);
+        int dayOfMonth = selectedDate.get(Calendar.DAY_OF_MONTH);
+
+        DatePickerDialog datePickerDialog = new DatePickerDialog(getActivity(), new DatePickerDialog.OnDateSetListener() {
+            @Override
+            public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+                // 사용자가 선택한 날짜를 selectedDate에 업데이트
+                selectedDate.set(Calendar.YEAR, year);
+                selectedDate.set(Calendar.MONTH, month);
+                selectedDate.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+
+                // SimpleDateFormat을 사용하여 날짜 형식으로 변환
+                SimpleDateFormat dateFormat = new SimpleDateFormat("yy년 MM월 dd일", Locale.KOREA);
+                String formattedDate = dateFormat.format(selectedDate.getTime());
+
+                // 선택한 날짜를 TextView에 설정
+                dateTextView.setText(formattedDate);
+            }
+        }, year, month, dayOfMonth);
+
+        datePickerDialog.show();
+    }
+
+
+
 }
