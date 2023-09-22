@@ -61,15 +61,11 @@ public class MainFragment extends Fragment {
         Drawable changeLunchIconColor = DrawableCompat.wrap(getResources().getDrawable(R.drawable.lunch_icon)).mutate();
         Drawable changeDinnerIconColor = DrawableCompat.wrap(getResources().getDrawable(R.drawable.dinner_icon)).mutate();
 
-        //버튼 애니메이션
-        final Animation rotation = AnimationUtils.loadAnimation(getActivity().getApplicationContext(), R.anim.rotate);
-
         //영양성분 전환 버튼
         view.findViewById(R.id.nutriChangeBtn).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 NutriFragmentView(change);
-                view.startAnimation(rotation);
             }
         });
 

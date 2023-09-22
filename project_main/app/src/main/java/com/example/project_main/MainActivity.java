@@ -21,6 +21,8 @@ import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.media.Image;
 import android.os.Bundle;
+import android.text.SpannableString;
+import android.text.style.ForegroundColorSpan;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -76,6 +78,9 @@ public class MainActivity extends AppCompatActivity {
     float foodProvince;
     String foodRaw_material;
 
+    AllergyList allergyList = new AllergyList();
+    ArrayList<String> userAllergy = new ArrayList<>();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -84,6 +89,15 @@ public class MainActivity extends AppCompatActivity {
         dbHelper = new MyDatabaseHelper(this);
         database = dbHelper.getReadableDatabase();
         boolean isUserTableEmpty = dbHelper.isUserTableEmpty();
+        //        사용자 알레르기 정보 가져오기
+        ArrayList<Integer> userAllergyListNum = dbHelper.getUserAllergy(); //사용자 알레르기 번호 목록
+
+        //알레르기 정보 가져오기
+        for(int i = 0; i < userAllergyListNum.size(); i++) {
+            for (int j = 0; j < allergyList.getAllergyArrayList(userAllergyListNum.get(i)).size(); j++) {
+                userAllergy.add(allergyList.getAllergyArrayList(userAllergyListNum.get(i)).get(j));
+            }
+        }
 
         // 테이블 삭제
 //        dbHelper.deleteAllRows("user_table");
@@ -211,8 +225,6 @@ public class MainActivity extends AppCompatActivity {
                             foodRaw_material = PrdRawmtrlAndPrdImgData[0];
                             foodImg = PrdRawmtrlAndPrdImgData[1];
 
-
-
                             String sql_sentence = "select foodname, manufacturer, classification, kcal, carbohydrate, protein, province, sugars, salt, cholesterol, saturated_fat, trans_fat from food_table where foodname = '"+foodName+"';";
                             ArrayList<RecodeSelectDto> recode_list = new ArrayList<RecodeSelectDto>();
                             recode_list = dbHelper.executeQuerySearchIntakeFoodToday(sql_sentence);
@@ -220,7 +232,6 @@ public class MainActivity extends AppCompatActivity {
                             foodCarbohydrate = recode_list.get(0).getCarbohydrate();
                             foodProtein = recode_list.get(0).getProtein();
                             foodProvince = recode_list.get(0).getProvince();
-
 
                             runOnUiThread(new Runnable() {
                                 @Override
@@ -234,7 +245,20 @@ public class MainActivity extends AppCompatActivity {
                                         searchedFoodName.setText(foodName);
                                         searchedFoodKcal.setText(foodKcal+"Kcal");
                                         searchedFoodNutriInfo.setText(foodInfo);
-                                        raw_material_text.setText(foodRaw_material);
+                                        SpannableString spannableString = new SpannableString(foodRaw_material);
+                                        for (int i = 0; i < userAllergy.size(); i++) {
+                                            int startIndex = foodRaw_material.indexOf(userAllergy.get(i));
+
+                                            if (startIndex != -1) {
+                                                int endIndex = startIndex + userAllergy.get(i).length();
+                                                spannableString.setSpan(new ForegroundColorSpan(Color.RED), startIndex, endIndex, 0);
+
+                                            }
+                                        }
+                                        raw_material_text.setText(spannableString);
+
+
+
                                     }
                                 }
                             });

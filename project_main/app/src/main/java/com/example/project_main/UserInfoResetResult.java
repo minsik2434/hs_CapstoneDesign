@@ -85,7 +85,7 @@ public class UserInfoResetResult extends Activity {
     double Harris_Benedict(int age, float weight, float height, String sex, String activity){
         double recommendCal = 0.0;
 
-        if(sex.equals("male")) {
+        if(sex.equals("남성")) {
             switch (activity){
                 case "운동 안함":
                     recommendCal = (66 + (13.7 * weight) + (5 * height) - (6.8 * age))*1.2;
