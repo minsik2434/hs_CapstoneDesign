@@ -27,6 +27,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TabHost;
 import android.widget.TextView;
@@ -178,7 +179,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
 
-        ImageView foodImageView = findViewById(R.id.recordFoodImage);
+        ImageButton foodImageView = findViewById(R.id.recordFoodImage);
         TextView searchedFoodName = findViewById(R.id.recordFoodName);
         TextView searchedFoodKcal = findViewById(R.id.recordFoodKcal);
         TextView searchedFoodNutriInfo = findViewById(R.id.recordFoodInfo);
@@ -218,7 +219,6 @@ public class MainActivity extends AppCompatActivity {
                             foodCarbohydrate = recode_list.get(0).getCarbohydrate();
                             foodProtein = recode_list.get(0).getProtein();
                             foodProvince = recode_list.get(0).getProvince();
-
 
                             runOnUiThread(new Runnable() {
                                 @Override
