@@ -182,9 +182,9 @@
         android:layout_weight="1">
 
         <View
-            android:layout_marginLeft="100dp"
+            android:layout_marginLeft="122dp"
             android:background="#515151"
-            android:layout_width="3dp"
+            android:layout_width="5dp"
             android:layout_height="match_parent"/>
 
 

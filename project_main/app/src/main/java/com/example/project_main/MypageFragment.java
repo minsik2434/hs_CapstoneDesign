@@ -4,6 +4,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -25,7 +27,10 @@ import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 public class MypageFragment extends Fragment {
 
@@ -54,13 +59,23 @@ public class MypageFragment extends Fragment {
         adapter = new RecyclerCustomAdapter();
         recyclerView.setAdapter(adapter);
 
-        Alert_Data data = new Alert_Data();
-        data.setTimeline_text("12:00 PM");
-        data.setTimeline_resId(R.drawable.warning_icon);
-        data.setTimeline_cardview("테스트");
+        MyDatabaseHelper dbHelper = new MyDatabaseHelper(this.getContext());
+        String sql_sentence = "SELECT * from user_timeline;";
+        ArrayList<TimelineSelectDto> timelineSelectDto = new ArrayList<TimelineSelectDto>();
+        timelineSelectDto = dbHelper.executeQuerySearchAlarmToday(sql_sentence);
 
-        // 각 값이 들어간 data를 adapter에 추가합니다.
-        adapter.addItem(data);
+        System.out.println("timelineSelectDto.size() :"+timelineSelectDto.size());
+        for(int i =0; i<timelineSelectDto.size();i++)
+        {
+            Alert_Data data = new Alert_Data();
+            String alarmTime = timelineSelectDto.get(i).getDate();
+            data.setTimeline_text(alarmTime.substring(5,16));
+            data.setTimeline_resId(getIcon(timelineSelectDto.get(i).getAlarm_ing()));
+            data.setTimeline_cardview(timelineSelectDto.get(i).getContext());
+            // 각 값이 들어간 data를 adapter에 추가합니다.
+            adapter.addItem(data);
+        }
+
 
         // adapter의 값 갱신
         adapter.notifyDataSetChanged();
@@ -88,6 +103,11 @@ public class MypageFragment extends Fragment {
         });
 
         return view;
+    }
+
+    private Bitmap getIcon(byte[] bytes) {
+        Bitmap bitmap = BitmapFactory.decodeByteArray(bytes,0, bytes.length);
+        return  bitmap;
     }
 
 }

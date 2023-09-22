@@ -81,20 +81,20 @@ public class StatisticsFragment extends Fragment {
             }
         });
 
-//        int[] data = dbHelper.caloriesFor7Days();
-//        int[] carbohydrate = dbHelper.carbohydrateCaloriesFor7Days();
-//        int[] protein = dbHelper.proteinCaloriesFor7Days();
-//        int[] fat = dbHelper.fatCaloriesFor7Days();
+        int[] data = dbHelper.caloriesFor7Days();
+        int[] carbohydrate = dbHelper.carbohydrateCaloriesFor7Days();
+        int[] protein = dbHelper.proteinCaloriesFor7Days();
+        int[] fat = dbHelper.fatCaloriesFor7Days();
 
         // 단백질 : 파란색 지방 : 마젠타  탄수화물 : 빨간색
-        int[] data = {2300, 5000, 3200, 2000, 2150, 2365, 7400};
-        int[] weight = {70, 50, 53, 80, 103, 47, 60};
-        int[] carbohydrate = {1000, 800, 900, 700, 600, 750, 850};
-        int[] protein = {400, 700, 600, 450, 550, 400, 800};
-        int[] fat = {900, 1200, 700, 850, 1000, 1215, 950};
+//        int[] data = {2300, 5000, 3200, 2000, 2150, 2365, 7400};
+//        int[] weight = {70, 50, 53, 80, 103, 47, 60};
+//        int[] carbohydrate = {1000, 800, 900, 700, 600, 750, 850};
+//        int[] protein = {400, 700, 600, 450, 550, 400, 800};
+//        int[] fat = {900, 1200, 700, 850, 1000, 1215, 950};
 
         // 선그래프
-        lineChartView.setWeightData(weight);
+//        lineChartView.setWeightData(weight);
 
         // 데이터를 BarChartView에 설정하여 그래프를 그립니다.
         barChartView.setData(data, carbohydrate, protein, fat);
