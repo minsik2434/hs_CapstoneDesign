@@ -1,9 +1,11 @@
 package com.example.project_main;
 
+import android.graphics.Bitmap;
+
 public class Alert_Data {
 
     private String timeline_text;
-    private int timeline_resId;
+    private Bitmap timeline_resId;
     private String timeline_cardview;
 
     public String getTimeline_text() {
@@ -14,11 +16,11 @@ public class Alert_Data {
         this.timeline_text = timeline_text;
     }
 
-    public int getTimeline_resId() {
+    public Bitmap getTimeline_resId() {
         return timeline_resId;
     }
 
-    public void setTimeline_resId(int timeline_resId) {
+    public void setTimeline_resId(Bitmap timeline_resId) {
         this.timeline_resId = timeline_resId;
     }
 
