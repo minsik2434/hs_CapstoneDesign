@@ -73,10 +73,10 @@
             <Button
                 android:id="@+id/btnPre4"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:layout_gravity="left"
-                android:text="이전" />
+                android:layout_height="50dp"
+                android:layout_gravity="right"
+                android:text="이전"
+                android:gravity="center" />
 
             <View
                 android:layout_width="0dp"
@@ -88,10 +88,10 @@
             <Button
                 android:id="@+id/btnNext4"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="50dp"
                 android:layout_gravity="right"
-                android:gravity="center"
-                android:text="다음" />
+                android:text="다음"
+                android:gravity="center" />
 
 
         </LinearLayout>

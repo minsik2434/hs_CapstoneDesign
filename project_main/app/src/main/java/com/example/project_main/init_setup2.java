@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
@@ -14,7 +15,7 @@ import androidx.annotation.Nullable;
 
 public class init_setup2 extends Activity {
 
-    Button btnPre2, btnNext2;
+    ImageButton btnPre2, btnNext2;
     EditText editAge, editHeight, editWeight;
     RadioGroup rGroup;
     RadioButton btnMan, btnWoman;

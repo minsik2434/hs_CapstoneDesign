@@ -6,13 +6,20 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 //import androidx.compose.ui.platform.ComposeView;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 import androidx.viewpager2.widget.ViewPager2;
 
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.PopupMenu;
 import android.widget.TextView;
+
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.util.ArrayList;
 
@@ -27,11 +34,8 @@ public class StatisticsFragment extends Fragment {
     private CircleIndicator3 mIndicator;
     private MyDatabaseHelper dbHelper;
 
-    private ViewPager2 mSecondPager;
-    private SecondBannerAdapter secondPagerAdapter;
-    private int second_num_page = 4;
-    private CircleIndicator3 mSecondIndicator;
-    private int currentPageIndex = 0;
+    private BottomNavigationView statisticsBottomNavigationView;
+    private FragmentManager fragmentManager;
 
     @Nullable
     @Override
@@ -52,22 +56,51 @@ public class StatisticsFragment extends Fragment {
         mPager.setCurrentItem(540);
         mPager.setOffscreenPageLimit(3);
 
+        fragmentManager = getActivity().getSupportFragmentManager();
 
-        // 두 번째
-        mSecondPager = view.findViewById(R.id.second_viewpager);
-        secondPagerAdapter = new SecondBannerAdapter(requireActivity(), second_num_page);
-        mSecondPager.setAdapter(secondPagerAdapter);
-        mSecondPager.setUserInputEnabled(false); // 두 번째 ViewPager2의 스와이프 비활성화
-        mSecondIndicator = view.findViewById(R.id.second_indicator);
-        mSecondIndicator.setViewPager(mSecondPager);
-        mSecondIndicator.createIndicators(second_num_page, 0);
-        mSecondPager.setOrientation(ViewPager2.ORIENTATION_HORIZONTAL);
+        statisticsBottomNavigationView = view.findViewById(R.id.statisticsBottomNavigationView);
+        // 초기 프래그먼트를 홈으로 설정
+        loadFragment(new StatisticsWeek()); // 초기 프래그먼트를 StatisticsWeek로 설정
+
+        statisticsBottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                Fragment fragment;
+                switch (item.getItemId()) {
+                    case R.id.home:
+                        fragment = new StatisticsHome();
+                        break;
+                    case R.id.month:
+                        fragment = new StatisticsMonth();
+                        break;
+                    case R.id.week:
+                        fragment = new StatisticsWeek();
+                        break;
+                    default:
+                        fragment = new StatisticsWeek();
+                        break;
+                }
+                return loadFragment(fragment);
+            }
+        });
 
         return view;
+    }
+
+    private boolean loadFragment(Fragment fragment) {
+        if (fragment != null) {
+            FragmentTransaction transaction = fragmentManager.beginTransaction();
+            transaction.replace(R.id.statistics_fragment_container, fragment);
+            transaction.commit();
+            return true;
+        }
+        return false;
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
     }
+
+
 }

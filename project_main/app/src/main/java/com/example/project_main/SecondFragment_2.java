@@ -31,7 +31,7 @@ public class SecondFragment_2 extends Fragment {
         View view = inflater.inflate(R.layout.fragment_second_2, container, false);
 
 
-        mSecondPager = requireActivity().findViewById(R.id.second_viewpager);
+//        mSecondPager = requireActivity().findViewById(R.id.second_viewpager);
 
         Button prevButton2 = view.findViewById(R.id.second_previous_button2);
         prevButton2.setOnClickListener(new View.OnClickListener() {

@@ -30,7 +30,7 @@ public class SecondFragment_4 extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_second_4, container, false);
 
-        mSecondPager = requireActivity().findViewById(R.id.second_viewpager); // 두 번째 ViewPager2의 ID를 수정하세요.
+//        mSecondPager = requireActivity().findViewById(R.id.second_viewpager);
 
         Button prevButton4 = view.findViewById(R.id.second_previous_button4);
         prevButton4.setOnClickListener(new View.OnClickListener() {

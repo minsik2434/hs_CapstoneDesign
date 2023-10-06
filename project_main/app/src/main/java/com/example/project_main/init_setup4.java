@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
@@ -20,7 +21,7 @@ import java.util.ArrayList;
 public class init_setup4 extends Activity {
 
 
-    Button btnPre4, btnNext4;
+    ImageButton btnPre4, btnNext4;
     TextView spinnerText;
 
     private Spinner exerciseSpinner;

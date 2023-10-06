@@ -1,64 +1,90 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
+    android:fillViewport="true"
+    android:background="@drawable/whitepurple"
     tools:context=".MainActivity">
 
-
-    <FrameLayout
-        android:layout_margin="10dp"
-        android:layout_gravity="center"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="200dp">
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
 
-        <androidx.viewpager2.widget.ViewPager2
-            android:id="@+id/viewpager"
-            android:layout_gravity="center"
-            android:clipToPadding="false"
-            android:clipChildren="false"
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cardViewViewPager"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:scaleType="fitXY"
-            android:layout_marginBottom="10dp"/>
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            app:cardCornerRadius="16dp">
 
-        <me.relex.circleindicator.CircleIndicator3
-            android:id="@+id/indicator"
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="200dp">
+
+                <androidx.viewpager2.widget.ViewPager2
+                    android:id="@+id/viewpager"
+                    android:layout_gravity="center"
+                    android:clipToPadding="false"
+                    android:clipChildren="false"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:scaleType="fitXY"
+                    android:layout_marginBottom="5dp"/>
+
+                <me.relex.circleindicator.CircleIndicator3
+                    android:id="@+id/indicator"
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
+                    android:layout_marginBottom="5dp" />
+
+            </FrameLayout>
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cardViewFrameLayout"
             android:layout_width="match_parent"
-            android:layout_height="48dp"
-            android:layout_marginBottom="10dp"
-            android:layout_gravity="bottom"/>
+            android:layout_height="350dp"
+            android:layout_margin="20dp"
+            app:cardCornerRadius="16dp">
 
-    </FrameLayout>
+            <FrameLayout
+                android:id="@+id/statistics_fragment_container"
+                android:background="#FFFFFF"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp" />
 
-    <!-- 그래프 -->
-    <FrameLayout
-        android:layout_margin="5dp"
-        android:layout_gravity="center"
-        android:layout_width="match_parent"
-        android:layout_height="300dp"
-        android:layout_marginTop="-100dp">
+        </androidx.cardview.widget.CardView>
 
-        <androidx.viewpager2.widget.ViewPager2
-            android:id="@+id/second_viewpager"
-            android:layout_gravity="center"
-            android:clipToPadding="false"
-            android:clipChildren="false"
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cardViewBottomNavigationView"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:scaleType="fitXY"
-            android:layout_marginBottom="10dp"
-            android:orientation="vertical" />
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            app:cardCornerRadius="16dp">
 
-        <me.relex.circleindicator.CircleIndicator3
-            android:id="@+id/second_indicator"
+            <com.google.android.material.bottomnavigation.BottomNavigationView
+                android:id="@+id/statisticsBottomNavigationView"
+                android:layout_width="match_parent"
+                android:layout_height="35dp"
+                app:menu="@menu/statistics_menu" />
+
+        </androidx.cardview.widget.CardView>
+
+        <TextView
             android:layout_width="match_parent"
-            android:layout_height="48dp"
-            android:layout_marginBottom="10dp"
-            android:layout_gravity="bottom"/>
+            android:layout_height="wrap_content"
+            android:text="이 부분에 추가된 텍스트"
+            android:textSize="18sp"
+            android:gravity="center"
+            android:layout_marginBottom="150dp"
+            android:padding="16dp"/>
 
-    </FrameLayout>
+    </LinearLayout>
 
-</LinearLayout>
+</ScrollView>
