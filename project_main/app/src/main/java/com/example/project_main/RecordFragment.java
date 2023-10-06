@@ -268,11 +268,15 @@ public class RecordFragment extends Fragment {
                     } else {
                         String dateTime = date + " " + time;
 
-                        AlarmController alarmController = new AlarmController(getContext());
-                        alarmController.cancelAlarm(002);
-                        alarmController.setAlarm(001, 0);
-                        dbHelper.addUserTimeline(nickname, "test2", getResources().getDrawable(R.drawable.warning_icon2));
-                        dbHelper.addIntake(nickname, foodname, dateTime, "");
+                        String mealTime = "";
+
+                        if(morningImgBtn)
+                            mealTime="아침";
+                        else if(lunchImgBtn)
+                            mealTime="점심";
+                        else
+                            mealTime="저녁";
+                        dbHelper.addIntake(nickname, foodname, dateTime, mealTime);
                         Intent intent = new Intent(getActivity(), MainActivity.class);
                         startActivity(intent);
                         getActivity().finish();
