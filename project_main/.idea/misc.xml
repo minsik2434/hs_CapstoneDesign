@@ -17,11 +17,22 @@
         <entry key="..\:/AndroidProjects/project_main-20230919/app/src/main/res/layout/fragment_nutri2.xml" value="0.264" />
         <entry key="..\:/AndroidProjects/project_main-20230919/app/src/main/res/layout/fragment_record.xml" value="0.4036458333333333" />
         <entry key="..\:/AndroidProjects/project_main-20230919/app/src/main/res/layout/listview_custom.xml" value="0.264" />
+        <entry key="..\:/Users/zmfms/Capstone/project_main/app/src/main/res/layout/fragment_calender.xml" value="0.19610507246376813" />
         <entry key="..\:/Users/zmfms/Capstone/project_main/app/src/main/res/layout/fragment_mypage.xml" value="0.19610507246376813" />
+        <entry key="..\:/Users/zmfms/Capstone/project_main/app/src/main/res/layout/fragment_statistics_tab.xml" value="0.19610507246376813" />
+        <entry key="..\:/Users/zmfms/Capstone/project_main/app/src/main/res/layout/frame_1.xml" value="0.19610507246376813" />
+        <entry key="..\:/Users/zmfms/Capstone/project_main/app/src/main/res/layout/frame_2.xml" value="0.19610507246376813" />
+        <entry key="..\:/Users/zmfms/Capstone/project_main/app/src/main/res/layout/frame_3.xml" value="0.19610507246376813" />
+        <entry key="..\:/Users/zmfms/Capstone/project_main/app/src/main/res/layout/init_setup2.xml" value="0.19610507246376813" />
+        <entry key="..\:/Users/zmfms/Capstone/project_main/app/src/main/res/layout/init_setup3.xml" value="0.19610507246376813" />
+        <entry key="..\:/Users/zmfms/Capstone/project_main/app/src/main/res/layout/init_setup4.xml" value="0.19610507246376813" />
+        <entry key="..\:/Users/zmfms/Capstone/project_main/app/src/main/res/layout/listview_custom.xml" value="0.19610507246376813" />
         <entry key="..\:/Users/zmfms/Capstone/project_main/app/src/main/res/layout/timeline_item.xml" value="0.19610507246376813" />
+        <entry key="..\:/Users/zmfms/Capstone/project_main/app/src/main/res/menu/bottom_menu.xml" value="0.2942708333333333" />
       </map>
     </option>
   </component>
+  <component name="ExternalStorageConfigurationManager" enabled="true" />
   <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="Android Studio default JDK" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/build/classes" />
   </component>

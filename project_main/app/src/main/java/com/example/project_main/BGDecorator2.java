@@ -32,3 +32,4 @@ public class BGDecorator2 implements DayViewDecorator {
         view.addSpan(new BackgroundColorSpan(Color.RED));
     }
 }
+

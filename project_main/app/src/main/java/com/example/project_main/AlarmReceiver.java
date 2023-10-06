@@ -21,6 +21,7 @@ public class AlarmReceiver extends BroadcastReceiver {
         Log.i(TAG, "onrecive : " + reqCode);
 
         if(reqCode == 1) {
+
             Log.i(TAG, "recived_code : 001");
 
             NotificationCompat.Builder builder = new NotificationCompat.Builder(context, "default");
@@ -61,7 +62,6 @@ public class AlarmReceiver extends BroadcastReceiver {
             // id값은
             // 정의해야하는 각 알림의 고유한 int값
             notificationManager.notify(reqCode, builder.build());
-
 
         }
         else if(reqCode == 10)

@@ -68,6 +68,4 @@ public class ListViewAdapter extends BaseAdapter {
         listViewItemList.clear();
     }
 
-
-
 }

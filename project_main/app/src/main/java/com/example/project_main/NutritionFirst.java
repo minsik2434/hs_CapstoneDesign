@@ -5,7 +5,6 @@ import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.os.Bundle;
 import androidx.fragment.app.Fragment;
-
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -26,7 +25,6 @@ public class NutritionFirst extends Fragment {
     private boolean overProtein;
     private boolean overProvince;
     private String timelineText;
-
 
     private ProgressBar mainCircleProgressbar;
     private ProgressBar progressbarCarbohydrate;
@@ -94,6 +92,7 @@ public class NutritionFirst extends Fragment {
         overProtein = pref.getBoolean("overProtein", false);
         overProvince = pref.getBoolean("overProvince", false);
         AlarmController alarmController = new AlarmController(getContext());
+
         //지병 없다면
         if (userDisease.size() == 0) {
             userDiseaseListNum.add(0);
@@ -142,6 +141,7 @@ public class NutritionFirst extends Fragment {
             carboPercentage.setTextColor(Color.parseColor("#ff0000"));
             progressbarCarbohydrate.setProgressTintList(ColorStateList.valueOf(Color.parseColor("#FF5D5D")));
             carboStatus.setImageResource(R.drawable.caution_cutout);
+
             System.out.println(overCarbohydrate);
             if(overCarbohydrate == false)
             {
@@ -195,10 +195,7 @@ public class NutritionFirst extends Fragment {
             kcalPercentage.setTextColor(Color.parseColor("#ff0000"));
         }
 
-
         return view;
     }
-
-
 
 }

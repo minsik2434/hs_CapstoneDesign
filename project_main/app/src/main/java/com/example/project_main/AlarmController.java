@@ -32,7 +32,6 @@ public class AlarmController {
         Calendar calendar = Calendar.getInstance();
         calendar.set(2023, 9 - 1, 22, 14, 0);
         alarmMgr.set(AlarmManager.ELAPSED_REALTIME_WAKEUP, calendar.getTimeInMillis(), alarmIntent);
-
     }
 
     public void setAlarm2(int reqCode, long timeMill) {
@@ -46,6 +45,7 @@ public class AlarmController {
         alarmMgr.set(AlarmManager.ELAPSED_REALTIME_WAKEUP,
                 SystemClock.elapsedRealtime() +
                         60* 1000 *timeMill, alarmIntent);
+
     }
 
     public void cancelAlarm(int reqCode) {

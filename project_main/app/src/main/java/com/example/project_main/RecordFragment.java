@@ -180,11 +180,7 @@ public class RecordFragment extends Fragment {
                     Toast.makeText(getActivity(), "아침, 점심, 저녁 중 하나를 선택하세요.",Toast.LENGTH_SHORT).show();
                     return;
                 }
-/*
-                AlarmController alarmController = new AlarmController(getContext());
-                alarmController.cancelAlarm(002);
-                alarmController.setAlarm(001,0);
-                dbHelper.addUserTimeline(nickname, "test2", getResources().getDrawable(R.drawable.warning_icon2));*/
+
                 dbHelper.addIntake(nickname, foodname, date, time);
                 Intent intent = new Intent(getActivity(), MainActivity.class);
                 startActivity(intent);

@@ -168,6 +168,7 @@ public class NutritionSecond extends Fragment {
             sugarPercentage.setTextColor(Color.parseColor("#ff0000"));
             progressbarSugar.setProgressTintList(ColorStateList.valueOf(Color.parseColor("#FF5D5D")));
             sugarStatus.setImageResource(R.drawable.caution_cutout);
+
             if(overSugar == false)
             {
                 alarmController.setAlarm2(13,0);
@@ -179,11 +180,13 @@ public class NutritionSecond extends Fragment {
         }else {
             editor.putBoolean("overSugar", false);
             editor.apply(); // 저장
+
         }
         if (nutriInfo.get(0).getSalt() - totalSalt < 0){
             saltPercentage.setTextColor(Color.parseColor("#ff0000"));
             progressbarSalt.setProgressTintList(ColorStateList.valueOf(Color.parseColor("#FF5D5D")));
             saltStatus.setImageResource(R.drawable.caution_cutout);
+
             if(overSalt == false)
             {
                 alarmController.setAlarm2(14,0);
@@ -195,11 +198,13 @@ public class NutritionSecond extends Fragment {
         }else {
             editor.putBoolean("overSalt", false);
             editor.apply(); // 저장
+
         }
         if (nutriInfo.get(0).getCholesterol() - totalCholesterol < 0){
             cholPercentage.setTextColor(Color.parseColor("#ff0000"));
             progressbarCholesterol.setProgressTintList(ColorStateList.valueOf(Color.parseColor("#FF5D5D")));
             cholesterolStatus.setImageResource(R.drawable.caution_cutout);
+
             if(overCholesterol == false)
             {
                 alarmController.setAlarm2(15,0);
@@ -211,11 +216,13 @@ public class NutritionSecond extends Fragment {
         }else {
             editor.putBoolean("overCholesterol", false);
             editor.apply(); // 저장
+
         }
         if (nutriInfo.get(0).getTrans_fat() - totalTransFat < 0){
             transFatPercentage.setTextColor(Color.parseColor("#ff0000"));
             progressbarTransFat.setProgressTintList(ColorStateList.valueOf(Color.parseColor("#FF5D5D")));
             transfatStatus.setImageResource(R.drawable.caution_cutout);
+
             if(overTransfat == false)
             {
                 alarmController.setAlarm2(16,0);
@@ -227,11 +234,13 @@ public class NutritionSecond extends Fragment {
         }else {
             editor.putBoolean("overTransfat", false);
             editor.apply(); // 저장
+
         }
         if (nutriInfo.get(0).getSaturated_fat() - totalSaturFat < 0){
             saturFatPercentage.setTextColor(Color.parseColor("#ff0000"));
             progressbarSaturFat.setProgressTintList(ColorStateList.valueOf(Color.parseColor("#FF5D5D")));
             saturfatStatus.setImageResource(R.drawable.caution_cutout);
+
             if(overSaturfat == false)
             {
                 alarmController.setAlarm2(17,0);
@@ -243,6 +252,7 @@ public class NutritionSecond extends Fragment {
         }else {
             editor.putBoolean("overSaturfat", false);
             editor.apply(); // 저장
+
         }
         //endregion
 
