@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    package="com.example.project_main">
+
+    <uses-permission android:name="android.permission.CAMERA"/>
+    <uses-feature android:name="android.hardware.camera"/>
+    <uses-feature android:name="android.hardware.camera.autofocus"/>
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+
+    <application
+        android:allowBackup="true"
+        android:dataExtractionRules="@xml/data_extraction_rules"
+        android:usesCleartextTraffic="true"
+        android:fullBackupContent="@xml/backup_rules"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.Project_main"
+        tools:targetApi="31">
+        <activity
+            android:name=".MainActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".init_setup1" android:label="init_setup1"/>
+        <activity android:name=".init_setup2" android:label="init_setup2"/>
+        <activity android:name=".init_setup3" android:label="init_setup3"/>
+        <activity android:name=".init_setup4" android:label="init_setup4"/>
+        <activity android:name=".init_setup5" android:label="init_setup5"/>
+        <activity android:name=".SearchActivity" android:label="search"/>
+        <activity android:name=".UserInfoReset" android:label="user_info_reset"/>
+        <activity android:name=".UserInfoResetResult" android:label="user_info_reset_result"/>
+        <activity android:name=".UserAllergyReset" android:label="user_info_reset_allergy"/>
+        <receiver
+            android:name=".AlarmReceiver"
+            android:enabled="true"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"></action>
+            </intent-filter>
+        </receiver>
+       
+    </application>
+
+</manifest>

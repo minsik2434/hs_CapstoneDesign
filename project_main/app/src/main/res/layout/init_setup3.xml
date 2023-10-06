@@ -1,0 +1,239 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <TableLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="5"
+        android:orientation="vertical"
+        >
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="알레르기 모두 체크"
+            android:textSize="25dp"
+            android:layout_margin="15dp"
+            android:gravity = "center"
+            />
+        <TableRow>
+
+            <CheckBox
+                android:id="@+id/checkMilk"
+                android:layout_width="81dp"
+                android:layout_height="46dp"
+                android:layout_margin="10dp"
+                android:background="@color/grayColor"
+                android:text="우유"
+                />
+
+            <CheckBox
+                android:id="@+id/checkFowl"
+                android:layout_width="81dp"
+                android:layout_height="46dp"
+                android:layout_margin="10dp"
+                android:background="@color/grayColor"
+                android:text="난류" />
+            <CheckBox
+                android:id="@+id/checkShellfish"
+                android:layout_width="81dp"
+                android:layout_height="46dp"
+                android:layout_margin="10dp"
+                android:background="@color/grayColor"
+                android:text="갑각류"
+                />
+
+            <CheckBox
+                android:id="@+id/checkFish"
+                android:layout_width="81dp"
+                android:layout_height="46dp"
+                android:layout_margin="10dp"
+                android:background="@color/grayColor"
+                android:text="생선" />
+
+
+        </TableRow>
+
+        <TableRow>
+
+            <CheckBox
+                android:id="@+id/checkNuts"
+                android:text="견과류"
+                android:background="@color/grayColor"
+                android:layout_width="81dp"
+                android:layout_height="46dp"
+                android:layout_margin="10dp"
+                />
+            <CheckBox
+                android:id="@+id/checkBean"
+                android:text="콩"
+                android:layout_width="81dp"
+                android:layout_height="46dp"
+                android:layout_margin="10dp"
+                android:background="@color/grayColor"
+                />
+            <CheckBox
+                android:id="@+id/checkWheat"
+                android:text="밀"
+                android:layout_width="81dp"
+                android:layout_height="46dp"
+                android:layout_margin="10dp"
+                android:background="@color/grayColor"
+                />
+            <CheckBox
+                android:id="@+id/checkPeanut"
+                android:text="땅콩"
+                android:layout_width="81dp"
+                android:layout_height="46dp"
+                android:layout_margin="10dp"
+                android:background="@color/grayColor"
+                />
+        </TableRow>
+
+        <TableRow>
+
+            <CheckBox
+                android:id="@+id/checkMeat"
+                android:text="육류"
+                android:background="@color/grayColor"
+                android:layout_width="81dp"
+                android:layout_height="46dp"
+                android:layout_margin="10dp"
+                />
+
+        </TableRow>
+
+    </TableLayout>
+
+
+
+    <TableLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="5"
+        android:orientation="vertical"
+        >
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="지병 모두 체크"
+            android:textSize="25dp"
+            android:layout_margin="15dp"
+            android:gravity = "center"
+            />
+        <TableRow>
+
+            <CheckBox
+                android:id="@+id/diabetes"
+                android:text="당뇨"
+                android:layout_width="81dp"
+                android:layout_height="46dp"
+                android:layout_margin="10dp"
+                android:background="@color/grayColor"
+                android:gravity="center"
+                />
+
+            <CheckBox
+                android:id="@+id/highBloodPressure"
+                android:layout_width="81dp"
+                android:layout_height="46dp"
+                android:layout_margin="10dp"
+                android:background="@color/grayColor"
+                android:text="고혈압" />
+            <CheckBox
+                android:id="@+id/hyperlipidemia"
+                android:layout_width="81dp"
+                android:layout_height="46dp"
+                android:layout_margin="10dp"
+                android:background="@color/grayColor"
+                android:textSize="12sp"
+                android:text="고지혈증"
+                />
+
+            <CheckBox
+                android:id="@+id/obesity"
+                android:layout_width="81dp"
+                android:layout_height="46dp"
+                android:layout_margin="10dp"
+                android:background="@color/grayColor"
+                android:text="비만" />
+
+        </TableRow>
+
+    </TableLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_weight="1">
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/btnPre3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:layout_gravity="left"
+                android:text="이전" />
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                />
+
+
+            <Button
+                android:id="@+id/btnNext3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right"
+                android:gravity="center"
+                android:text="다음" />
+
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="60"
+            android:orientation="horizontal"
+            >
+
+            <TextView
+                android:id="@+id/text3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="진행률 3/4"
+                android:layout_margin="20dp"
+                android:textSize="20dp" />
+
+            <ProgressBar
+                android:id="@+id/progressbar"
+                style="?android:attr/progressBarStyleHorizontal"
+                android:layout_width="250dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_margin="10dp"
+                android:max="100"
+                android:progress="75"
+                android:scaleY="5" />
+
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+
+</LinearLayout>
