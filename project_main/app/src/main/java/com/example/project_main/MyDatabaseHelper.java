@@ -5,11 +5,15 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.util.Log;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -81,6 +85,7 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
     //disease_user_table column
     private static final String DISEASE_USER_TABLE_COLUMN_NICKNAME = "nickname";
     private static final String DISEASE_USER_TABLE_COLUMN_DISEASEID = "diseaseID";
+
 
     public MyDatabaseHelper(@Nullable Context context)
     {
@@ -178,6 +183,57 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
         cursor.close();
         db.close();
         return intake_food;
+    }
+
+    //오늘의 타임라인 정보
+    public ArrayList<TimelineSelectDto> executeQuerySearchAlarmToday(String sql_sentence){
+        ArrayList<TimelineSelectDto> alarmAll = new ArrayList<TimelineSelectDto>();
+
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery(sql_sentence,null);
+
+        int recordCount = cursor.getCount();
+
+        for (int i = 0; i < recordCount; i++){
+            cursor.moveToNext();
+            TimelineSelectDto test = new TimelineSelectDto();
+
+            test.setNickname(cursor.getString(1));
+            test.setContext(cursor.getString(2));
+            test.setDate(cursor.getString(3));
+            test.setAlarm_ing(cursor.getBlob(4));
+
+            alarmAll.add(test);
+        }
+        cursor.close();
+        db.close();
+        return alarmAll;
+    }
+
+    //타임라인 알림내용 추가
+    void addUserTimeline(String nickname, String alarmContext, Drawable alarmIcon) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues cv = new ContentValues();
+
+        Bitmap bitmap = ((BitmapDrawable) alarmIcon).getBitmap();
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.PNG,100,stream);
+        byte[] data = stream.toByteArray();
+
+        cv.put("nickname", nickname);
+        cv.put("context", alarmContext);
+        cv.put("alarm_img", data);
+
+        long result = db.insert("user_timeline", null, cv);
+        if (result == -1)
+        {
+            Toast.makeText(mContext, "Failed", Toast.LENGTH_SHORT).show();
+        }
+        else
+        {
+            Toast.makeText(mContext, "데이터 추가 성공", Toast.LENGTH_SHORT).show();
+        }
+        db.close();
     }
 
     //칼로리 과다 섭취한 날짜
@@ -590,7 +646,6 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         db.delete(tableName, null, null);
         db.close();
-        Toast.makeText(mContext, tableName + " 테이블의 모든 행이 삭제되었습니다.", Toast.LENGTH_SHORT).show();
     }
 
     public String getResult(){

@@ -100,11 +100,13 @@ public class NutritionFirst extends Fragment {
             totalProvince += intake_food.get(i).getProvince();
         }
 
+
         //프로그레스 바 설정. 2200.0f 는 임시값. (총 먹은 칼로리/권장 칼로리)
             mainCircleProgressbar.setProgress( Math.round( (totalKcal/nutriInfo.get(0).getKcal())*100) ) ;
             progressbarCarbohydrate.setProgress( Math.round( (totalCarbohydrate/nutriInfo.get(0).getCarbohydrate())*100 ) );
             progressbarProtein.setProgress( Math.round( (totalProtein/nutriInfo.get(0).getProtein())*100 ) );
             progressbarProvince.setProgress( Math.round( (totalProvince/nutriInfo.get(0).getProvince())*100 ) );
+
 
         //탄단지 총섭취량/권장섭취량 텍스트 설정. 권장섭취량은 임시값
         kcalPercentage.setText(String.format("%.0f",totalKcal) + "");

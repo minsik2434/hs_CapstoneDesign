@@ -29,6 +29,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TabHost;
 import android.widget.TextView;
@@ -60,7 +61,6 @@ public class MainActivity extends AppCompatActivity {
     NutritionFirst fragment_nutri1;
     NutritionSecond fragment_nutri2;
 
-    TimeState fragment_state_breakfast;
     //BottomAppBar barcodeBar;
     FloatingActionButton cameraBtn;
 
@@ -106,13 +106,11 @@ public class MainActivity extends AppCompatActivity {
 //        dbHelper.deleteAllRows("disease");
 //        dbHelper.deleteAllRows("disease_user");
 
-
         if (isUserTableEmpty) {
             Intent intent = new Intent(MainActivity.this, init_setup1.class);
             startActivity(intent);
             finish(); // 현재 액티비티를 종료하여 뒤로가기 버튼으로 다시 이 액티비티로 돌아오지 않도록 합니다.
         }
-
 
         //fragment 추가
         fragment_main = new MainFragment();
@@ -122,8 +120,6 @@ public class MainActivity extends AppCompatActivity {
         //영양성분
         fragment_nutri1 = new NutritionFirst();
         fragment_nutri2 = new NutritionSecond();
-        //아침리스트뷰
-        fragment_state_breakfast = new TimeState();
         //메인 그래프
 
         //바코드
@@ -148,9 +144,6 @@ public class MainActivity extends AppCompatActivity {
 
         //영양소1 화면교체
         getSupportFragmentManager().beginTransaction().replace(R.id.nutri_content, fragment_nutri1).commit();
-
-        //아침 리스트뷰 프래그먼트
-        getSupportFragmentManager().beginTransaction().replace(R.id.time_state_frame, fragment_state_breakfast).commit();
 
 
         //2023-06-06
@@ -194,7 +187,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
 
-        ImageView foodImageView = findViewById(R.id.recordFoodImage);
+        ImageButton foodImageView = findViewById(R.id.recordFoodImage);
         TextView searchedFoodName = findViewById(R.id.recordFoodName);
         TextView searchedFoodKcal = findViewById(R.id.recordFoodKcal);
         TextView searchedFoodNutriInfo = findViewById(R.id.recordFoodInfo);
@@ -269,7 +262,6 @@ public class MainActivity extends AppCompatActivity {
                     }
                 });
                 uThread.start();
-
 
             } else {
                 Toast.makeText(this, "No barcode scanned", Toast.LENGTH_SHORT).show();
