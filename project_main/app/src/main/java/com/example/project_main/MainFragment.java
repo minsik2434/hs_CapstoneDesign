@@ -16,13 +16,16 @@ import androidx.fragment.app.FragmentStatePagerAdapter;
 import androidx.fragment.app.FragmentTransaction;
 
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.ListView;
 import android.widget.ProgressBar;
+import android.widget.ScrollView;
 import android.widget.TabHost;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -32,11 +35,20 @@ import org.eazegraph.lib.models.PieModel;
 import org.w3c.dom.Text;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 
 public class MainFragment extends Fragment {
 
     private int change = 1;
+    MyDatabaseHelper dbHelper;
+
+    private ListView mainFoodList;
+    ScrollView mainScrollview;
+
+    private ListViewAdapter listViewAdapter;
+    private ArrayList<RecodeSelectDto> intake_food = new ArrayList<RecodeSelectDto>();
+    private ArrayList<String> foodInfo = new ArrayList<>();
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -50,6 +62,12 @@ public class MainFragment extends Fragment {
         TextView timeState_now = view.findViewById(R.id.time_state_now);
         TextView todayMainTextview = view.findViewById(R.id.todayMainTextview);
 
+        mainFoodList = (ListView) view.findViewById(R.id.mainFoodList);
+        mainScrollview = (ScrollView) view.findViewById(R.id.mainScrollview);
+
+        listViewAdapter = new ListViewAdapter();
+        ListView mainFoodList = view.findViewById(R.id.mainFoodList);
+
         String year = "yyyy";
         String month = "MM";
         String day = "dd";
@@ -60,6 +78,25 @@ public class MainFragment extends Fragment {
         Drawable changeBreakfastIconColor = DrawableCompat.wrap(getResources().getDrawable(R.drawable.breakfast_icon)).mutate();
         Drawable changeLunchIconColor = DrawableCompat.wrap(getResources().getDrawable(R.drawable.lunch_icon)).mutate();
         Drawable changeDinnerIconColor = DrawableCompat.wrap(getResources().getDrawable(R.drawable.dinner_icon)).mutate();
+
+        //DB
+        dbHelper = new MyDatabaseHelper(getActivity().getApplicationContext());
+
+        String sql_sentence = "SELECT intake_table.foodname, manufacturer, classification, kcal, carbohydrate, protein, province, sugars, salt, cholesterol, saturated_fat, trans_fat  from intake_table join food_table on intake_table.foodname = food_table.foodname where substr(date,1,10) = date('now','localtime')and time= '"+"아침"+"';";
+        intake_food = dbHelper.executeQuerySearchIntakeFoodToday(sql_sentence);
+
+        for (int i = 0; i < intake_food.size(); i++) {
+            foodInfo.add("탄수화물 " + intake_food.get(i).getCarbohydrate() + "g" + " 단백질 " + intake_food.get(i).getProtein() + "g" + " 지방 " + intake_food.get(i).getProvince() + "g");
+        }
+
+        //어뎁터에 아이템 추가
+        for (int i = 0; i < intake_food.size(); i++) {
+            listViewAdapter.addItem(intake_food.get(i).getFoodName(), Math.round(intake_food.get(i).getKcal()) + " Kcal", foodInfo.get(i));
+        }
+
+        mainFoodList.setAdapter(listViewAdapter);
+        foodInfo.clear();
+
 
         //영양성분 전환 버튼
         view.findViewById(R.id.nutriChangeBtn).setOnClickListener(new View.OnClickListener() {
@@ -86,15 +123,25 @@ public class MainFragment extends Fragment {
                 timeState_now.setText("아침");
 
                 //아침 리스트 불러오기
-                FragmentManager fragmentManager = getFragmentManager();
-                FragmentTransaction transaction = fragmentManager.beginTransaction();
-                TimeState breakfast = new TimeState();
+                foodInfo.clear();
+                intake_food.clear();
+                listViewAdapter.clearItem();
 
-                //상태 아침으로 변경
-                breakfast.timeStateStr = "morning";
+                String sql_sentence = "SELECT intake_table.foodname, manufacturer, classification, kcal, carbohydrate, protein, province, sugars, salt, cholesterol, saturated_fat, trans_fat  from intake_table join food_table on intake_table.foodname = food_table.foodname where substr(date,1,10) = date('now','localtime')and time= '"+"아침"+"';";
+                intake_food = dbHelper.executeQuerySearchIntakeFoodToday(sql_sentence);
 
-                transaction.replace(R.id.time_state_frame, breakfast);
-                transaction.commit();
+                for (int i = 0; i < intake_food.size(); i++) {
+                    foodInfo.add("탄수화물 " + intake_food.get(i).getCarbohydrate() + "g" + " 단백질 " + intake_food.get(i).getProtein() + "g" + " 지방 " + intake_food.get(i).getProvince() + "g");
+                }
+
+                //어뎁터에 아이템 추가
+                for (int i = 0; i < intake_food.size(); i++) {
+                    listViewAdapter.addItem(intake_food.get(i).getFoodName(), Math.round(intake_food.get(i).getKcal()) + " Kcal", foodInfo.get(i));
+                }
+
+                mainFoodList.setAdapter(listViewAdapter);
+
+
 
             }
         });
@@ -115,13 +162,23 @@ public class MainFragment extends Fragment {
                 timeState_now.setText("점심");
 
                 //점심 리스트 불러오기
-                FragmentManager fragmentManager = getFragmentManager();
-                FragmentTransaction transaction = fragmentManager.beginTransaction();
-                TimeState lunch = new TimeState();
-                //상태 점심으로 변경
-                lunch.timeStateStr = "lunch";
-                transaction.replace(R.id.time_state_frame, lunch);
-                transaction.commit();
+                foodInfo.clear();
+                intake_food.clear();
+                listViewAdapter.clearItem();
+                String sql_sentence = "SELECT intake_table.foodname, manufacturer, classification, kcal, carbohydrate, protein, province, sugars, salt, cholesterol, saturated_fat, trans_fat  from intake_table join food_table on intake_table.foodname = food_table.foodname where substr(date,1,10) = date('now','localtime')and time= '"+"점심"+"';";
+                intake_food = dbHelper.executeQuerySearchIntakeFoodToday(sql_sentence);
+
+                for (int i = 0; i < intake_food.size(); i++) {
+                    foodInfo.add("탄수화물 " + intake_food.get(i).getCarbohydrate() + "g" + " 단백질 " + intake_food.get(i).getProtein() + "g" + " 지방 " + intake_food.get(i).getProvince() + "g");
+                }
+
+                //어뎁터에 아이템 추가
+                for (int i = 0; i < intake_food.size(); i++) {
+                    listViewAdapter.addItem(intake_food.get(i).getFoodName(), Math.round(intake_food.get(i).getKcal()) + " Kcal", foodInfo.get(i));
+                }
+
+                mainFoodList.setAdapter(listViewAdapter);
+                foodInfo.clear();
 
             }
         });
@@ -142,14 +199,34 @@ public class MainFragment extends Fragment {
                 timeState_now.setText("저녁");
 
                 //저녁 리스트 불러오기
-                FragmentManager fragmentManager = getFragmentManager();
-                FragmentTransaction transaction = fragmentManager.beginTransaction();
-                TimeState dinner = new TimeState();
-                //상태 저녁으로 변경
-                dinner.timeStateStr = "dinner";
-                transaction.replace(R.id.time_state_frame, dinner);
-                transaction.commit();
+                foodInfo.clear();
+                intake_food.clear();
+                listViewAdapter.clearItem();
+                String sql_sentence = "SELECT intake_table.foodname, manufacturer, classification, kcal, carbohydrate, protein, province, sugars, salt, cholesterol, saturated_fat, trans_fat  from intake_table join food_table on intake_table.foodname = food_table.foodname where substr(date,1,10) = date('now','localtime')and time= '"+"저녁"+"';";
+                intake_food = dbHelper.executeQuerySearchIntakeFoodToday(sql_sentence);
 
+                for (int i = 0; i < intake_food.size(); i++) {
+                    foodInfo.add("탄수화물 " + intake_food.get(i).getCarbohydrate() + "g" + " 단백질 " + intake_food.get(i).getProtein() + "g" + " 지방 " + intake_food.get(i).getProvince() + "g");
+                }
+
+                //어뎁터에 아이템 추가
+                for (int i = 0; i < intake_food.size(); i++) {
+                    listViewAdapter.addItem(intake_food.get(i).getFoodName(), Math.round(intake_food.get(i).getKcal()) + " Kcal", foodInfo.get(i));
+                }
+
+                mainFoodList.setAdapter(listViewAdapter);
+                foodInfo.clear();
+
+            }
+        });
+
+        //스크롤 기능 구현
+        mainFoodList.setOnTouchListener(new View.OnTouchListener() {
+
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                mainScrollview.requestDisallowInterceptTouchEvent(true);
+                return false;
             }
         });
 
@@ -160,9 +237,6 @@ public class MainFragment extends Fragment {
         //영양성분(탄단지)
         NutritionFirst nutri1 = new NutritionFirst();
         transaction.replace(R.id.nutri_content, nutri1);
-        //섭취음식정보(아침)
-        TimeState breakfast = new TimeState();
-        transaction.replace(R.id.time_state_frame, breakfast);
         transaction.commit();
 
         return view;

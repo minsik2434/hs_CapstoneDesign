@@ -33,9 +33,9 @@ public class StatisticsFragment extends Fragment {
     private int first_num_page = 3;
     private CircleIndicator3 mIndicator;
     private MyDatabaseHelper dbHelper;
-
     private BottomNavigationView statisticsBottomNavigationView;
     private FragmentManager fragmentManager;
+
 
     @Nullable
     @Override

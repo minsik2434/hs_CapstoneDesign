@@ -8,16 +8,16 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_weight="5"
-        android:orientation="vertical"
-        >
+        android:orientation="vertical">
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="알레르기 모두 체크"
-            android:textSize="25dp"
             android:layout_margin="15dp"
-            android:gravity = "center"
-            />
+            android:gravity="center"
+            android:text="알레르기 모두 체크"
+            android:textSize="25dp" />
+
         <TableRow>
 
             <CheckBox
@@ -25,32 +25,31 @@
                 android:layout_width="81dp"
                 android:layout_height="46dp"
                 android:layout_margin="10dp"
-                android:background="@color/grayColor"
-                android:text="우유"
-                />
+                android:background="@drawable/custom_checkbox"
+                android:text="우유" />
 
             <CheckBox
                 android:id="@+id/checkFowl"
                 android:layout_width="81dp"
                 android:layout_height="46dp"
                 android:layout_margin="10dp"
-                android:background="@color/grayColor"
+                android:background="@drawable/custom_checkbox"
                 android:text="난류" />
+
             <CheckBox
                 android:id="@+id/checkShellfish"
                 android:layout_width="81dp"
                 android:layout_height="46dp"
                 android:layout_margin="10dp"
-                android:background="@color/grayColor"
-                android:text="갑각류"
-                />
+                android:background="@drawable/custom_checkbox"
+                android:text="갑각류" />
 
             <CheckBox
                 android:id="@+id/checkFish"
                 android:layout_width="81dp"
                 android:layout_height="46dp"
                 android:layout_margin="10dp"
-                android:background="@color/grayColor"
+                android:background="@drawable/custom_checkbox"
                 android:text="생선" />
 
 
@@ -60,103 +59,99 @@
 
             <CheckBox
                 android:id="@+id/checkNuts"
-                android:text="견과류"
-                android:background="@color/grayColor"
                 android:layout_width="81dp"
                 android:layout_height="46dp"
                 android:layout_margin="10dp"
-                />
+                android:background="@drawable/custom_checkbox"
+                android:text="견과류" />
+
             <CheckBox
                 android:id="@+id/checkBean"
-                android:text="콩"
                 android:layout_width="81dp"
                 android:layout_height="46dp"
                 android:layout_margin="10dp"
-                android:background="@color/grayColor"
-                />
+                android:background="@drawable/custom_checkbox"
+                android:text="콩" />
+
             <CheckBox
                 android:id="@+id/checkWheat"
-                android:text="밀"
                 android:layout_width="81dp"
                 android:layout_height="46dp"
                 android:layout_margin="10dp"
-                android:background="@color/grayColor"
-                />
+                android:background="@drawable/custom_checkbox"
+                android:text="밀" />
+
             <CheckBox
                 android:id="@+id/checkPeanut"
-                android:text="땅콩"
                 android:layout_width="81dp"
                 android:layout_height="46dp"
                 android:layout_margin="10dp"
-                android:background="@color/grayColor"
-                />
+                android:background="@drawable/custom_checkbox"
+                android:text="땅콩" />
         </TableRow>
 
         <TableRow>
 
             <CheckBox
                 android:id="@+id/checkMeat"
-                android:text="육류"
-                android:background="@color/grayColor"
                 android:layout_width="81dp"
                 android:layout_height="46dp"
                 android:layout_margin="10dp"
-                />
+                android:background="@drawable/custom_checkbox"
+                android:text="육류" />
         </TableRow>
 
     </TableLayout>
-
 
 
     <TableLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_weight="5"
-        android:orientation="vertical"
-        >
+        android:orientation="vertical">
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="지병 모두 체크"
-            android:textSize="25dp"
             android:layout_margin="15dp"
-            android:gravity = "center"
-            />
+            android:gravity="center"
+            android:text="지병 모두 체크"
+            android:textSize="25dp" />
+
         <TableRow>
 
             <CheckBox
                 android:id="@+id/diabetes"
-                android:text="당뇨"
                 android:layout_width="81dp"
                 android:layout_height="46dp"
                 android:layout_margin="10dp"
-                android:background="@color/grayColor"
+                android:background="@drawable/custom_checkbox"
                 android:gravity="center"
-                />
+                android:text="당뇨" />
 
             <CheckBox
                 android:id="@+id/highBloodPressure"
                 android:layout_width="81dp"
                 android:layout_height="46dp"
                 android:layout_margin="10dp"
-                android:background="@color/grayColor"
+                android:background="@drawable/custom_checkbox"
                 android:text="고혈압" />
+
             <CheckBox
                 android:id="@+id/hyperlipidemia"
                 android:layout_width="81dp"
                 android:layout_height="46dp"
                 android:layout_margin="10dp"
-                android:background="@color/grayColor"
-                android:textSize="12sp"
+                android:background="@drawable/custom_checkbox"
                 android:text="고지혈증"
-                />
+                android:textSize="12sp" />
 
             <CheckBox
                 android:id="@+id/obesity"
                 android:layout_width="81dp"
                 android:layout_height="46dp"
                 android:layout_margin="10dp"
-                android:background="@color/grayColor"
+                android:background="@drawable/custom_checkbox"
                 android:text="비만" />
 
         </TableRow>
@@ -167,22 +162,29 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
         android:layout_marginTop="50dp"
-        android:gravity="center">
+        android:layout_marginBottom="100dp"
+        android:gravity="center"
+        android:orientation="horizontal">
 
-        <Button
+        <android.widget.Button
             android:id="@+id/resetAllergyCancel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginRight="80dp"
-            android:text="취소"/>
+            android:background="@drawable/green_btn"
+            android:text="취소"
+            android:textColor="#6AFF84"
+            android:textSize="18sp" />
 
-        <Button
+        <android.widget.Button
             android:id="@+id/resetAllergySave"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="저장"/>
+            android:background="@drawable/green_btn"
+            android:text="저장"
+            android:textColor="#6AFF84"
+            android:textSize="18sp" />
 
     </LinearLayout>
 

@@ -79,6 +79,7 @@ public class RecordFragment extends Fragment {
     boolean dinnerImgBtn = false;
 
     private ImageButton dateButton;
+
     private TextView dateTextView;
     private Calendar selectedDate = Calendar.getInstance();
 
@@ -301,7 +302,6 @@ public class RecordFragment extends Fragment {
         return dateFormat.format(currentDateTime);
     }
 
-
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
 
@@ -378,6 +378,7 @@ public class RecordFragment extends Fragment {
         DatePickerDialog datePickerDialog = new DatePickerDialog(getActivity(), new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+
                 selectedDate.set(Calendar.YEAR, year);
                 selectedDate.set(Calendar.MONTH, month);
                 selectedDate.set(Calendar.DAY_OF_MONTH, dayOfMonth);
@@ -391,6 +392,7 @@ public class RecordFragment extends Fragment {
 
         datePickerDialog.show();
     }
+
 
     private String dateFormat(String pattern){
         Date date = new Date();
@@ -406,7 +408,5 @@ public class RecordFragment extends Fragment {
         String currentDate = currentDateFormat.format(new Date());
         dateTextView.setText(currentDate);
     }
-
-
 
 }
