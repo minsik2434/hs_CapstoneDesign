@@ -237,7 +237,6 @@ public class RecordFragment extends Fragment {
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }
-
                 // 현재 날짜 가져오기
                 SimpleDateFormat currentDateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.KOREA);
                 String currentDate = currentDateFormat.format(new Date());

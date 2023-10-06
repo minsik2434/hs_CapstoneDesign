@@ -21,7 +21,7 @@ public class init_setup3 extends Activity {
     Integer[] integerDisease = {R.id.diabetes,R.id.highBloodPressure,R.id.hyperlipidemia,R.id.obesity};
     CheckBox[] checkDisease = new CheckBox[integerDisease.length];
 
-    ImageButton btnNext3, btnPre3;
+    Button btnNext3, btnPre3;
 
     MyDatabaseHelper allergyDB;
     MyDatabaseHelper diseaseDB;
@@ -152,3 +152,4 @@ public class init_setup3 extends Activity {
     }
 
 }
+

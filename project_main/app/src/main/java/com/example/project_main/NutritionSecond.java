@@ -1,4 +1,6 @@
 package com.example.project_main;
+import android.app.Activity;
+import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -20,6 +22,16 @@ import org.w3c.dom.Text;
 import java.util.ArrayList;
 
 public class NutritionSecond extends Fragment {
+
+    SharedPreferences pref;          // 프리퍼런스
+    SharedPreferences.Editor editor; // 에디터
+
+    private boolean overSugar;
+    private boolean overSalt;
+    private boolean overCholesterol;
+    private boolean overTransfat;
+    private boolean overSaturfat;
+    private String timelineText;
 
     private ProgressBar progressbarSugar;
     private ProgressBar progressbarSalt;
@@ -89,6 +101,20 @@ public class NutritionSecond extends Fragment {
         userRecAmount = new UserRecommendAmount();
         userDisease = dbHelper.getUserDisease(); //사용자 지병
 
+        //알람
+        // 1. Shared Preference 초기화
+        pref = getContext().getSharedPreferences("pref2", Activity.MODE_PRIVATE);
+        editor = pref.edit();
+
+        // 2. 저장해둔 값 불러오기 ("식별값", 초기값) -> 식별값과 초기값은 직접 원하는 이름과 값으로 작성.
+
+        overSugar = pref.getBoolean("overSugar", false);
+        overSalt = pref.getBoolean("overSalt", false);
+        overCholesterol = pref.getBoolean("overCholesterol", false);
+        overTransfat = pref.getBoolean("overTransfat", false);
+        overSaturfat = pref.getBoolean("overSaturfat", false);
+        AlarmController alarmController = new AlarmController(getContext());
+
         //지병 없다면
         if (userDisease.size() == 0) {
             userDiseaseListNum.add(0);
@@ -142,26 +168,91 @@ public class NutritionSecond extends Fragment {
             sugarPercentage.setTextColor(Color.parseColor("#ff0000"));
             progressbarSugar.setProgressTintList(ColorStateList.valueOf(Color.parseColor("#FF5D5D")));
             sugarStatus.setImageResource(R.drawable.caution_cutout);
+
+            if(overSugar == false)
+            {
+                alarmController.setAlarm2(13,0);
+                timelineText = "당이 기준치를 초과하였습니다.";
+                dbHelper.addUserTimeline(userInfo.get(0).getNickname(), timelineText, getResources().getDrawable(R.drawable.warning_icon2));
+                editor.putBoolean("overSugar", true);
+                editor.apply(); // 저장
+            }
+        }else {
+            editor.putBoolean("overSugar", false);
+            editor.apply(); // 저장
+
         }
         if (nutriInfo.get(0).getSalt() - totalSalt < 0){
             saltPercentage.setTextColor(Color.parseColor("#ff0000"));
             progressbarSalt.setProgressTintList(ColorStateList.valueOf(Color.parseColor("#FF5D5D")));
             saltStatus.setImageResource(R.drawable.caution_cutout);
+
+            if(overSalt == false)
+            {
+                alarmController.setAlarm2(14,0);
+                timelineText = "나트륨이 기준치를 초과하였습니다.";
+                dbHelper.addUserTimeline(userInfo.get(0).getNickname(), timelineText, getResources().getDrawable(R.drawable.warning_icon2));
+                editor.putBoolean("overSalt", true);
+                editor.apply(); // 저장
+            }
+        }else {
+            editor.putBoolean("overSalt", false);
+            editor.apply(); // 저장
+
         }
         if (nutriInfo.get(0).getCholesterol() - totalCholesterol < 0){
             cholPercentage.setTextColor(Color.parseColor("#ff0000"));
             progressbarCholesterol.setProgressTintList(ColorStateList.valueOf(Color.parseColor("#FF5D5D")));
             cholesterolStatus.setImageResource(R.drawable.caution_cutout);
+
+            if(overCholesterol == false)
+            {
+                alarmController.setAlarm2(15,0);
+                timelineText = "콜레스테롤이 기준치를 초과하였습니다.";
+                dbHelper.addUserTimeline(userInfo.get(0).getNickname(), timelineText, getResources().getDrawable(R.drawable.warning_icon2));
+                editor.putBoolean("overCholesterol", true);
+                editor.apply(); // 저장
+            }
+        }else {
+            editor.putBoolean("overCholesterol", false);
+            editor.apply(); // 저장
+
         }
         if (nutriInfo.get(0).getTrans_fat() - totalTransFat < 0){
             transFatPercentage.setTextColor(Color.parseColor("#ff0000"));
             progressbarTransFat.setProgressTintList(ColorStateList.valueOf(Color.parseColor("#FF5D5D")));
             transfatStatus.setImageResource(R.drawable.caution_cutout);
+
+            if(overTransfat == false)
+            {
+                alarmController.setAlarm2(16,0);
+                timelineText = "트랜스지방이 기준치를 초과하였습니다.";
+                dbHelper.addUserTimeline(userInfo.get(0).getNickname(), timelineText, getResources().getDrawable(R.drawable.warning_icon2));
+                editor.putBoolean("overTransfat", true);
+                editor.apply(); // 저장
+            }
+        }else {
+            editor.putBoolean("overTransfat", false);
+            editor.apply(); // 저장
+
         }
         if (nutriInfo.get(0).getSaturated_fat() - totalSaturFat < 0){
             saturFatPercentage.setTextColor(Color.parseColor("#ff0000"));
             progressbarSaturFat.setProgressTintList(ColorStateList.valueOf(Color.parseColor("#FF5D5D")));
             saturfatStatus.setImageResource(R.drawable.caution_cutout);
+
+            if(overSaturfat == false)
+            {
+                alarmController.setAlarm2(17,0);
+                timelineText = "포화지방산이 기준치를 초과하였습니다.";
+                dbHelper.addUserTimeline(userInfo.get(0).getNickname(), timelineText, getResources().getDrawable(R.drawable.warning_icon2));
+                editor.putBoolean("overSaturfat", true);
+                editor.apply(); // 저장
+            }
+        }else {
+            editor.putBoolean("overSaturfat", false);
+            editor.apply(); // 저장
+
         }
         //endregion
 

@@ -15,7 +15,7 @@ import androidx.annotation.Nullable;
 
 public class init_setup2 extends Activity {
 
-    ImageButton btnPre2, btnNext2;
+    Button btnPre2, btnNext2;
     EditText editAge, editHeight, editWeight;
     RadioGroup rGroup;
     RadioButton btnMan, btnWoman;

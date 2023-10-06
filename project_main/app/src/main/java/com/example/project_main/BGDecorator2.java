@@ -49,3 +49,4 @@ public class BGDecorator2 implements DayViewDecorator {
         }
     }
 }
+

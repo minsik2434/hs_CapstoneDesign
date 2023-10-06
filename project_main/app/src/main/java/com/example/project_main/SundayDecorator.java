@@ -28,5 +28,3 @@ public class SundayDecorator implements DayViewDecorator {
         view.addSpan(new ForegroundColorSpan(Color.RED));
     }
 }
-
-

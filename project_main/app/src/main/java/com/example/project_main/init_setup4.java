@@ -21,7 +21,7 @@ import java.util.ArrayList;
 public class init_setup4 extends Activity {
 
 
-    ImageButton btnPre4, btnNext4;
+    Button btnPre4, btnNext4;
     TextView spinnerText;
 
     private Spinner exerciseSpinner;

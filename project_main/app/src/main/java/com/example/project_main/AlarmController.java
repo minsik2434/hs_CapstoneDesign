@@ -32,11 +32,20 @@ public class AlarmController {
         Calendar calendar = Calendar.getInstance();
         calendar.set(2023, 9 - 1, 22, 14, 0);
         alarmMgr.set(AlarmManager.ELAPSED_REALTIME_WAKEUP, calendar.getTimeInMillis(), alarmIntent);
+    }
+
+    public void setAlarm2(int reqCode, long timeMill) {
+        Log.i(TAG, "setAlarm req : " + reqCode + ", timeMill : " + timeMill);
+        Intent intent = new Intent(context, AlarmReceiver.class);
+        intent.putExtra("requestCode", reqCode);
+
+        PendingIntent alarmIntent = PendingIntent.getBroadcast(context, reqCode, intent, PendingIntent.FLAG_IMMUTABLE);
 
         //특정 시간에서 +n분 후 알림
-        /*alarmMgr.set(AlarmManager.ELAPSED_REALTIME_WAKEUP,
+        alarmMgr.set(AlarmManager.ELAPSED_REALTIME_WAKEUP,
                 SystemClock.elapsedRealtime() +
-                        60* 1000 *timeMill, alarmIntent);*/
+                        60* 1000 *timeMill, alarmIntent);
+
     }
 
     public void cancelAlarm(int reqCode) {
