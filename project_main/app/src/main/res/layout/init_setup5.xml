@@ -17,7 +17,7 @@
             android:text="당신의 일일 권장 칼로리는 ?"
             android:layout_gravity="center"
             android:layout_marginTop="70dp"
-            android:textSize="15dp"
+            android:textSize="25dp"
             >
         </TextView>
 
@@ -58,7 +58,7 @@
                 android:layout_gravity="center"
                 android:layout_marginTop="15dp"
                 android:text="kcal"
-                android:textSize="13dp"
+                android:textSize="30dp"
                 />
 
         </LinearLayout>
@@ -203,7 +203,7 @@
         android:orientation="vertical"
         >
 
-        <Button
+        <android.widget.Button
             android:id="@+id/btnStart"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -211,12 +211,15 @@
             android:layout_gravity="center"
             android:gravity="center"
             android:layout_marginTop="30dp"
+            android:background="@drawable/green_btn"
+            android:textColor="#6AFF84"
             />
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="상세 정보는 다시 설정할 수 있습니다"
             android:textSize="10dp"
+            android:layout_marginTop="5sp"
             android:layout_gravity="center"
             />
     </LinearLayout>

@@ -17,7 +17,7 @@
             android:id="@+id/text1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="활동량 ?"
+            android:text="활동량 설정"
             android:layout_gravity="center"
             android:layout_marginTop="30dp"
             android:textSize="25dp"
@@ -54,7 +54,6 @@
             android:layout_marginBottom="40dp"
             />
 
-
     </LinearLayout>
 
     <LinearLayout
@@ -70,13 +69,17 @@
             android:layout_weight="1"
             android:orientation="horizontal">
 
-            <Button
+            <android.widget.Button
                 android:id="@+id/btnPre4"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_gravity="right"
+                android:layout_marginLeft="10dp"
+                android:background="@drawable/green_btn"
                 android:gravity="center"
-                android:layout_gravity="left"
-                android:text="이전" />
+                android:text="이전"
+                android:textColor="#6AFF84"
+                android:textSize="20sp" />
 
             <View
                 android:layout_width="0dp"
@@ -85,13 +88,17 @@
                 />
 
 
-            <Button
+            <android.widget.Button
                 android:id="@+id/btnNext4"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="50dp"
                 android:layout_gravity="right"
+                android:layout_marginRight="10dp"
+                android:background="@drawable/green_btn"
                 android:gravity="center"
-                android:text="다음" />
+                android:text="다음"
+                android:textColor="#6AFF84"
+                android:textSize="20sp" />
 
 
         </LinearLayout>
@@ -128,10 +135,4 @@
 
 
     </LinearLayout>
-
-
-
-
-
-
 </LinearLayout>

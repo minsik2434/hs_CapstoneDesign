@@ -20,6 +20,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.lang.reflect.Array;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -460,36 +461,6 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
         return result;
     }
 
-    public int[] caloriesFor7Days() {
-        SQLiteDatabase db = this.getReadableDatabase();
-        int[] caloriesArray = new int[7];
-
-        Calendar calendar = Calendar.getInstance();
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
-
-        for (int i = 6; i >= 0; i--) {
-            String date = dateFormat.format(calendar.getTime());
-
-            Cursor cursor = db.rawQuery("SELECT SUM(kcal) FROM intake_table " +
-                    "INNER JOIN food_table ON intake_table.foodname = food_table.foodname " +
-                    "WHERE substr(date, 1, 10) = ?;", new String[]{date});
-
-            if (cursor.moveToFirst()) {
-                caloriesArray[i] = cursor.getInt(0);
-            } else {
-                caloriesArray[i] = 0;
-            }
-
-            cursor.close();
-
-            calendar.add(Calendar.DAY_OF_YEAR, -1);
-        }
-
-        db.close();
-
-        return caloriesArray;
-    }
-
     public String getNthMostEatenFoodForWeek(int rank) {
         SQLiteDatabase db = this.getReadableDatabase();
 
@@ -525,104 +496,7 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
         return foodName;
     }
 
-    // 단백질 계산
-    public int[] proteinCaloriesFor7Days() {
-        SQLiteDatabase db = this.getReadableDatabase();
-        int[] proteinCaloriesArray = new int[7];
 
-        Calendar calendar = Calendar.getInstance();
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
-
-        for (int i = 6; i >= 0; i--) {
-            String date = dateFormat.format(calendar.getTime());
-
-            Cursor cursor = db.rawQuery("SELECT SUM(protein) FROM intake_table " +
-                    "INNER JOIN food_table ON intake_table.foodname = food_table.foodname " +
-                    "WHERE substr(date, 1, 10) = ?;", new String[]{date});
-
-            if (cursor.moveToFirst()) {
-                float totalProteinGrams = cursor.getFloat(0);
-                int proteinCalories = (int) (totalProteinGrams * 4); // 1g 단백질이 4칼로리이므로, 총 단백질(g) * 4 = 단백질 칼로리
-                proteinCaloriesArray[i] = proteinCalories;
-            } else {
-                proteinCaloriesArray[i] = 0;
-            }
-
-            cursor.close();
-
-            calendar.add(Calendar.DAY_OF_YEAR, -1);
-        }
-
-        db.close();
-
-        return proteinCaloriesArray;
-    }
-
-    // 지방계산
-    public int[] fatCaloriesFor7Days() {
-        SQLiteDatabase db = this.getReadableDatabase();
-        int[] fatCaloriesArray = new int[7];
-
-        Calendar calendar = Calendar.getInstance();
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
-
-        for (int i = 6; i >= 0; i--) {
-            String date = dateFormat.format(calendar.getTime());
-
-            Cursor cursor = db.rawQuery("SELECT SUM(saturated_fat + trans_fat) FROM intake_table " +
-                    "INNER JOIN food_table ON intake_table.foodname = food_table.foodname " +
-                    "WHERE substr(date, 1, 10) = ?;", new String[]{date});
-
-            if (cursor.moveToFirst()) {
-                float totalFatGrams = cursor.getFloat(0);
-                int fatCalories = (int) (totalFatGrams * 9); // 1g 지방이 9칼로리이므로, 총 지방(g) * 9 = 지방 칼로리
-                fatCaloriesArray[i] = fatCalories;
-            } else {
-                fatCaloriesArray[i] = 0;
-            }
-
-            cursor.close();
-
-            calendar.add(Calendar.DAY_OF_YEAR, -1);
-        }
-
-        db.close();
-
-        return fatCaloriesArray;
-    }
-
-    // 탄수화물 계산산
-   public int[] carbohydrateCaloriesFor7Days() {
-        SQLiteDatabase db = this.getReadableDatabase();
-        int[] carbohydrateCaloriesArray = new int[7];
-
-        Calendar calendar = Calendar.getInstance();
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
-
-        for (int i = 6; i >= 0; i--) {
-            String date = dateFormat.format(calendar.getTime());
-
-            Cursor cursor = db.rawQuery("SELECT SUM(carbohydrate) FROM intake_table " +
-                    "INNER JOIN food_table ON intake_table.foodname = food_table.foodname " +
-                    "WHERE substr(date, 1, 10) = ?;", new String[]{date});
-
-            if (cursor.moveToFirst()) {
-                float totalCarbohydrateGrams = cursor.getFloat(0);
-                int carbohydrateCalories = (int) (totalCarbohydrateGrams * 4); // 1g 탄수화물이 4칼로리이므로, 총 탄수화물(g) * 4 = 탄수화물 칼로리
-                carbohydrateCaloriesArray[i] = carbohydrateCalories;
-            } else {
-                carbohydrateCaloriesArray[i] = 0;
-            }
-
-            cursor.close();
-
-            calendar.add(Calendar.DAY_OF_YEAR, -1);
-        }
-
-        db.close();
-
-        return carbohydrateCaloriesArray;
-    }
 
     // user_table이 비어있는지 확인하는 함수
     public boolean isUserTableEmpty() {
@@ -646,7 +520,6 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         db.delete(tableName, null, null);
         db.close();
-        Toast.makeText(mContext, tableName + " 테이블의 모든 행이 삭제되었습니다.", Toast.LENGTH_SHORT).show();
     }
 
     public String getResult(){

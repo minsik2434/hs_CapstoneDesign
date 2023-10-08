@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -14,7 +15,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 public class init_setup1 extends AppCompatActivity {
 
-    Button btnNext1;
+    ImageButton btnNext1;
     EditText editNickname;
 
     MyDatabaseHelper dbHelper;

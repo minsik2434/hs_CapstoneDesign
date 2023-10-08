@@ -1,0 +1,26 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/protein_menu"
+        android:title="단백질" />
+    <item
+        android:id="@+id/fat_menu"
+        android:title="지방" />
+    <item
+        android:id="@+id/carbohydrate_menu"
+        android:title="탄수화물" />
+    <item
+        android:id="@+id/saccharides_menu"
+        android:title="당류" />
+    <item
+        android:id="@+id/sodium_menu"
+        android:title="나트륨" />
+    <item
+        android:id="@+id/cholesterol_menu"
+        android:title="콜레스테롤" />
+    <item
+        android:id="@+id/transfat_menu"
+        android:title="트랜스지방" />
+    <item
+        android:id="@+id/fattyacid_menu"
+        android:title="포화지방산" />
+</menu>

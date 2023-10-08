@@ -1,8 +1,11 @@
 package com.example.project_main;
+import android.app.Activity;
+import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.os.Bundle;
 import androidx.fragment.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +17,14 @@ import android.widget.Toast;
 import java.util.ArrayList;
 
 public class NutritionFirst extends Fragment {
+
+    SharedPreferences pref;          // 프리퍼런스
+    SharedPreferences.Editor editor; // 에디터
+
+    private boolean overCarbohydrate;
+    private boolean overProtein;
+    private boolean overProvince;
+    private String timelineText;
 
     private ProgressBar mainCircleProgressbar;
     private ProgressBar progressbarCarbohydrate;
@@ -71,6 +82,17 @@ public class NutritionFirst extends Fragment {
         userRecAmount = new UserRecommendAmount();
         userDisease = dbHelper.getUserDisease(); //사용자 지병
 
+        //알람
+        // 1. Shared Preference 초기화
+        pref = getContext().getSharedPreferences("pref", Activity.MODE_PRIVATE);
+        editor = pref.edit();
+
+        // 2. 저장해둔 값 불러오기 ("식별값", 초기값) -> 식별값과 초기값은 직접 원하는 이름과 값으로 작성.
+        overCarbohydrate = pref.getBoolean("overCarbohydrate", false);
+        overProtein = pref.getBoolean("overProtein", false);
+        overProvince = pref.getBoolean("overProvince", false);
+        AlarmController alarmController = new AlarmController(getContext());
+
         //지병 없다면
         if (userDisease.size() == 0) {
             userDiseaseListNum.add(0);
@@ -83,7 +105,7 @@ public class NutritionFirst extends Fragment {
             }
         }
 
-        nutriInfo = userRecAmount.getUserRecommendAmount(userDiseaseListNum,userInfo.get(0).getAge(), userInfo.get(0).getHeight(), userInfo.get(0).getWeight(), userInfo.get(0).getSex(),userInfo.get(0).getActivity());
+        nutriInfo = userRecAmount.getUserRecommendAmount(userDiseaseListNum, this.userInfo.get(0).getAge(), this.userInfo.get(0).getHeight(), this.userInfo.get(0).getWeight(), this.userInfo.get(0).getSex(), this.userInfo.get(0).getActivity());
 
         //변수 선언
         Float totalKcal=0.0f;
@@ -119,16 +141,51 @@ public class NutritionFirst extends Fragment {
             carboPercentage.setTextColor(Color.parseColor("#ff0000"));
             progressbarCarbohydrate.setProgressTintList(ColorStateList.valueOf(Color.parseColor("#FF5D5D")));
             carboStatus.setImageResource(R.drawable.caution_cutout);
+
+            System.out.println(overCarbohydrate);
+            if(overCarbohydrate == false)
+            {
+                alarmController.setAlarm2(10,0);
+                timelineText = "탄수화물이 기준치를 초과하였습니다.";
+                dbHelper.addUserTimeline(userInfo.get(0).getNickname(), timelineText, getResources().getDrawable(R.drawable.warning_icon2));
+                editor.putBoolean("overCarbohydrate", true);
+                editor.apply(); // 저장
+            }
+        } else{
+            editor.putBoolean("overCarbohydrate", false);
+            editor.apply(); // 저장
         }
         if (nutriInfo.get(0).getProtein() - totalProtein < 0){
             proteinPercentage.setTextColor(Color.parseColor("#ff0000"));
             progressbarProtein.setProgressTintList(ColorStateList.valueOf(Color.parseColor("#FF5D5D")));
             proteinStatus.setImageResource(R.drawable.caution_cutout);
+            if(overProtein == false)
+            {
+                alarmController.setAlarm2(11,0);
+                timelineText = "단백질이 기준치를 초과하였습니다.";
+                dbHelper.addUserTimeline(userInfo.get(0).getNickname(), timelineText, getResources().getDrawable(R.drawable.warning_icon2));
+                editor.putBoolean("overProtein", true);
+                editor.apply(); // 저장
+            }
+        }else {
+            editor.putBoolean("overProtein", false);
+            editor.apply(); // 저장
         }
         if (nutriInfo.get(0).getProvince() - totalProvince < 0){
             provincePercentage.setTextColor(Color.parseColor("#ff0000"));
             progressbarProvince.setProgressTintList(ColorStateList.valueOf(Color.parseColor("#FF5D5D")));
             provinceStatus.setImageResource(R.drawable.caution_cutout);
+            if(overProvince == false)
+            {
+                alarmController.setAlarm2(12,0);
+                timelineText = "지방이 기준치를 초과하였습니다.";
+                dbHelper.addUserTimeline(userInfo.get(0).getNickname(), timelineText, getResources().getDrawable(R.drawable.warning_icon2));
+                editor.putBoolean("overProvince", true);
+                editor.apply(); // 저장
+            }
+        }else {
+            editor.putBoolean("overProvince", false);
+            editor.apply(); // 저장
         }
         //endregion
 
@@ -138,10 +195,7 @@ public class NutritionFirst extends Fragment {
             kcalPercentage.setTextColor(Color.parseColor("#ff0000"));
         }
 
-
         return view;
     }
-
-
 
 }

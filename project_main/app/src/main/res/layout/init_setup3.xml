@@ -25,7 +25,7 @@
                 android:layout_width="81dp"
                 android:layout_height="46dp"
                 android:layout_margin="10dp"
-                android:background="@color/grayColor"
+                android:background="@drawable/custom_checkbox"
                 android:text="우유"
                 />
 
@@ -34,14 +34,15 @@
                 android:layout_width="81dp"
                 android:layout_height="46dp"
                 android:layout_margin="10dp"
-                android:background="@color/grayColor"
+                android:background="@drawable/custom_checkbox"
                 android:text="난류" />
+
             <CheckBox
                 android:id="@+id/checkShellfish"
                 android:layout_width="81dp"
                 android:layout_height="46dp"
                 android:layout_margin="10dp"
-                android:background="@color/grayColor"
+                android:background="@drawable/custom_checkbox"
                 android:text="갑각류"
                 />
 
@@ -50,7 +51,7 @@
                 android:layout_width="81dp"
                 android:layout_height="46dp"
                 android:layout_margin="10dp"
-                android:background="@color/grayColor"
+                android:background="@drawable/custom_checkbox"
                 android:text="생선" />
 
 
@@ -61,7 +62,7 @@
             <CheckBox
                 android:id="@+id/checkNuts"
                 android:text="견과류"
-                android:background="@color/grayColor"
+                android:background="@drawable/custom_checkbox"
                 android:layout_width="81dp"
                 android:layout_height="46dp"
                 android:layout_margin="10dp"
@@ -72,7 +73,7 @@
                 android:layout_width="81dp"
                 android:layout_height="46dp"
                 android:layout_margin="10dp"
-                android:background="@color/grayColor"
+                android:background="@drawable/custom_checkbox"
                 />
             <CheckBox
                 android:id="@+id/checkWheat"
@@ -80,7 +81,7 @@
                 android:layout_width="81dp"
                 android:layout_height="46dp"
                 android:layout_margin="10dp"
-                android:background="@color/grayColor"
+                android:background="@drawable/custom_checkbox"
                 />
             <CheckBox
                 android:id="@+id/checkPeanut"
@@ -88,7 +89,7 @@
                 android:layout_width="81dp"
                 android:layout_height="46dp"
                 android:layout_margin="10dp"
-                android:background="@color/grayColor"
+                android:background="@drawable/custom_checkbox"
                 />
         </TableRow>
 
@@ -97,7 +98,7 @@
             <CheckBox
                 android:id="@+id/checkMeat"
                 android:text="육류"
-                android:background="@color/grayColor"
+                android:background="@drawable/custom_checkbox"
                 android:layout_width="81dp"
                 android:layout_height="46dp"
                 android:layout_margin="10dp"
@@ -131,7 +132,7 @@
                 android:layout_width="81dp"
                 android:layout_height="46dp"
                 android:layout_margin="10dp"
-                android:background="@color/grayColor"
+                android:background="@drawable/custom_checkbox"
                 android:gravity="center"
                 />
 
@@ -140,14 +141,14 @@
                 android:layout_width="81dp"
                 android:layout_height="46dp"
                 android:layout_margin="10dp"
-                android:background="@color/grayColor"
+                android:background="@drawable/custom_checkbox"
                 android:text="고혈압" />
             <CheckBox
                 android:id="@+id/hyperlipidemia"
                 android:layout_width="81dp"
                 android:layout_height="46dp"
                 android:layout_margin="10dp"
-                android:background="@color/grayColor"
+                android:background="@drawable/custom_checkbox"
                 android:textSize="12sp"
                 android:text="고지혈증"
                 />
@@ -157,7 +158,7 @@
                 android:layout_width="81dp"
                 android:layout_height="46dp"
                 android:layout_margin="10dp"
-                android:background="@color/grayColor"
+                android:background="@drawable/custom_checkbox"
                 android:text="비만" />
 
         </TableRow>
@@ -170,21 +171,23 @@
         android:orientation="vertical"
         android:layout_weight="1">
 
-
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:orientation="horizontal">
 
-            <Button
+            <android.widget.Button
                 android:id="@+id/btnPre3"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_gravity="right"
+                android:layout_marginLeft="10dp"
+                android:background="@drawable/green_btn"
                 android:gravity="center"
-                android:layout_gravity="left"
-                android:text="이전" />
-
+                android:text="이전"
+                android:textColor="#6AFF84"
+                android:textSize="20sp" />
             <View
                 android:layout_width="0dp"
                 android:layout_height="0dp"
@@ -192,13 +195,17 @@
                 />
 
 
-            <Button
+            <android.widget.Button
                 android:id="@+id/btnNext3"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="50dp"
                 android:layout_gravity="right"
+                android:layout_marginRight="10dp"
+                android:background="@drawable/green_btn"
                 android:gravity="center"
-                android:text="다음" />
+                android:text="다음"
+                android:textColor="#6AFF84"
+                android:textSize="20sp" />
 
 
         </LinearLayout>
@@ -234,6 +241,5 @@
 
 
     </LinearLayout>
-
 
 </LinearLayout>

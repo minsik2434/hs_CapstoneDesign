@@ -61,7 +61,6 @@ public class MainActivity extends AppCompatActivity {
     NutritionFirst fragment_nutri1;
     NutritionSecond fragment_nutri2;
 
-    TimeState fragment_state_breakfast;
     //BottomAppBar barcodeBar;
     FloatingActionButton cameraBtn;
 
@@ -121,8 +120,6 @@ public class MainActivity extends AppCompatActivity {
         //영양성분
         fragment_nutri1 = new NutritionFirst();
         fragment_nutri2 = new NutritionSecond();
-        //아침리스트뷰
-        fragment_state_breakfast = new TimeState();
         //메인 그래프
 
         //바코드
@@ -147,9 +144,6 @@ public class MainActivity extends AppCompatActivity {
 
         //영양소1 화면교체
         getSupportFragmentManager().beginTransaction().replace(R.id.nutri_content, fragment_nutri1).commit();
-
-        //아침 리스트뷰 프래그먼트
-        getSupportFragmentManager().beginTransaction().replace(R.id.time_state_frame, fragment_state_breakfast).commit();
 
 
         //2023-06-06
@@ -268,7 +262,6 @@ public class MainActivity extends AppCompatActivity {
                     }
                 });
                 uThread.start();
-
 
             } else {
                 Toast.makeText(this, "No barcode scanned", Toast.LENGTH_SHORT).show();
