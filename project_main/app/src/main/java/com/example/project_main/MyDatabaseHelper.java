@@ -20,6 +20,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.lang.reflect.Array;
+import java.sql.PreparedStatement;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -427,7 +428,6 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
 
     //사용자 지병 가져오기
     public ArrayList<Integer> getUserDisease(){
-
         SQLiteDatabase db = getReadableDatabase();
         ArrayList<Integer> diseaseNum= new ArrayList<>();
 
@@ -438,7 +438,6 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
             cursor.moveToNext();
             diseaseNum.add(cursor.getInt(0));
         }
-
         cursor.close();
         db.close();
 
@@ -546,4 +545,34 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
                 "activity = '"+ activity +"',\n" +
                 "recommended_kcal = "+ recommendKcal+" ;");
     }
+    public ArrayList<NutritionDto> getFoodNutrition(String foodName) {
+
+        SQLiteDatabase db = getReadableDatabase();
+        ArrayList<NutritionDto> foodNutriInfo = new ArrayList<>();
+        Cursor cursor = db.rawQuery("SELECT kcal, protein, province, carbohydrate, sugars, salt, cholesterol, saturated_fat, trans_fat\n"+
+                "from food_table\n"+
+                "where foodname='"+foodName + "';", null);
+
+        int recordCount = cursor.getCount();
+
+        for (int i = 0; i < recordCount; i++) {
+            cursor.moveToNext();
+            NutritionDto nutri = new NutritionDto();
+            nutri.setKcal(cursor.getInt(0));
+            nutri.setCarbohydrate(cursor.getFloat(1));
+            nutri.setProtein(cursor.getFloat(2));
+            nutri.setProvince(cursor.getFloat(3));
+            nutri.setSugars(cursor.getFloat(4));
+            nutri.setSalt(cursor.getFloat(5));
+            nutri.setCholesterol(cursor.getFloat(6));
+            nutri.setSaturated_fat(cursor.getFloat(7));
+            nutri.setTrans_fat(cursor.getFloat(8));
+            foodNutriInfo.add(nutri);
+        }
+
+        cursor.close();
+        db.close();
+        return foodNutriInfo;
+    }
+
 }
