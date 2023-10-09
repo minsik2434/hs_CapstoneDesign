@@ -38,6 +38,7 @@
         <activity android:name=".UserInfoReset" android:label="user_info_reset"/>
         <activity android:name=".UserInfoResetResult" android:label="user_info_reset_result"/>
         <activity android:name=".UserAllergyReset" android:label="user_info_reset_allergy"/>
+        <activity android:name=".MainRecordManage" android:label="main_record_manage"/>
         <receiver
             android:name=".AlarmReceiver"
             android:enabled="true"

@@ -1,3 +1,4 @@
+
 package com.example.project_main;
 
 import android.graphics.Color;
@@ -32,3 +33,4 @@ public class BGDecorator implements DayViewDecorator {
         view.addSpan(new BackgroundColorSpan(Color.GREEN));
     }
 }
+

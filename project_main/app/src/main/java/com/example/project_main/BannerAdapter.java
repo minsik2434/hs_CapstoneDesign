@@ -17,8 +17,8 @@ public class BannerAdapter extends FragmentStateAdapter {
     public Fragment createFragment(int position) {
         int index = getRealPosition(position);
 
-        if(index==0) return new Fragment_1();
-        else if(index==1) return new Fragment_2();
+        if (index == 0) return new Fragment_1();
+        else if (index == 1) return new Fragment_2();
         else return new Fragment_3();
     }
 
@@ -27,6 +27,8 @@ public class BannerAdapter extends FragmentStateAdapter {
         return 1080;
     }
 
-    public int getRealPosition(int position) { return position % mCount; }
+    public int getRealPosition(int position) {
+        return position % mCount;
+    }
 
 }

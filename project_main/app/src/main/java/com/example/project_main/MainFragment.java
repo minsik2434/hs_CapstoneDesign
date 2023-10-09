@@ -1,5 +1,6 @@
 package com.example.project_main;
 
+import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -59,7 +60,10 @@ public class MainFragment extends Fragment {
         ImageButton lunch_btn = view.findViewById(R.id.lunch_btn);
         ImageButton dinner_btn = view.findViewById(R.id.dinner_btn);
 
-        TextView timeState_now = view.findViewById(R.id.time_state_now);
+        TextView timeState_morning = view.findViewById(R.id.time_state_morning);
+        TextView timeState_lunch = view.findViewById(R.id.time_state_lunch);
+        TextView timeState_dinner = view.findViewById(R.id.time_state_dinner);
+
         TextView todayMainTextview = view.findViewById(R.id.todayMainTextview);
 
         mainFoodList = (ListView) view.findViewById(R.id.mainFoodList);
@@ -120,7 +124,9 @@ public class MainFragment extends Fragment {
                 dinner_btn.setImageDrawable(changeDinnerIconColor);
 
                 //텍스트 변경
-                timeState_now.setText("아침");
+                timeState_morning.setVisibility(View.VISIBLE);
+                timeState_lunch.setVisibility(View.INVISIBLE);
+                timeState_dinner.setVisibility(View.INVISIBLE);
 
                 //아침 리스트 불러오기
                 foodInfo.clear();
@@ -159,7 +165,9 @@ public class MainFragment extends Fragment {
                 dinner_btn.setImageDrawable(changeDinnerIconColor);
 
                 //텍스트 변경
-                timeState_now.setText("점심");
+                timeState_morning.setVisibility(View.INVISIBLE);
+                timeState_lunch.setVisibility(View.VISIBLE);
+                timeState_dinner.setVisibility(View.INVISIBLE);
 
                 //점심 리스트 불러오기
                 foodInfo.clear();
@@ -196,7 +204,9 @@ public class MainFragment extends Fragment {
                 dinner_btn.setImageDrawable(changeDinnerIconColor);
 
                 //텍스트 변경
-                timeState_now.setText("저녁");
+                timeState_morning.setVisibility(View.INVISIBLE);
+                timeState_lunch.setVisibility(View.INVISIBLE);
+                timeState_dinner.setVisibility(View.VISIBLE);
 
                 //저녁 리스트 불러오기
                 foodInfo.clear();
@@ -217,6 +227,15 @@ public class MainFragment extends Fragment {
                 mainFoodList.setAdapter(listViewAdapter);
                 foodInfo.clear();
 
+            }
+        });
+
+        //기록 관리 버튼
+        view.findViewById(R.id.mainRecordManageBtn).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), MainRecordManage.class);
+                startActivity(intent);
             }
         });
 

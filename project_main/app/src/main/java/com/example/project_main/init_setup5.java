@@ -20,6 +20,12 @@ public class init_setup5 extends Activity {
 
     SharedPreferences preferences;
 
+    MyDatabaseHelper dbHelper;
+    UserRecommendAmount userRecAmount;
+    private ArrayList<Integer> userDisease = new ArrayList<>();
+    private ArrayList<Integer> userDiseaseListNum = new ArrayList<>();
+    private ArrayList<NutritionDto> nutriInfo = new ArrayList<>();
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -35,6 +41,23 @@ public class init_setup5 extends Activity {
         // SharedPreferences 객체 초기화
         preferences = getSharedPreferences("my_preferences", MODE_PRIVATE);
 
+        //지병에 따른 권장량 가져오기
+        dbHelper = new MyDatabaseHelper(this);
+        userRecAmount = new UserRecommendAmount();
+        userDisease = dbHelper.getUserDisease(); //사용자 지병
+
+        //지병 없다면
+        if (userDisease.size() == 0) {
+            userDiseaseListNum.add(0);
+        }
+        //지병 있다면
+        else {
+            for (int i = 0; i < userDisease.size(); i++) {
+
+                userDiseaseListNum.add(userDisease.get(i) + 1);
+            }
+        }
+
         Intent intent = getIntent();
         String nickname = intent.getStringExtra("nickname");
         String ageString = intent.getStringExtra("age");
@@ -47,12 +70,13 @@ public class init_setup5 extends Activity {
         Integer height = Integer.valueOf(heightString);
         Integer weight = Integer.valueOf(weightString);
 
-        double recommendKcal = Harris_Benedict(age, weight, height, sex, activity);
+        nutriInfo = userRecAmount.getUserRecommendAmount(userDiseaseListNum, age, height, weight, sex, activity);
 
+        double recommendKcal = nutriInfo.get(0).getKcal();
 
-        double carbohydrate = calCarbohydrate(recommendKcal);
-        double protein=calProtein(recommendKcal);
-        double fat=calFat(recommendKcal);
+        double carbohydrate = nutriInfo.get(0).getCarbohydrate();
+        double protein=nutriInfo.get(0).getProtein();
+        double fat=nutriInfo.get(0).getProvince();
 
         textKcal.setText(String.valueOf((int)recommendKcal));
         carbohydrateGram.setText(String.valueOf((int)carbohydrate));
@@ -85,73 +109,4 @@ public class init_setup5 extends Activity {
     public void onBackPressed() {
         //super.onBackPressed();
     }
-
-
-    // 칼로리 계산식
-    double Harris_Benedict(int age, int weight, int height, String sex, String activity){
-        double recommendCal = 0.0;
-
-        if(sex.equals("남성")) {
-            switch (activity){
-                case "운동 안함":
-                    recommendCal = (66 + (13.7 * weight) + (5 * height) - (6.8 * age))*1.2;
-                    break;
-                case "운동 거의 안함":
-                    recommendCal = (66 + (13.7 * weight) + (5 * height) - (6.8 * age))*1.375;
-                    break;
-                case "보통":
-                    recommendCal = (66 + (13.7 * weight) + (5 * height) - (6.8 * age))*1.55;
-                    break;
-                case "운동 조금 함":
-                    recommendCal = (66 + (13.7 * weight) + (5 * height) - (6.8 * age))*1.725;
-                    break;
-                case "운동 많이 함":
-                    recommendCal = (66 + (13.7 * weight) + (5 * height) - (6.8 * age))*1.9;
-                    break;
-            }
-        }
-        else{
-            switch (activity){
-                case "운동 안함":
-                    recommendCal = (655 + (13.7 * weight) + (1.8 * height) - (4.7 * age))*1.2;
-                    break;
-                case "운동 거의 안함":
-                    recommendCal = (655 + (13.7 * weight) + (1.8 * height) - (4.7 * age))*1.375;
-                    break;
-                case "보통":
-                    recommendCal = (655 + (13.7 * weight) + (1.8 * height) - (4.7 * age))*1.55;
-                    break;
-                case "운동 조금 함":
-                    recommendCal = (655 + (13.7 * weight) + (1.8 * height) - (4.7 * age))*1.725;
-                    break;
-                case "운동 많이 함":
-                    recommendCal = (655 + (13.7 * weight) + (1.8 * height) - (4.7 * age))*1.9;
-                    break;
-            }
-        }
-
-        return recommendCal;
-    }
-
-    //        일일 권장칼로리 = 60%탄수화물, 15%단백질, 25%지방
-    //        1그램의 탄수화물은 4칼로리에 해당
-    //        1그램의 단백질은 4칼로리에 해당
-    //        1그램의 지방은 9칼리로리에 해당
-    //탄수화물 계산
-    double calCarbohydrate(double recommendCal){
-        double carbohydrate=recommendCal*0.6/4;
-        return carbohydrate;
-    }
-    //단백질 계산
-    double calProtein(double recommendCal){
-        double protein=recommendCal*0.15/4;
-        return protein;
-    }
-    //지방 계산
-    double calFat(double recommendCal){
-        double fat=recommendCal*0.25/9;
-        return fat;
-    }
-
-
 }

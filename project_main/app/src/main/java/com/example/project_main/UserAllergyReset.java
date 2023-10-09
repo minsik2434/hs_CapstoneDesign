@@ -77,6 +77,8 @@ public class UserAllergyReset extends Activity {
                 //DB에 지병 추가
                 addUserDiseases(nickname);
 
+                Intent intent = new Intent(getApplicationContext(), UserInfoResetResult.class);
+                startActivity(intent);
                 finish();
             }
 

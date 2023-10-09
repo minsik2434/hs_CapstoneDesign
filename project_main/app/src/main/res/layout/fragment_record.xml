@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/whitepurple"
     tools:context=".RecordFragment">
 
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        android:orientation="vertical"
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
@@ -20,148 +21,222 @@
         <LinearLayout
             android:gravity="center"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
-            <ImageButton
-                android:id="@+id/recordFoodImage"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/sample_image"
-                />
-        </LinearLayout>
-
-        <TextView
-            android:id="@+id/recordFoodName"
-            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="신라면"
-            android:textSize="23dp"
-            android:textColor="@android:color/background_dark"/>
-        <TextView
-            android:id="@+id/recordFoodKcal"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="200 kcal"
-            android:textSize="15dp"/>
-        <TextView
-            android:id="@+id/recordFoodInfo"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="탄수화물 100g 단백질 100g 지방 100g "
-            android:textSize="12dp"/>
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:id="@+id/raw_material_text"
-            android:text="선택한 음식의 정보 출력\n...\n...\n...\n...\n...\n..."
-            android:background="@android:color/transparent"/>
-
-
-
-
-    </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_margin="10dp">
-
-            <Button
-                android:id="@+id/dateButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="날짜 선택"
-                android:layout_centerHorizontal="true"
-                android:layout_marginTop="16dp"
-                android:drawableLeft="@drawable/ic_baseline_calendar_month_24"/>
+            android:orientation="vertical">
 
             <TextView
-                android:id="@+id/dateTextView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/dateButton"
-                android:layout_centerHorizontal="true"
-                android:layout_marginTop="16dp"
-                android:layout_marginLeft="10sp"
-                android:text="00년 00월 00일"/>
-
-
-        </LinearLayout>
-
-
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_margin="10dp">
-
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="시간"
-                android:layout_marginEnd="30dp"
-                android:textSize="20dp"/>
-
-            <RadioGroup
-                android:id="@+id/timeToEat_group"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="horizontal"
-                >
-
-                <RadioButton
-                    android:id="@+id/morningBtn"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="아침"
-                    android:layout_marginEnd="30dp"
-                    />
-                <RadioButton
-                    android:id="@+id/lunchBtn"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="점심"
-                    android:layout_marginEnd="30dp"
-                    />
-                <RadioButton
-                    android:id="@+id/dinnerBtn"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="저녁"
-                    android:layout_marginEnd="30dp"
-                    />
-
-
-            </RadioGroup>
-
-        </LinearLayout>
-
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:layout_marginTop="50dp">
-        </LinearLayout>
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="bottom">
-            <android.widget.Button
-                android:id="@+id/recordBtn"
+                android:id="@+id/todayRecordTextview"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@drawable/green_btn"
-                android:layout_marginLeft="30sp"
-                android:layout_marginRight="30sp"
-                android:textSize="18sp"
-                android:text="기록하기" />
-        </LinearLayout>
+                android:gravity="left"
+                android:paddingLeft="20dp"
+                android:paddingTop="15dp"
+                android:paddingBottom="15dp"
+                android:text="2023년 3월 1일"
+                android:textColor="#000000"
+                android:textSize="20dp"
+                android:textStyle="bold" />
 
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="300dp"
+                android:layout_margin="20dp"
+                android:background="#FFFFFF"
+                app:cardCornerRadius="20dp"
+                app:cardElevation="4dp"
+
+                app:cardUseCompatPadding="true">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center">
+
+                    <ImageButton
+                        android:id="@+id/recordFoodImage"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/recordclickbtn_img" />
+                </LinearLayout>
+
+                <TextView
+                    android:id="@+id/underFoodImageText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom|center"
+                    android:layout_marginBottom="30dp"
+                    android:text="이미지를 클릭하세요"
+                    android:textColor="@android:color/background_dark"
+                    android:textSize="23dp" />
+
+
+            </androidx.cardview.widget.CardView>
+
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:background="#FFFFFF"
+                app:cardCornerRadius="20dp"
+                app:cardElevation="4dp"
+                app:cardUseCompatPadding="true">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+
+                    <TextView
+                        android:id="@+id/recordFoodName"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="음식 이름"
+                        android:textColor="@android:color/background_dark"
+                        android:textSize="23dp" />
+
+                    <TextView
+                        android:id="@+id/recordFoodKcal"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="200 kcal"
+                        android:textSize="15dp" />
+
+                    <TextView
+                        android:id="@+id/recordFoodInfo"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="탄수화물, 단백질, 지방 정보"
+                        android:textSize="12dp" />
+
+                    <TextView
+                        android:id="@+id/raw_material_text"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:background="@android:color/transparent"
+                        android:text="선택한 음식의 정보 출력\n...\n...\n...\n...\n...\n..." />
+
+                </LinearLayout>
+
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:background="#FFFFFF"
+                app:cardCornerRadius="10dp"
+                app:cardElevation="4dp"
+                app:cardUseCompatPadding="true">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp"
+                    android:gravity="center"
+                    android:orientation="horizontal">
+
+                    <ImageButton
+                        android:id="@+id/dateButton"
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:layout_centerHorizontal="true"
+                        android:src="@drawable/record_cal_image" />
+
+                    <TextView
+                        android:id="@+id/dateTextView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/dateButton"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginLeft="30dp"
+                        android:text="00년 00월 00일"
+                        android:textSize="25dp"
+                        android:textStyle="bold|italic" />
+
+
+                </LinearLayout>
+
+            </androidx.cardview.widget.CardView>
+
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:background="#FFFFFF"
+                app:cardCornerRadius="10dp"
+                app:cardElevation="4dp"
+                app:cardUseCompatPadding="true">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp"
+                    android:gravity="center"
+                    android:orientation="horizontal">
+
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="50dp"
+                        android:text="시간"
+                        android:textSize="20dp" />
+
+                    <ImageButton
+                        android:id="@+id/record_breakfast_btn"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="30dp"
+                        android:alpha="0.3"
+                        android:background="@drawable/breakfast_icon" />
+
+                    <ImageButton
+                        android:id="@+id/record_lunch_btn"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="30dp"
+                        android:alpha="0.3"
+                        android:background="@drawable/lunch_icon" />
+
+                    <ImageButton
+                        android:id="@+id/record_dinner_btn"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:alpha="0.3"
+                        android:background="@drawable/dinner_icon" />
+
+
+                </LinearLayout>
+
+            </androidx.cardview.widget.CardView>
+
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="100dp"
+                android:background="#FFFFFF"
+                app:cardCornerRadius="10dp"
+                app:cardElevation="4dp"
+                app:cardUseCompatPadding="true">
+
+                <android.widget.Button
+                    android:id="@+id/recordBtn"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:text="기록하기"
+                    android:textColor="#8E8C8C"/>
+            </androidx.cardview.widget.CardView>
+
+        </LinearLayout>
     </LinearLayout>
+    </ScrollView>
 
 </FrameLayout>

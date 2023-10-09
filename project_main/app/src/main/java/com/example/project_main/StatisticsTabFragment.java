@@ -1,5 +1,6 @@
 package com.example.project_main;
 
+import android.graphics.Color;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -13,11 +14,15 @@ import androidx.fragment.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
 public class StatisticsTabFragment extends Fragment {
 
     private final int Fragment_1 = 1;
     private final int Fragment_2 = 2;
+
+    Button calendarBtn;
+    Button staticsBtn;
 
     @Nullable
     @Override
@@ -26,10 +31,16 @@ public class StatisticsTabFragment extends Fragment {
 
         View view = inflater.inflate(R.layout.fragment_statistics_tab, container, false);
 
+        calendarBtn = view.findViewById(R.id.fragment_calender_btn);
+        staticsBtn = view.findViewById(R.id.fragment_statistics_btn);
+
         view.findViewById(R.id.fragment_calender_btn).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                calendarBtn.setBackgroundResource(R.drawable.statics_btn_style1);
+                calendarBtn.setTextColor(Color.parseColor("#ffffff"));
+                staticsBtn.setBackgroundResource(R.drawable.statics_btn_style2);
+                staticsBtn.setTextColor(Color.parseColor("#6844A8"));
                 FragmentView(Fragment_1);
 
             }
@@ -38,6 +49,10 @@ public class StatisticsTabFragment extends Fragment {
         view.findViewById(R.id.fragment_statistics_btn).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                calendarBtn.setBackgroundResource(R.drawable.statics_btn_style2);
+                calendarBtn.setTextColor(Color.parseColor("#6844A8"));
+                staticsBtn.setBackgroundResource(R.drawable.statics_btn_style1);
+                staticsBtn.setTextColor(Color.parseColor("#ffffff"));
                 FragmentView(Fragment_2);
 
             }

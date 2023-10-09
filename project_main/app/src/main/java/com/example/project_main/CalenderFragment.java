@@ -119,7 +119,7 @@ public class CalenderFragment extends Fragment {
                 //리스트뷰에 어뎁터 set
                 schedule_list.setAdapter(listViewAdapter);
                 //ArrayList 초기화
-                    foodNutriInfo.clear();
+                foodNutriInfo.clear();
             }
         });
 
@@ -150,5 +150,4 @@ public class CalenderFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
     }
-
 }

@@ -50,6 +50,7 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.google.zxing.integration.android.IntentIntegrator;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -63,17 +64,22 @@ public class RecordFragment extends Fragment {
     Button recordBtn;
     TextView recordFoodName, recordFoodKcal, recordFoodInfo;
     TextView raw_mtrl;
-    RadioGroup timeToEat_group;
-    RadioButton morningBtn, lunchBtn, dinnerBtn;
+    ImageButton record_breakfast_btn, record_lunch_btn, record_dinner_btn;
     ImageView foodImg;
     TextView searchedFoodName;
     TextView searchedFoodKcal;
     TextView searchedFoodNutriInfo;
     AllergyList allergyList = new AllergyList();
+    TextView todayRecordTextview;
+    TextView underFoodImageText;
     ArrayList<String> userAllergy = new ArrayList<>();
 
+    boolean morningImgBtn = false;
+    boolean lunchImgBtn = false;
+    boolean dinnerImgBtn = false;
 
-    private Button dateButton;
+    private ImageButton dateButton;
+
     private TextView dateTextView;
     private Calendar selectedDate = Calendar.getInstance();
 
@@ -89,11 +95,17 @@ public class RecordFragment extends Fragment {
         recordFoodKcal = view.findViewById(R.id.recordFoodKcal);
         recordFoodInfo = view.findViewById(R.id.recordFoodInfo);
         raw_mtrl = view.findViewById(R.id.raw_material_text);
-        timeToEat_group = view.findViewById(R.id.timeToEat_group);
         foodImg = view.findViewById(R.id.recordFoodImage);
-        morningBtn = view.findViewById(R.id.morningBtn);
-        lunchBtn = view.findViewById(R.id.lunchBtn);
-        dinnerBtn = view.findViewById(R.id.dinnerBtn);
+        todayRecordTextview = view.findViewById(R.id.todayRecordTextview);
+        record_breakfast_btn = view.findViewById(R.id.record_breakfast_btn);
+        record_lunch_btn = view.findViewById(R.id.record_lunch_btn);
+        record_dinner_btn = view.findViewById(R.id.record_dinner_btn);
+
+        String year = "yyyy";
+        String month = "MM";
+        String day = "dd";
+
+        todayRecordTextview.setText(dateFormat(year)+"년 " + dateFormat(month)+"월 " + dateFormat(day)+"일");
 
         MyDatabaseHelper dbHelper = new MyDatabaseHelper(getActivity().getApplicationContext());
 
@@ -110,8 +122,6 @@ public class RecordFragment extends Fragment {
                 showDatePickerDialog();
             }
         });
-
-
 
         foodImg.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -166,29 +176,112 @@ public class RecordFragment extends Fragment {
         });
 
 
+
+
+        record_breakfast_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (morningImgBtn) {
+                    morningImgBtn = false;
+                    record_breakfast_btn.setAlpha(0.3f);
+                } else {
+                    morningImgBtn = true;
+                    record_breakfast_btn.setAlpha(1.0f);
+                }
+            }
+        });
+        record_lunch_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (lunchImgBtn) {
+                    lunchImgBtn = false;
+                    record_lunch_btn.setAlpha(0.3f);
+                } else {
+                    lunchImgBtn = true;
+                    record_lunch_btn.setAlpha(1.0f);
+                }
+            }
+        });
+        record_dinner_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (dinnerImgBtn) {
+                    dinnerImgBtn = false;
+                    record_dinner_btn.setAlpha(0.3f);
+                } else {
+                    dinnerImgBtn = true;
+                    record_dinner_btn.setAlpha(1.0f);
+                }
+            }
+        });
+
+
+
         // 기록하기 버튼을 눌렀을 때
         recordBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 String nickname = dbHelper.getNickname();
                 String foodname = recordFoodName.getText().toString();
-                String date = getCurrentDateTime();
-                String time = getTimeStringFromRadioGroup();
 
-                if(time.isEmpty()){
-                    Toast.makeText(getActivity(), "아침, 점심, 저녁 중 하나를 선택하세요.",Toast.LENGTH_SHORT).show();
-                    return;
+                // dateTextView에서 날짜 문자열 가져오기
+                String dateText = dateTextView.getText().toString();
+
+                // dateText를 "yy년 MM월 dd일" 형식에서 "yyyy-MM-dd" 형식으로 변환
+                SimpleDateFormat inputFormat = new SimpleDateFormat("yy년 MM월 dd일", Locale.KOREA);
+                SimpleDateFormat outputFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.KOREA);
+                String date = "";
+                try {
+                    Date parsedDate = inputFormat.parse(dateText);
+                    date = outputFormat.format(parsedDate);
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+                // 현재 날짜 가져오기
+                SimpleDateFormat currentDateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.KOREA);
+                String currentDate = currentDateFormat.format(new Date());
+
+                // 현재 시간을 "hh:mm:ss" 형식으로 가져오기
+                SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm:ss", Locale.KOREA);
+                String time = timeFormat.format(new Date());
+
+                int count = 0;
+                if (morningImgBtn) {
+                    count++;
+                }
+                if (lunchImgBtn) {
+                    count++;
+                }
+                if (dinnerImgBtn) {
+                    count++;
                 }
 
-                AlarmController alarmController = new AlarmController(getContext());
-                alarmController.cancelAlarm(002);
-                alarmController.setAlarm(001,0);
-                dbHelper.addUserTimeline(nickname, "test2", getResources().getDrawable(R.drawable.warning_icon2));
-                dbHelper.addIntake(nickname, foodname, date, time);
-                Intent intent = new Intent(getActivity(), MainActivity.class);
-                startActivity(intent);
-                getActivity().finish();
+                if (foodname.equals("음식 이름")) {
+                    Toast.makeText(getActivity(), "음식을 선택해 주세요.", Toast.LENGTH_SHORT).show();
+                } else if (date.compareTo(currentDate) > 0) {
+                    Toast.makeText(getActivity(), "미래 날짜를 선택할 수 없습니다."+date, Toast.LENGTH_SHORT).show();
+                } else {
+                    if (count == 0) {
+                        Toast.makeText(getActivity(), "아침, 점심, 저녁 중 하나를 선택하세요.", Toast.LENGTH_SHORT).show();
+                    } else if (count > 1) {
+                        Toast.makeText(getActivity(), "아침, 점심, 저녁 중 하나만 선택하세요.", Toast.LENGTH_SHORT).show();
+                    } else {
+                        String dateTime = date + " " + time;
+
+                        String mealTime = "";
+
+                        if(morningImgBtn)
+                            mealTime="아침";
+                        else if(lunchImgBtn)
+                            mealTime="점심";
+                        else
+                            mealTime="저녁";
+                        dbHelper.addIntake(nickname, foodname, dateTime, mealTime);
+                        Intent intent = new Intent(getActivity(), MainActivity.class);
+                        startActivity(intent);
+                        getActivity().finish();
+                    }
+                }
             }
         });
 
@@ -210,21 +303,6 @@ public class RecordFragment extends Fragment {
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         Date currentDateTime = new Date();
         return dateFormat.format(currentDateTime);
-    }
-
-
-
-    private String getTimeStringFromRadioGroup() {
-        int checkedRadioButtonId = timeToEat_group.getCheckedRadioButtonId();
-        if (checkedRadioButtonId == R.id.morningBtn) {
-            return morningBtn.getText().toString();
-        } else if (checkedRadioButtonId == R.id.lunchBtn) {
-            return lunchBtn.getText().toString();
-        } else if (checkedRadioButtonId == R.id.dinnerBtn) {
-            return dinnerBtn.getText().toString();
-        }
-
-        return "";
     }
 
     @Override
@@ -303,16 +381,14 @@ public class RecordFragment extends Fragment {
         DatePickerDialog datePickerDialog = new DatePickerDialog(getActivity(), new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-                // 사용자가 선택한 날짜를 selectedDate에 업데이트
+
                 selectedDate.set(Calendar.YEAR, year);
                 selectedDate.set(Calendar.MONTH, month);
                 selectedDate.set(Calendar.DAY_OF_MONTH, dayOfMonth);
 
-                // SimpleDateFormat을 사용하여 날짜 형식으로 변환
                 SimpleDateFormat dateFormat = new SimpleDateFormat("yy년 MM월 dd일", Locale.KOREA);
                 String formattedDate = dateFormat.format(selectedDate.getTime());
 
-                // 선택한 날짜를 TextView에 설정
                 dateTextView.setText(formattedDate);
             }
         }, year, month, dayOfMonth);
@@ -321,5 +397,19 @@ public class RecordFragment extends Fragment {
     }
 
 
+    private String dateFormat(String pattern){
+        Date date = new Date();
+        return new SimpleDateFormat(pattern).format(date);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        // 현재 날짜를 가져와서 dateTextView 업데이트
+        SimpleDateFormat currentDateFormat = new SimpleDateFormat("yy년 MM월 dd일", Locale.KOREA);
+        String currentDate = currentDateFormat.format(new Date());
+        dateTextView.setText(currentDate);
+    }
 
 }

@@ -182,12 +182,10 @@
         android:layout_weight="1">
 
         <View
-            android:layout_marginLeft="122dp"
+            android:layout_marginLeft="126dp"
             android:background="#515151"
             android:layout_width="5dp"
             android:layout_height="match_parent"/>
-
-
         <ScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent">

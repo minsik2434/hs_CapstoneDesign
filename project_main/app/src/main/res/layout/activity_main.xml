@@ -40,7 +40,7 @@
         android:id="@+id/mainCameraBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:backgroundTint="#8BC87A"
+        android:backgroundTint="#6844A8"
         android:src="@drawable/ic_baseline_photo_camera_24"
         app:layout_anchor="@id/bottomAppBar"
         app:tint="@android:color/white" />

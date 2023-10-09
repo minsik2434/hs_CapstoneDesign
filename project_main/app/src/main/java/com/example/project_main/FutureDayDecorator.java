@@ -26,3 +26,4 @@ public class FutureDayDecorator implements DayViewDecorator {
         view.setDaysDisabled(true);
     }
 }
+
