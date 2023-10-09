@@ -2,58 +2,58 @@ package com.example.project_main;
 
 
 import static android.app.Activity.RESULT_OK;
-
-import static com.google.zxing.integration.android.IntentIntegrator.REQUEST_CODE;
+import static android.content.ContentValues.TAG;
 
 import android.Manifest;
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
-import android.app.Notification;
-import android.app.NotificationChannel;
-import android.app.NotificationManager;
-import android.app.PendingIntent;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.content.res.AssetFileDescriptor;
+import android.graphics.Bitmap;
 import android.graphics.Color;
-import android.graphics.drawable.Drawable;
-import android.graphics.drawable.ColorDrawable;
+import android.graphics.ImageDecoder;
 import android.os.Build;
+import android.os.Environment;
+import android.graphics.drawable.ColorDrawable;
+import android.net.Uri;
 import android.os.Bundle;
+import java.io.File;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
-import androidx.core.app.NotificationCompat;
 import androidx.core.content.ContextCompat;
+import androidx.core.content.FileProvider;
 import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
-
 import android.os.Handler;
 import android.os.Looper;
+import android.provider.MediaStore;
 import android.text.SpannableString;
 import android.text.style.ForegroundColorSpan;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.DatePicker;
-import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.RadioButton;
-import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.bumptech.glide.Glide;
 import com.google.zxing.integration.android.IntentIntegrator;
-
+import org.tensorflow.lite.Interpreter;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.nio.MappedByteBuffer;
+import java.nio.channels.FileChannel;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
@@ -61,6 +61,7 @@ import java.util.Locale;
 public class RecordFragment extends Fragment {
 
     private static final int CAMERA_PERMISSION_REQUEST_CODE = 200;
+
     Button recordBtn;
     TextView recordFoodName, recordFoodKcal, recordFoodInfo;
     TextView raw_mtrl;
@@ -71,7 +72,6 @@ public class RecordFragment extends Fragment {
     TextView searchedFoodNutriInfo;
     AllergyList allergyList = new AllergyList();
     TextView todayRecordTextview;
-    TextView underFoodImageText;
     ArrayList<String> userAllergy = new ArrayList<>();
 
     boolean morningImgBtn = false;
@@ -82,6 +82,9 @@ public class RecordFragment extends Fragment {
 
     private TextView dateTextView;
     private Calendar selectedDate = Calendar.getInstance();
+    static final int TAKE_PICTURE = 2;
+    static final int REQUEST_TAKE_PHOTO = 2;
+    String mCurrentPhotoPath;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -105,7 +108,7 @@ public class RecordFragment extends Fragment {
         String month = "MM";
         String day = "dd";
 
-        todayRecordTextview.setText(dateFormat(year)+"년 " + dateFormat(month)+"월 " + dateFormat(day)+"일");
+        todayRecordTextview.setText(dateFormat(year) + "년 " + dateFormat(month) + "월 " + dateFormat(day) + "일");
 
         MyDatabaseHelper dbHelper = new MyDatabaseHelper(getActivity().getApplicationContext());
 
@@ -115,6 +118,16 @@ public class RecordFragment extends Fragment {
 
         SimpleDateFormat dateFormat = new SimpleDateFormat("yy년 MM월 dd일", Locale.KOREA);
         dateTextView.setText(dateFormat.format(selectedDate.getTime()));
+
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if(ContextCompat.checkSelfPermission(getActivity(),Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(getActivity(),Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
+                Log.d(TAG, "권한 설정 완료");
+            }
+            else {
+                Log.d(TAG, "권한 설정 요청");
+                ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
+            }
+        }
 
         dateButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -159,23 +172,25 @@ public class RecordFragment extends Fragment {
                     }
                 });
 
-                Button button3 = customLayout.findViewById(R.id.button3);
-                button3.setOnClickListener(new View.OnClickListener() {
+                Button picbtn = customLayout.findViewById(R.id.picbtn);
+                picbtn.setOnClickListener(new View.OnClickListener() {
                     @Override
-                    public void onClick(View v) {
-                        // 팝업 닫기
-                        dialog.dismiss();
-                        Toast.makeText(getActivity(), "3번 버튼이 눌림", Toast.LENGTH_SHORT).show();
+                    public void onClick(View view) {
+                        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                        File photoFile = null;
+                        try{photoFile = createImageFile();}
+                        catch (IOException ex) { }
+                        if(photoFile != null){
+                            Uri photoURI = FileProvider.getUriForFile(getActivity(),"com.example.project_main.fileprovider",photoFile);
+                            takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT,photoURI);
+                            startActivityForResult(takePictureIntent,REQUEST_TAKE_PHOTO);
+                        }
                     }
                 });
-
                 dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-
                 dialog.show();
             }
         });
-
-
 
 
         record_breakfast_btn.setOnClickListener(new View.OnClickListener() {
@@ -214,7 +229,6 @@ public class RecordFragment extends Fragment {
                 }
             }
         });
-
 
 
         // 기록하기 버튼을 눌렀을 때
@@ -259,7 +273,7 @@ public class RecordFragment extends Fragment {
                 if (foodname.equals("음식 이름")) {
                     Toast.makeText(getActivity(), "음식을 선택해 주세요.", Toast.LENGTH_SHORT).show();
                 } else if (date.compareTo(currentDate) > 0) {
-                    Toast.makeText(getActivity(), "미래 날짜를 선택할 수 없습니다."+date, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), "미래 날짜를 선택할 수 없습니다." + date, Toast.LENGTH_SHORT).show();
                 } else {
                     if (count == 0) {
                         Toast.makeText(getActivity(), "아침, 점심, 저녁 중 하나를 선택하세요.", Toast.LENGTH_SHORT).show();
@@ -270,12 +284,12 @@ public class RecordFragment extends Fragment {
 
                         String mealTime = "";
 
-                        if(morningImgBtn)
-                            mealTime="아침";
-                        else if(lunchImgBtn)
-                            mealTime="점심";
+                        if (morningImgBtn)
+                            mealTime = "아침";
+                        else if (lunchImgBtn)
+                            mealTime = "점심";
                         else
-                            mealTime="저녁";
+                            mealTime = "저녁";
                         dbHelper.addIntake(nickname, foodname, dateTime, mealTime);
                         Intent intent = new Intent(getActivity(), MainActivity.class);
                         startActivity(intent);
@@ -286,6 +300,12 @@ public class RecordFragment extends Fragment {
         });
 
         return view;
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults){
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if(grantResults[0] == PackageManager.PERMISSION_GRANTED && grantResults[1] == PackageManager.PERMISSION_GRANTED);
 
     }
 
@@ -307,6 +327,49 @@ public class RecordFragment extends Fragment {
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode == REQUEST_TAKE_PHOTO && resultCode == RESULT_OK){
+            File file = new File(mCurrentPhotoPath);
+            Bitmap bitmap;
+            try{
+                bitmap=MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), Uri.fromFile(file));
+                if(bitmap !=null){
+                    foodImg.setImageBitmap(bitmap);
+                    Interpreter tflite = getTfliteInterpreter("food_model.tflite");
+                    int imageWidth = 224;
+                    int imageHeight = 224;
+                    float[][][][] inputData = new float[1][imageWidth][imageHeight][3];
+                    float[][] output = new float[1][150];
+                    Bitmap inputBitmap = Bitmap.createScaledBitmap(bitmap, imageWidth,imageHeight,true);
+                    for(int y=0; y<imageHeight; y++){
+                        for(int x=0; x<imageWidth; x++){
+                            int pixelValue = inputBitmap.getPixel(x,y);
+                            inputData[0][x][y][0] = (Color.red(pixelValue)/255.0f);
+                            inputData[0][x][y][1] = (Color.green(pixelValue)/255.0f);
+                            inputData[0][x][y][2] = (Color.blue(pixelValue)/255.0f);
+                        }
+                    }
+                    tflite.run(inputData,output);
+                    int foodindex=0;
+                    float max = output[0][0];
+                    int maxIndex = 0;
+                    for(int i=0; i<150; i++){
+                        if(output[0][i] > max){
+                            max = output[0][i];
+                            maxIndex = i;
+                        }
+                    }
+
+                    foodindex = maxIndex;
+                    Foodname f = new Foodname();
+                    recordFoodName.setText(f.getFoodName(foodindex));
+                }
+            }
+            catch (IOException e){
+                e.printStackTrace();
+            }
+            return;
+        }
 
         Handler handler = new Handler(Looper.getMainLooper());
 //        사용자 알레르기 정보 가져오기
@@ -314,26 +377,25 @@ public class RecordFragment extends Fragment {
         ArrayList<Integer> userAllergyListNum = dbHelper.getUserAllergy(); //사용자 알레르기 번호 목록
 
 //        //알레르기 정보 가져오기
-        for(int i = 0; i < userAllergyListNum.size(); i++) {
+        for (int i = 0; i < userAllergyListNum.size(); i++) {
 
             for (int j = 0; j < allergyList.getAllergyArrayList(userAllergyListNum.get(i)).size(); j++) {
                 userAllergy.add(allergyList.getAllergyArrayList(userAllergyListNum.get(i)).get(j));
             }
         }
 
-        if(resultCode == RESULT_OK) {
+        if (resultCode == RESULT_OK) {
             String fn = data.getStringExtra("fname");
             String kcal = data.getStringExtra("kcal");
             String info = data.getStringExtra("foodinfo");
             String mtrl = data.getStringExtra("rawmtrl");
             String imgurl = data.getStringExtra("imgurl");
 
-            if(imgurl == null && mtrl == null){
+            if (imgurl == null && mtrl == null) {
                 foodImg.setImageResource(R.drawable.noimg);
                 raw_mtrl.setText("알 수 없음");
 
-            }
-            else if (imgurl == null){
+            } else if (imgurl == null) {
                 foodImg.setImageResource(R.drawable.noimg);
                 SpannableString spannableString = new SpannableString(mtrl);
                 for (int i = 0; i < userAllergy.size(); i++) {
@@ -346,12 +408,10 @@ public class RecordFragment extends Fragment {
                     }
                 }
                 raw_mtrl.setText(spannableString);
-            }
-            else if(mtrl == null){
+            } else if (mtrl == null) {
                 raw_mtrl.setText("알 수 없음");
                 Glide.with(this).load(imgurl).into(foodImg);
-            }
-            else{
+            } else {
                 SpannableString spannableString = new SpannableString(mtrl);
                 for (int i = 0; i < userAllergy.size(); i++) {
                     int startIndex = mtrl.indexOf(userAllergy.get(i));
@@ -367,9 +427,10 @@ public class RecordFragment extends Fragment {
             recordFoodName.setText(fn);
             recordFoodKcal.setText(kcal);
             recordFoodInfo.setText(info);
+            return;
         }
-    }
 
+    }
 
 
     // DatePickerDialog를 표시하는 메서드
@@ -397,7 +458,7 @@ public class RecordFragment extends Fragment {
     }
 
 
-    private String dateFormat(String pattern){
+    private String dateFormat(String pattern) {
         Date date = new Date();
         return new SimpleDateFormat(pattern).format(date);
     }
@@ -412,4 +473,35 @@ public class RecordFragment extends Fragment {
         dateTextView.setText(currentDate);
     }
 
+    private Interpreter getTfliteInterpreter(String modelPath) {
+        try {
+            return new Interpreter(loadModelFile(getActivity(), modelPath));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    private MappedByteBuffer loadModelFile(Activity activity, String modelPath) throws IOException {
+        AssetFileDescriptor fileDescriptor = activity.getAssets().openFd(modelPath);
+        FileInputStream inputStream = new FileInputStream(fileDescriptor.getFileDescriptor());
+        FileChannel fileChannel = inputStream.getChannel();
+        long startOffset = fileDescriptor.getStartOffset();
+        long declaredLength = fileDescriptor.getDeclaredLength();
+        return fileChannel.map(FileChannel.MapMode.READ_ONLY, startOffset, declaredLength);
+    }
+
+    private File createImageFile() throws IOException{
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        String imageFileName = "JPEG_" + timeStamp + "_";
+        File storageDir = getContext().getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+        File image = File.createTempFile(
+                imageFileName,
+                ".jpg",
+                storageDir
+        );
+
+        mCurrentPhotoPath = image.getAbsolutePath();
+        return image;
+    }
 }
