@@ -73,6 +73,7 @@ public class RecordFragment extends Fragment {
     AllergyList allergyList = new AllergyList();
     TextView todayRecordTextview;
     ArrayList<String> userAllergy = new ArrayList<>();
+    ArrayList<NutritionDto> foodNurition = new ArrayList<>();
 
     boolean morningImgBtn = false;
     boolean lunchImgBtn = false;
@@ -328,6 +329,8 @@ public class RecordFragment extends Fragment {
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        MyDatabaseHelper dbHelper = new MyDatabaseHelper(getActivity().getApplicationContext());
+        ArrayList<Integer> userAllergyListNum = dbHelper.getUserAllergy();
         if(requestCode == REQUEST_TAKE_PHOTO && resultCode == RESULT_OK){
             File file = new File(mCurrentPhotoPath);
             Bitmap bitmap;
@@ -359,10 +362,12 @@ public class RecordFragment extends Fragment {
                             maxIndex = i;
                         }
                     }
-
                     foodindex = maxIndex;
                     Foodname f = new Foodname();
                     recordFoodName.setText(f.getFoodName(foodindex));
+                    foodNurition = dbHelper.getFoodNutrition(f.getFoodName(foodindex));
+                    recordFoodKcal.setText(""+foodNurition.get(0).getKcal()+"kcal");
+                    recordFoodInfo.setText("탄수화물 "+ foodNurition.get(0).getCarbohydrate() + "g, 단백질 "+ foodNurition.get(0).getProtein() + "g, 지방 " + foodNurition.get(0).getProvince() + "g");
                 }
             }
             catch (IOException e){
@@ -371,11 +376,7 @@ public class RecordFragment extends Fragment {
             return;
         }
 
-        Handler handler = new Handler(Looper.getMainLooper());
 //        사용자 알레르기 정보 가져오기
-        MyDatabaseHelper dbHelper = new MyDatabaseHelper(getActivity().getApplicationContext());
-        ArrayList<Integer> userAllergyListNum = dbHelper.getUserAllergy(); //사용자 알레르기 번호 목록
-
 //        //알레르기 정보 가져오기
         for (int i = 0; i < userAllergyListNum.size(); i++) {
 
