@@ -16,6 +16,8 @@ import android.content.res.AssetFileDescriptor;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.ImageDecoder;
+import android.graphics.Matrix;
+import android.media.ExifInterface;
 import android.os.Build;
 import android.os.Environment;
 import android.graphics.drawable.ColorDrawable;
@@ -334,10 +336,21 @@ public class RecordFragment extends Fragment {
         if(requestCode == REQUEST_TAKE_PHOTO && resultCode == RESULT_OK){
             File file = new File(mCurrentPhotoPath);
             Bitmap bitmap;
+            ExifInterface exif = null;
             try{
                 bitmap=MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), Uri.fromFile(file));
+                exif = new ExifInterface(mCurrentPhotoPath);
+                int exifOrientation;
+                int exifDegree;
+                if (exif != null) {
+                    exifOrientation = exif.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL);
+                    exifDegree = exifOrientationToDegrees(exifOrientation);
+                } else {
+                    exifDegree = 0;
+                }
+                foodImg.setImageBitmap(rotate(bitmap, exifDegree));
                 if(bitmap !=null){
-                    foodImg.setImageBitmap(bitmap);
+                    //foodImg.setImageBitmap(bitmap);
                     Interpreter tflite = getTfliteInterpreter("food_model.tflite");
                     int imageWidth = 224;
                     int imageHeight = 224;
@@ -504,5 +517,21 @@ public class RecordFragment extends Fragment {
 
         mCurrentPhotoPath = image.getAbsolutePath();
         return image;
+    }
+    private int exifOrientationToDegrees(int exifOrientation) {
+        if (exifOrientation == ExifInterface.ORIENTATION_ROTATE_90) {
+            return 90;
+        } else if (exifOrientation == ExifInterface.ORIENTATION_ROTATE_180) {
+            return 180;
+        } else if (exifOrientation == ExifInterface.ORIENTATION_ROTATE_270) {
+            return 270;
+        }
+        return 0;
+    }
+
+    private Bitmap rotate(Bitmap bitmap, float degree) {
+        Matrix matrix = new Matrix();
+        matrix.postRotate(degree);
+        return Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
     }
 }

@@ -6,7 +6,7 @@ android {
     compileSdk 33
     aaptOptions{
         noCompress 'tflite'
-    }
+    } 
     defaultConfig {
         applicationId "com.example.project_main"
         minSdk 26
