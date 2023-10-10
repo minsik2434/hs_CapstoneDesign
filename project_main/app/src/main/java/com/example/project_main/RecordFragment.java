@@ -348,7 +348,8 @@ public class RecordFragment extends Fragment {
                 } else {
                     exifDegree = 0;
                 }
-                foodImg.setImageBitmap(rotate(bitmap, exifDegree));
+                Bitmap resized = Bitmap.createScaledBitmap(bitmap,1024 ,1024 , true);
+                foodImg.setImageBitmap(rotate(resized, exifDegree));
                 if(bitmap !=null){
                     //foodImg.setImageBitmap(bitmap);
                     Interpreter tflite = getTfliteInterpreter("food_model.tflite");
