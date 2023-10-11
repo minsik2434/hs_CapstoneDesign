@@ -14,6 +14,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -56,8 +58,6 @@ public class MainRecordManage extends Activity {
             @Override
             public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
 
-                Toast.makeText(MainRecordManage.this, (i + 1) + "번째 리스트 음식 이름 : " + intake_food.get(i).getFoodName() + "", Toast.LENGTH_SHORT).show();
-
                 AlertDialog.Builder builder = new AlertDialog.Builder(MainRecordManage.this);
                 builder.setTitle("음식 기록 삭제");
                 builder.setMessage("[" + intake_food.get(i).getFoodName() + "] 을/를 삭제하시겠습니까?");
@@ -66,10 +66,11 @@ public class MainRecordManage extends Activity {
                 builder.setPositiveButton("삭제", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        Toast.makeText(MainRecordManage.this, "삭제되었습니다.", Toast.LENGTH_SHORT).show();
+                        dbHelper.deleteFoodIntake(intake_food.get(i).getIntakeID());
+                        Toast.makeText(MainRecordManage.this, intake_food.get(i).getFoodName() +" 이/가 삭제되었습니다.", Toast.LENGTH_SHORT).show();
 
-                        //삭제하려면 intake_id 까지 가져와야 함
-                        listViewAdapter.notifyDataSetChanged();
+                        getFoodListFromSelectedDate();
+
                     }
                 });
                 //취소
@@ -77,7 +78,6 @@ public class MainRecordManage extends Activity {
 
                 AlertDialog alert = builder.create();
                 alert.show();
-
 
                 return false;
             }
@@ -95,6 +95,8 @@ public class MainRecordManage extends Activity {
         findViewById(R.id.manageXBtn).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                setResult(RESULT_OK);
                 finish();
             }
         });
@@ -130,13 +132,13 @@ public class MainRecordManage extends Activity {
     private void getFoodListFromSelectedDate() {
         //db에서 해당 날짜 음식 정보 가져오기
         String dbDate = dbFormat.format(selectedDate.getTime());
-        String sql_sentence = "select food_table.foodname, manufacturer, classification, kcal, carbohydrate, protein, province, sugars, salt, cholesterol, saturated_fat, trans_fat\n" +
+        String sql_sentence = "select intakeID, food_table.foodname, kcal, carbohydrate, protein, province, sugars, salt, cholesterol, saturated_fat, trans_fat, time\n" +
                 "from food_table, intake_table\n" +
                 "where food_table.foodname = intake_table.foodname\n" +
                 "and intakeID in (select intakeID from intake_table where substr(date,1,10) = '" + dbDate + "');";
 
         dbHelper = new MyDatabaseHelper(this);
-        intake_food = dbHelper.executeQuerySearchIntakeFoodToday(sql_sentence);
+        intake_food = dbHelper.executeQuerySearchIntakeFoodFromSelectedDate(sql_sentence);
 
         //음식 탄단지 정보 저장
         for (int i = 0; i < intake_food.size(); i++) {
@@ -146,7 +148,17 @@ public class MainRecordManage extends Activity {
         listViewAdapter.clearItem();
         //어뎁터에 아이템 추가
         for (int i = 0; i < intake_food.size(); i++) {
-            listViewAdapter.addItem(intake_food.get(i).getFoodName(), Math.round(intake_food.get(i).getKcal()) + " Kcal", foodNutriInfo.get(i));
+            if (intake_food.get(i).getIntakeTime().equals("아침")) {
+                listViewAdapter.addItem(R.drawable.breakfast_icon, intake_food.get(i).getFoodName(), Math.round(intake_food.get(i).getKcal()) + " Kcal", foodNutriInfo.get(i));
+            }
+            else if (intake_food.get(i).getIntakeTime().equals("점심")){
+                listViewAdapter.addItem(R.drawable.lunch_icon, intake_food.get(i).getFoodName(), Math.round(intake_food.get(i).getKcal()) + " Kcal", foodNutriInfo.get(i));
+            }
+            else if (intake_food.get(i).getIntakeTime().equals("저녁")){
+                listViewAdapter.addItem(R.drawable.dinner_icon,intake_food.get(i).getFoodName(), Math.round(intake_food.get(i).getKcal()) + " Kcal", foodNutriInfo.get(i));
+            }
+            else;
+
         }
         //리스트뷰에 어뎁터 set
         selectedDateListview.setAdapter(listViewAdapter);

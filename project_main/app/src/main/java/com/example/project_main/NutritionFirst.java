@@ -42,7 +42,7 @@ public class NutritionFirst extends Fragment {
     private ArrayList<Integer> userDiseaseListNum = new ArrayList<>();
 
     private String sql_sentence = "SELECT intake_table.foodname, manufacturer, classification," +
-            "kcal, carbohydrate, protein, province, sugars, salt, cholesterol, saturated_fat, trans_fat " +
+            "kcal, carbohydrate, protein, province, sugars, salt, cholesterol, saturated_fat, trans_fat, time " +
             "from intake_table join food_table on intake_table.foodname = food_table.foodname where substr(date,1,10) = date('now','localtime');";
 
     private TextView kcalRecommend;

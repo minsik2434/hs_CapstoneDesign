@@ -19,10 +19,9 @@
             android:orientation="horizontal">
 
             <ImageView
-                android:id="@+id/timeStateIc"
+                android:id="@+id/timeStateIcon"
                 android:layout_width="20sp"
-                android:layout_height="20sp"
-                android:background="@drawable/breakfast_icon" />
+                android:layout_height="20sp" />
 
             <TextView
                 android:id="@+id/foodName"

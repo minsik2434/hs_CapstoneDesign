@@ -76,7 +76,7 @@ public class MainFragment extends Fragment {
         String month = "MM";
         String day = "dd";
 
-        todayMainTextview.setText(dateFormat(year)+"년 " + dateFormat(month)+"월 " + dateFormat(day)+"일");
+        todayMainTextview.setText(dateFormat(year) + "년 " + dateFormat(month) + "월 " + dateFormat(day) + "일");
 
         //아이콘 색 변경 drawable 변수
         Drawable changeBreakfastIconColor = DrawableCompat.wrap(getResources().getDrawable(R.drawable.breakfast_icon)).mutate();
@@ -86,7 +86,7 @@ public class MainFragment extends Fragment {
         //DB
         dbHelper = new MyDatabaseHelper(getActivity().getApplicationContext());
 
-        String sql_sentence = "SELECT intake_table.foodname, manufacturer, classification, kcal, carbohydrate, protein, province, sugars, salt, cholesterol, saturated_fat, trans_fat  from intake_table join food_table on intake_table.foodname = food_table.foodname where substr(date,1,10) = date('now','localtime')and time= '"+"아침"+"';";
+        String sql_sentence = "SELECT intake_table.foodname, manufacturer, classification, kcal, carbohydrate, protein, province, sugars, salt, cholesterol, saturated_fat, trans_fat, time from intake_table join food_table on intake_table.foodname = food_table.foodname where substr(date,1,10) = date('now','localtime')and time= '" + "아침" + "';";
         intake_food = dbHelper.executeQuerySearchIntakeFoodToday(sql_sentence);
 
         for (int i = 0; i < intake_food.size(); i++) {
@@ -95,12 +95,11 @@ public class MainFragment extends Fragment {
 
         //어뎁터에 아이템 추가
         for (int i = 0; i < intake_food.size(); i++) {
-            listViewAdapter.addItem(intake_food.get(i).getFoodName(), Math.round(intake_food.get(i).getKcal()) + " Kcal", foodInfo.get(i));
+            listViewAdapter.addItem(0, intake_food.get(i).getFoodName(), Math.round(intake_food.get(i).getKcal()) + " Kcal", foodInfo.get(i));
         }
 
         mainFoodList.setAdapter(listViewAdapter);
         foodInfo.clear();
-
 
         //영양성분 전환 버튼
         view.findViewById(R.id.nutriChangeBtn).setOnClickListener(new View.OnClickListener() {
@@ -133,7 +132,7 @@ public class MainFragment extends Fragment {
                 intake_food.clear();
                 listViewAdapter.clearItem();
 
-                String sql_sentence = "SELECT intake_table.foodname, manufacturer, classification, kcal, carbohydrate, protein, province, sugars, salt, cholesterol, saturated_fat, trans_fat  from intake_table join food_table on intake_table.foodname = food_table.foodname where substr(date,1,10) = date('now','localtime')and time= '"+"아침"+"';";
+                String sql_sentence = "SELECT intake_table.foodname, manufacturer, classification, kcal, carbohydrate, protein, province, sugars, salt, cholesterol, saturated_fat, trans_fat, time from intake_table join food_table on intake_table.foodname = food_table.foodname where substr(date,1,10) = date('now','localtime')and time= '" + "아침" + "';";
                 intake_food = dbHelper.executeQuerySearchIntakeFoodToday(sql_sentence);
 
                 for (int i = 0; i < intake_food.size(); i++) {
@@ -142,12 +141,10 @@ public class MainFragment extends Fragment {
 
                 //어뎁터에 아이템 추가
                 for (int i = 0; i < intake_food.size(); i++) {
-                    listViewAdapter.addItem(intake_food.get(i).getFoodName(), Math.round(intake_food.get(i).getKcal()) + " Kcal", foodInfo.get(i));
+                    listViewAdapter.addItem(0, intake_food.get(i).getFoodName(), Math.round(intake_food.get(i).getKcal()) + " Kcal", foodInfo.get(i));
                 }
 
                 mainFoodList.setAdapter(listViewAdapter);
-
-
 
             }
         });
@@ -173,7 +170,7 @@ public class MainFragment extends Fragment {
                 foodInfo.clear();
                 intake_food.clear();
                 listViewAdapter.clearItem();
-                String sql_sentence = "SELECT intake_table.foodname, manufacturer, classification, kcal, carbohydrate, protein, province, sugars, salt, cholesterol, saturated_fat, trans_fat  from intake_table join food_table on intake_table.foodname = food_table.foodname where substr(date,1,10) = date('now','localtime')and time= '"+"점심"+"';";
+                String sql_sentence = "SELECT intake_table.foodname, manufacturer, classification, kcal, carbohydrate, protein, province, sugars, salt, cholesterol, saturated_fat, trans_fat, time from intake_table join food_table on intake_table.foodname = food_table.foodname where substr(date,1,10) = date('now','localtime')and time= '" + "점심" + "';";
                 intake_food = dbHelper.executeQuerySearchIntakeFoodToday(sql_sentence);
 
                 for (int i = 0; i < intake_food.size(); i++) {
@@ -182,7 +179,7 @@ public class MainFragment extends Fragment {
 
                 //어뎁터에 아이템 추가
                 for (int i = 0; i < intake_food.size(); i++) {
-                    listViewAdapter.addItem(intake_food.get(i).getFoodName(), Math.round(intake_food.get(i).getKcal()) + " Kcal", foodInfo.get(i));
+                    listViewAdapter.addItem(0, intake_food.get(i).getFoodName(), Math.round(intake_food.get(i).getKcal()) + " Kcal", foodInfo.get(i));
                 }
 
                 mainFoodList.setAdapter(listViewAdapter);
@@ -212,7 +209,7 @@ public class MainFragment extends Fragment {
                 foodInfo.clear();
                 intake_food.clear();
                 listViewAdapter.clearItem();
-                String sql_sentence = "SELECT intake_table.foodname, manufacturer, classification, kcal, carbohydrate, protein, province, sugars, salt, cholesterol, saturated_fat, trans_fat  from intake_table join food_table on intake_table.foodname = food_table.foodname where substr(date,1,10) = date('now','localtime')and time= '"+"저녁"+"';";
+                String sql_sentence = "SELECT intake_table.foodname, manufacturer, classification, kcal, carbohydrate, protein, province, sugars, salt, cholesterol, saturated_fat, trans_fat, time from intake_table join food_table on intake_table.foodname = food_table.foodname where substr(date,1,10) = date('now','localtime')and time= '" + "저녁" + "';";
                 intake_food = dbHelper.executeQuerySearchIntakeFoodToday(sql_sentence);
 
                 for (int i = 0; i < intake_food.size(); i++) {
@@ -221,12 +218,11 @@ public class MainFragment extends Fragment {
 
                 //어뎁터에 아이템 추가
                 for (int i = 0; i < intake_food.size(); i++) {
-                    listViewAdapter.addItem(intake_food.get(i).getFoodName(), Math.round(intake_food.get(i).getKcal()) + " Kcal", foodInfo.get(i));
+                    listViewAdapter.addItem(0, intake_food.get(i).getFoodName(), Math.round(intake_food.get(i).getKcal()) + " Kcal", foodInfo.get(i));
                 }
 
                 mainFoodList.setAdapter(listViewAdapter);
                 foodInfo.clear();
-
             }
         });
 
@@ -235,7 +231,8 @@ public class MainFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getActivity(), MainRecordManage.class);
-                startActivity(intent);
+                startActivityForResult(intent, 100);
+
             }
         });
 
@@ -262,12 +259,11 @@ public class MainFragment extends Fragment {
     }
 
     //프래그먼트 호출(영양성분)
-    private void NutriFragmentView(int fragment){
-
+    private void NutriFragmentView(int fragment) {
         FragmentManager fragmentManager = getFragmentManager();
         FragmentTransaction transaction = fragmentManager.beginTransaction();
 
-        switch (fragment){
+        switch (fragment) {
             case 0:
                 // 첫번 째 프래그먼트 호출
                 NutritionFirst nutri1 = new NutritionFirst();
@@ -286,8 +282,9 @@ public class MainFragment extends Fragment {
         }
     }
 
-    private String dateFormat(String pattern){
+    private String dateFormat(String pattern) {
         Date date = new Date();
         return new SimpleDateFormat(pattern).format(date);
     }
+
 }

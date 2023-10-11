@@ -181,12 +181,78 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
             test.setCholesterol(cursor.getFloat(9));
             test.setSaturated_fat(cursor.getFloat(10));
             test.setTrans_fat(cursor.getFloat(11));
+            test.setIntakeTime(cursor.getString(12));
             intake_food.add(test);
         }
         cursor.close();
         db.close();
         return intake_food;
     }
+
+    //음식 정보 검색
+    public ArrayList<RecodeSelectDto> executeQuerySearchFood(String sql_sentence) {
+        ArrayList<RecodeSelectDto> intake_food = new ArrayList<RecodeSelectDto>();
+
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery(sql_sentence, null);
+
+        int recordCount = cursor.getCount();
+
+        for (int i = 0; i < recordCount; i++) {
+            cursor.moveToNext();
+            RecodeSelectDto test = new RecodeSelectDto();
+
+            test.setFoodName(cursor.getString(0));
+            test.setManufacturer(cursor.getString(1));
+            test.setClassification(cursor.getString(2));
+            test.setKcal(cursor.getFloat(3));
+            test.setCarbohydrate(cursor.getFloat(4));
+            test.setProtein(cursor.getFloat(5));
+            test.setProvince(cursor.getFloat(6));
+            test.setSugars(cursor.getFloat(7));
+            test.setSalt(cursor.getFloat(8));
+            test.setCholesterol(cursor.getFloat(9));
+            test.setSaturated_fat(cursor.getFloat(10));
+            test.setTrans_fat(cursor.getFloat(11));
+            intake_food.add(test);
+        }
+        cursor.close();
+        db.close();
+        return intake_food;
+    }
+
+    //해당 날짜 음식 정보 가져오기
+    public ArrayList<RecodeSelectDto> executeQuerySearchIntakeFoodFromSelectedDate(String sql_sentence) {
+        ArrayList<RecodeSelectDto> intake_food = new ArrayList<RecodeSelectDto>();
+
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery(sql_sentence, null);
+
+        int recordCount = cursor.getCount();
+
+        for (int i = 0; i < recordCount; i++) {
+            cursor.moveToNext();
+            RecodeSelectDto test = new RecodeSelectDto();
+
+            test.setIntakeID(cursor.getInt(0));
+            test.setFoodName(cursor.getString(1));
+            test.setKcal(cursor.getFloat(2));
+            test.setCarbohydrate(cursor.getFloat(3));
+            test.setProtein(cursor.getFloat(4));
+            test.setProvince(cursor.getFloat(5));
+            test.setSugars(cursor.getFloat(6));
+            test.setSalt(cursor.getFloat(7));
+            test.setCholesterol(cursor.getFloat(8));
+            test.setSaturated_fat(cursor.getFloat(9));
+            test.setTrans_fat(cursor.getFloat(10));
+            test.setIntakeTime(cursor.getString(11));
+            intake_food.add(test);
+        }
+        cursor.close();
+        db.close();
+        return intake_food;
+    }
+
 
     //오늘의 타임라인 정보
     public ArrayList<TimelineSelectDto> executeQuerySearchAlarmToday(String sql_sentence) {
@@ -541,4 +607,12 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
                 "activity = '" + activity + "',\n" +
                 "recommended_kcal = " + recommendKcal + " ;");
     }
+
+    //해당 음식 섭취 정보 삭제
+    void deleteFoodIntake(int id){
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.execSQL("delete from intake_table where intakeID = " + id);
+        db.close();
+    }
+
 }
