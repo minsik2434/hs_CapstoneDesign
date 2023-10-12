@@ -44,7 +44,7 @@ public class StatisticsMonth extends Fragment {
             calendar.add(Calendar.MONTH, -1); // 이전 월로 이동
         }
 
-        int[] data = {10, 20, 30, 40, 50, 60, 70}; // 예시 데이터
+        int[] data = {60, 40, 30, 40, 50, 60, 70}; // 예시 데이터
         int[] contentsData = {70, 72, 73, 71, 74, 75, 76}; // 예시 데이터
 
         combinedChartView.setData(data, dateArr, contentsData);
