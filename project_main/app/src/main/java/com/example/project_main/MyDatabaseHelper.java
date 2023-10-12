@@ -227,14 +227,6 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
         cv.put("alarm_img", data);
 
         long result = db.insert("user_timeline", null, cv);
-        if (result == -1)
-        {
-            Toast.makeText(mContext, "Failed", Toast.LENGTH_SHORT).show();
-        }
-        else
-        {
-            Toast.makeText(mContext, "데이터 추가 성공", Toast.LENGTH_SHORT).show();
-        }
         db.close();
     }
 
@@ -306,15 +298,6 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
         cv.put(USER_TABLE_COLUMN_RECOMMENDED_KCAL, recommended_kcal);
 
         long result = db.insert(USER_TABLE_NAME, null, cv);
-
-        if (result == -1)
-        {
-            Toast.makeText(mContext, "Failed", Toast.LENGTH_SHORT).show();
-        }
-        else
-        {
-            Toast.makeText(mContext, "데이터 추가 성공", Toast.LENGTH_SHORT).show();
-        }
 
         db.close();
     }

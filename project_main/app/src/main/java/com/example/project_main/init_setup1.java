@@ -15,7 +15,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 public class init_setup1 extends AppCompatActivity {
 
-    ImageButton btnNext1;
+    Button btnNext1;
     EditText editNickname;
 
     MyDatabaseHelper dbHelper;

@@ -55,7 +55,7 @@ public class StatisticsWeek extends Fragment {
         }
 
 
-        int[] data = {10, 20, 30, 40, 50, 60, 70};
+        int[] data = {30, 40, 60, 70, 50, 60, 30};
         int[] contentsData = {70, 72, 73, 71, 74, 75, 76};
 
         combinedChartView.setData(data, dateArr, contentsData);
