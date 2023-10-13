@@ -15,9 +15,8 @@ import androidx.appcompat.app.AppCompatActivity;
 
 public class init_setup1 extends AppCompatActivity {
 
-    ImageButton btnNext1;
+    Button btnNext1;
     EditText editNickname;
-
     MyDatabaseHelper dbHelper;
 
 
@@ -25,7 +24,6 @@ public class init_setup1 extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.init_setup1);
-
         btnNext1 = findViewById(R.id.btnNext1);
         editNickname = findViewById(R.id.editNickname);
 
@@ -75,6 +73,4 @@ public class init_setup1 extends AppCompatActivity {
     public void onBackPressed() {
         //super.onBackPressed();
     }
-
-
 }
