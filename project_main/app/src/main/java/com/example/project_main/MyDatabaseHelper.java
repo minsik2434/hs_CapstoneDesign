@@ -68,6 +68,8 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
     private static final String NUTRITION_TABLE_COLUMN_CHOLESTEROL = "cholesterol";
     private static final String NUTRITION_TABLE_COLUMN_TRANS_FAT = "trans_fat";
     private static final String NUTRITION_TABLE_COLUMN_SATURATED_FAT = "saturated_fat";
+    private static final String NUTRITION_TABLE_COLUMN_SUGARS = "sugars";
+    private static final String NUTRITION_TABLE_COLUMN_SALT = "salt";
     //intake_table column
     private static final String INTAKE_TABLE_COLUMN_INTAKEID = "intakeID";
     private static final String INTAKE_TABLE_COLUMN_NICKNAME = "nickname";
@@ -575,6 +577,471 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
         return recordCount == 0;
     }
 
+    // 칼로리
+    public int getTotalCaloriesConsumedOnDate(String targetDate) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        int totalCalories = 0;
+
+        // Prepare the query
+        String query = "SELECT strftime('%m/%d', " + INTAKE_TABLE_COLUMN_DATE + ") AS formatted_date, SUM(" + NUTRITION_TABLE_COLUMN_KCAL + ") AS total_calories " +
+                "FROM " + INTAKE_TABLE_NAME + " AS i " +
+                "JOIN " + FOOD_TABLE_NAME + " AS n ON i." + INTAKE_TABLE_COLUMN_FOODNAME + " = n." + FOOD_TABLE_COLUMN_FOODNAME + " " +
+                "WHERE formatted_date = ? " +
+                "GROUP BY formatted_date;";
+
+        // Execute the query
+        Cursor cursor = db.rawQuery(query, new String[]{targetDate});
+
+        if (cursor.moveToFirst()) {
+            int totalCaloriesIndex = cursor.getColumnIndex("total_calories");
+            totalCalories = cursor.getInt(totalCaloriesIndex);
+        }
+
+        cursor.close();
+        db.close();
+
+        return totalCalories;
+    }
+
+
+    // 탄수화물(day)
+    public int getTotalCarbohydratesConsumedOnDate(String targetDate) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        int totalCarbohydrates = 0;
+
+        String query = "SELECT strftime('%m/%d', " + INTAKE_TABLE_COLUMN_DATE + ") AS formatted_date, SUM(" + NUTRITION_TABLE_COLUMN_CARBOHYDRATE + ") AS total_carbohydrates " +
+                "FROM " + INTAKE_TABLE_NAME + " AS i " +
+                "JOIN " + FOOD_TABLE_NAME + " AS n ON i." + INTAKE_TABLE_COLUMN_FOODNAME + " = n." + FOOD_TABLE_COLUMN_FOODNAME + " " +
+                "WHERE formatted_date = ? " +
+                "GROUP BY formatted_date;";
+
+        Cursor cursor = db.rawQuery(query, new String[]{targetDate});
+
+        if (cursor.moveToFirst()) {
+            int totalCarbohydratesIndex = cursor.getColumnIndex("total_carbohydrates");
+            totalCarbohydrates = cursor.getInt(totalCarbohydratesIndex);
+        }
+
+        cursor.close();
+        db.close();
+
+        return totalCarbohydrates;
+    }
+
+    // 단백질(day)
+    public int getTotalProteinConsumedOnDate(String targetDate) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        int totalProtein = 0;
+
+        String query = "SELECT strftime('%m/%d', " + INTAKE_TABLE_COLUMN_DATE + ") AS formatted_date, SUM(" + NUTRITION_TABLE_COLUMN_PROTEIN + ") AS total_protein " +
+                "FROM " + INTAKE_TABLE_NAME + " AS i " +
+                "JOIN " + FOOD_TABLE_NAME + " AS n ON i." + INTAKE_TABLE_COLUMN_FOODNAME + " = n." + FOOD_TABLE_COLUMN_FOODNAME + " " +
+                "WHERE formatted_date = ? " +
+                "GROUP BY formatted_date;";
+
+        Cursor cursor = db.rawQuery(query, new String[]{targetDate});
+
+        if (cursor.moveToFirst()) {
+            int totalProteinIndex = cursor.getColumnIndex("total_protein");
+            totalProtein = cursor.getInt(totalProteinIndex);
+        }
+
+        cursor.close();
+        db.close();
+
+        return totalProtein;
+    }
+
+    // 지방(day)
+    public int getTotalFatConsumedOnDate(String targetDate) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        int totalFat = 0;
+
+        // Prepare the query
+        String query = "SELECT strftime('%m/%d', " + INTAKE_TABLE_COLUMN_DATE + ") AS formatted_date, SUM(" + NUTRITION_TABLE_COLUMN_PROVINCE + ") AS total_fat " +
+                "FROM " + INTAKE_TABLE_NAME + " AS i " +
+                "JOIN " + FOOD_TABLE_NAME + " AS n ON i." + INTAKE_TABLE_COLUMN_FOODNAME + " = n." + FOOD_TABLE_COLUMN_FOODNAME + " " +
+                "WHERE formatted_date = ? " +
+                "GROUP BY formatted_date;";
+
+        // Execute the query
+        Cursor cursor = db.rawQuery(query, new String[]{targetDate});
+
+        if (cursor.moveToFirst()) {
+            int totalFatIndex = cursor.getColumnIndex("total_fat");
+            totalFat = cursor.getInt(totalFatIndex);
+        }
+
+        cursor.close();
+        db.close();
+
+        return totalFat;
+    }
+
+    // 당류(day)
+    public int getTotalSugarsConsumedOnDate(String targetDate) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        int totalSugars = 0;
+
+        // Prepare the query
+        String query = "SELECT strftime('%m/%d', " + INTAKE_TABLE_COLUMN_DATE + ") AS formatted_date, SUM(" + NUTRITION_TABLE_COLUMN_SUGARS + ") AS total_sugars " +
+                "FROM " + INTAKE_TABLE_NAME + " AS i " +
+                "JOIN " + FOOD_TABLE_NAME + " AS n ON i." + INTAKE_TABLE_COLUMN_FOODNAME + " = n." + FOOD_TABLE_COLUMN_FOODNAME + " " +
+                "WHERE formatted_date = ? " +
+                "GROUP BY formatted_date;";
+
+        // Execute the query
+        Cursor cursor = db.rawQuery(query, new String[]{targetDate});
+
+        if (cursor.moveToFirst()) {
+            int totalSugarsIndex = cursor.getColumnIndex("total_sugars");
+            totalSugars = cursor.getInt(totalSugarsIndex);
+        }
+
+        cursor.close();
+        db.close();
+
+        return totalSugars;
+    }
+
+    // 염분(day)
+    public int getTotalSodiumConsumedOnDate(String targetDate) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        int totalSodium = 0;
+
+        // 쿼리문 준비
+        String query = "SELECT strftime('%m/%d', " + INTAKE_TABLE_COLUMN_DATE + ") AS formatted_date, SUM(" + NUTRITION_TABLE_COLUMN_SALT + ") AS total_sodium " +
+                "FROM " + INTAKE_TABLE_NAME + " AS i " +
+                "JOIN " + FOOD_TABLE_NAME + " AS n ON i." + INTAKE_TABLE_COLUMN_FOODNAME + " = n." + FOOD_TABLE_COLUMN_FOODNAME + " " +
+                "WHERE formatted_date = ? " +
+                "GROUP BY formatted_date;";
+
+        // 쿼리 실행
+        Cursor cursor = db.rawQuery(query, new String[]{targetDate});
+
+        if (cursor.moveToFirst()) {
+            int totalSodiumIndex = cursor.getColumnIndex("total_sodium");
+            totalSodium = cursor.getInt(totalSodiumIndex);
+        }
+
+        cursor.close();
+        db.close();
+
+        return totalSodium;
+    }
+
+    // 콜레스테롤(day)
+    public int getTotalCholesterolConsumedOnDate(String targetDate) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        int totalCholesterol = 0;
+
+        // 쿼리문 준비
+        String query = "SELECT strftime('%m/%d', " + INTAKE_TABLE_COLUMN_DATE + ") AS formatted_date, SUM(" + NUTRITION_TABLE_COLUMN_CHOLESTEROL + ") AS total_cholesterol " +
+                "FROM " + INTAKE_TABLE_NAME + " AS i " +
+                "JOIN " + FOOD_TABLE_NAME + " AS n ON i." + INTAKE_TABLE_COLUMN_FOODNAME + " = n." + FOOD_TABLE_COLUMN_FOODNAME + " " +
+                "WHERE formatted_date = ? " +
+                "GROUP BY formatted_date;";
+
+        // 쿼리 실행
+        Cursor cursor = db.rawQuery(query, new String[]{targetDate});
+
+        if (cursor.moveToFirst()) {
+            int totalCholesterolIndex = cursor.getColumnIndex("total_cholesterol");
+            totalCholesterol = cursor.getInt(totalCholesterolIndex);
+        }
+
+        cursor.close();
+        db.close();
+
+        return totalCholesterol;
+    }
+
+    // 포화지방(day)
+    public int getTotalSaturatedFatConsumedOnDate(String targetDate) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        int totalSaturatedFat = 0;
+
+        // 쿼리문 준비
+        String query = "SELECT strftime('%m/%d', " + INTAKE_TABLE_COLUMN_DATE + ") AS formatted_date, SUM(" + NUTRITION_TABLE_COLUMN_SATURATED_FAT + ") AS total_saturated_fat " +
+                "FROM " + INTAKE_TABLE_NAME + " AS i " +
+                "JOIN " + FOOD_TABLE_NAME + " AS n ON i." + INTAKE_TABLE_COLUMN_FOODNAME + " = n." + FOOD_TABLE_COLUMN_FOODNAME + " " +
+                "WHERE formatted_date = ? " +
+                "GROUP BY formatted_date;";
+
+        // 쿼리 실행
+        Cursor cursor = db.rawQuery(query, new String[]{targetDate});
+
+        if (cursor.moveToFirst()) {
+            int totalSaturatedFatIndex = cursor.getColumnIndex("total_saturated_fat");
+            totalSaturatedFat = cursor.getInt(totalSaturatedFatIndex);
+        }
+
+        cursor.close();
+        db.close();
+
+        return totalSaturatedFat;
+    }
+
+    // 트랜스지방(day)
+    public int getTotalTransFatConsumedOnDate(String targetDate) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        int totalTransFat = 0;
+
+        // 쿼리문 준비
+        String query = "SELECT strftime('%m/%d', " + INTAKE_TABLE_COLUMN_DATE + ") AS formatted_date, SUM(" + NUTRITION_TABLE_COLUMN_TRANS_FAT + ") AS total_trans_fat " +
+                "FROM " + INTAKE_TABLE_NAME + " AS i " +
+                "JOIN " + FOOD_TABLE_NAME + " AS n ON i." + INTAKE_TABLE_COLUMN_FOODNAME + " = n." + FOOD_TABLE_COLUMN_FOODNAME + " " +
+                "WHERE formatted_date = ? " +
+                "GROUP BY formatted_date;";
+
+        // 쿼리 실행
+        Cursor cursor = db.rawQuery(query, new String[]{targetDate});
+
+        if (cursor.moveToFirst()) {
+            int totalTransFatIndex = cursor.getColumnIndex("total_trans_fat");
+            totalTransFat = cursor.getInt(totalTransFatIndex);
+        }
+
+        cursor.close();
+        db.close();
+
+        return totalTransFat;
+    }
+
+    // 칼로리(Month)
+    public int getTotalCaloriesForMonth(String targetDate) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        int totalCalories = 0;
+
+        // 쿼리문 준비
+        String query = "SELECT strftime('%Y-%m', " + INTAKE_TABLE_COLUMN_DATE + ") AS formatted_month, SUM(" + NUTRITION_TABLE_COLUMN_KCAL + ") AS total_calories " +
+                "FROM " + INTAKE_TABLE_NAME + " AS i " +
+                "JOIN " + FOOD_TABLE_NAME + " AS n ON i." + INTAKE_TABLE_COLUMN_FOODNAME + " = n." + FOOD_TABLE_COLUMN_FOODNAME + " " +
+                "WHERE formatted_month = ? " +
+                "GROUP BY formatted_month;";
+
+        // 쿼리 실행
+        Cursor cursor = db.rawQuery(query, new String[]{targetDate});
+
+        if (cursor.moveToFirst()) {
+            int totalCaloriesIndex = cursor.getColumnIndex("total_calories");
+            totalCalories = cursor.getInt(totalCaloriesIndex);
+        }
+
+        cursor.close();
+        db.close();
+
+        return totalCalories;
+    }
+
+    // 탄수화물(Month)
+    public int getTotalCarbohydratesForMonth(String targetDate) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        int totalCarbohydrates = 0;
+
+        // 쿼리문 준비
+        String query = "SELECT strftime('%Y-%m', " + INTAKE_TABLE_COLUMN_DATE + ") AS formatted_month, SUM(" + NUTRITION_TABLE_COLUMN_CARBOHYDRATE + ") AS total_carbohydrates " +
+                "FROM " + INTAKE_TABLE_NAME + " AS i " +
+                "JOIN " + FOOD_TABLE_NAME + " AS n ON i." + INTAKE_TABLE_COLUMN_FOODNAME + " = n." + FOOD_TABLE_COLUMN_FOODNAME + " " +
+                "WHERE formatted_month = ? " +
+                "GROUP BY formatted_month;";
+
+        // 쿼리 실행
+        Cursor cursor = db.rawQuery(query, new String[]{targetDate});
+
+        if (cursor.moveToFirst()) {
+            int totalCarbohydratesIndex = cursor.getColumnIndex("total_carbohydrates");
+            totalCarbohydrates = cursor.getInt(totalCarbohydratesIndex);
+        }
+
+        cursor.close();
+        db.close();
+
+        return totalCarbohydrates;
+    }
+
+    // 단백질(Month)
+    public int getTotalProteinsForMonth(String targetDate) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        int totalProteins = 0;
+
+        // 쿼리문 준비
+        String query = "SELECT strftime('%Y-%m', " + INTAKE_TABLE_COLUMN_DATE + ") AS formatted_month, SUM(" + NUTRITION_TABLE_COLUMN_PROTEIN + ") AS total_proteins " +
+                "FROM " + INTAKE_TABLE_NAME + " AS i " +
+                "JOIN " + FOOD_TABLE_NAME + " AS n ON i." + INTAKE_TABLE_COLUMN_FOODNAME + " = n." + FOOD_TABLE_COLUMN_FOODNAME + " " +
+                "WHERE formatted_month = ? " +
+                "GROUP BY formatted_month;";
+
+        // 쿼리 실행
+        Cursor cursor = db.rawQuery(query, new String[]{targetDate});
+
+        if (cursor.moveToFirst()) {
+            int totalProteinsIndex = cursor.getColumnIndex("total_proteins");
+            totalProteins = cursor.getInt(totalProteinsIndex);
+        }
+
+        cursor.close();
+        db.close();
+
+        return totalProteins;
+    }
+
+    // 지방(Month)
+    public int getTotalFatForMonth(String targetDate) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        int totalFat = 0;
+
+        // 쿼리문 준비
+        String query = "SELECT strftime('%Y-%m', " + INTAKE_TABLE_COLUMN_DATE + ") AS formatted_month, SUM(" + NUTRITION_TABLE_COLUMN_PROVINCE + ") AS total_fat " +
+                "FROM " + INTAKE_TABLE_NAME + " AS i " +
+                "JOIN " + FOOD_TABLE_NAME + " AS n ON i." + INTAKE_TABLE_COLUMN_FOODNAME + " = n." + FOOD_TABLE_COLUMN_FOODNAME + " " +
+                "WHERE formatted_month = ? " +
+                "GROUP BY formatted_month;";
+
+        // 쿼리 실행
+        Cursor cursor = db.rawQuery(query, new String[]{targetDate});
+
+        if (cursor.moveToFirst()) {
+            int totalFatIndex = cursor.getColumnIndex("total_fat");
+            totalFat = cursor.getInt(totalFatIndex);
+        }
+
+        cursor.close();
+        db.close();
+
+        return totalFat;
+    }
+
+    // 당류(Month)
+    public int getTotalSugarsForMonth(String targetDate) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        int totalSugars = 0;
+
+        // 쿼리문 준비
+        String query = "SELECT strftime('%Y-%m', " + INTAKE_TABLE_COLUMN_DATE + ") AS formatted_month, SUM(" + NUTRITION_TABLE_COLUMN_SUGARS + ") AS total_sugars " +
+                "FROM " + INTAKE_TABLE_NAME + " AS i " +
+                "JOIN " + FOOD_TABLE_NAME + " AS n ON i." + INTAKE_TABLE_COLUMN_FOODNAME + " = n." + FOOD_TABLE_COLUMN_FOODNAME + " " +
+                "WHERE formatted_month = ? " +
+                "GROUP BY formatted_month;";
+
+        // 쿼리 실행
+        Cursor cursor = db.rawQuery(query, new String[]{targetDate});
+
+        if (cursor.moveToFirst()) {
+            int totalSugarsIndex = cursor.getColumnIndex("total_sugars");
+            totalSugars = cursor.getInt(totalSugarsIndex);
+        }
+
+        cursor.close();
+        db.close();
+
+        return totalSugars;
+    }
+
+    // 나트륨 (Month)
+    public int getTotalSaltForMonth(String targetDate) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        int totalSalt = 0;
+
+        // 쿼리문 준비
+        String query = "SELECT strftime('%Y-%m', " + INTAKE_TABLE_COLUMN_DATE + ") AS formatted_month, SUM(" + NUTRITION_TABLE_COLUMN_SALT + ") AS total_salt " +
+                "FROM " + INTAKE_TABLE_NAME + " AS i " +
+                "JOIN " + FOOD_TABLE_NAME + " AS n ON i." + INTAKE_TABLE_COLUMN_FOODNAME + " = n." + FOOD_TABLE_COLUMN_FOODNAME + " " +
+                "WHERE formatted_month = ? " +
+                "GROUP BY formatted_month;";
+
+        // 쿼리 실행
+        Cursor cursor = db.rawQuery(query, new String[]{targetDate});
+
+        if (cursor.moveToFirst()) {
+            int totalSaltIndex = cursor.getColumnIndex("total_salt");
+            totalSalt = cursor.getInt(totalSaltIndex);
+        }
+
+        cursor.close();
+        db.close();
+
+        return totalSalt;
+    }
+
+    // 콜레스테롤 (Month)
+    public int getTotalCholesterolForMonth(String targetDate) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        int totalCholesterol = 0;
+
+        // 쿼리문 준비
+        String query = "SELECT strftime('%Y-%m', " + INTAKE_TABLE_COLUMN_DATE + ") AS formatted_month, SUM(" + NUTRITION_TABLE_COLUMN_CHOLESTEROL + ") AS total_cholesterol " +
+                "FROM " + INTAKE_TABLE_NAME + " AS i " +
+                "JOIN " + FOOD_TABLE_NAME + " AS n ON i." + INTAKE_TABLE_COLUMN_FOODNAME + " = n." + FOOD_TABLE_COLUMN_FOODNAME + " " +
+                "WHERE formatted_month = ? " +
+                "GROUP BY formatted_month;";
+
+        // 쿼리 실행
+        Cursor cursor = db.rawQuery(query, new String[]{targetDate});
+
+        if (cursor.moveToFirst()) {
+            int totalCholesterolIndex = cursor.getColumnIndex("total_cholesterol");
+            totalCholesterol = cursor.getInt(totalCholesterolIndex);
+        }
+
+        cursor.close();
+        db.close();
+
+        return totalCholesterol;
+    }
+
+    // 트랜스지방 (Month)
+    public int getTotalTransFatForMonth(String targetDate) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        int totalTransFat = 0;
+
+        // 쿼리문 준비
+        String query = "SELECT strftime('%Y-%m', " + INTAKE_TABLE_COLUMN_DATE + ") AS formatted_month, SUM(" + NUTRITION_TABLE_COLUMN_TRANS_FAT + ") AS total_trans_fat " +
+                "FROM " + INTAKE_TABLE_NAME + " AS i " +
+                "JOIN " + FOOD_TABLE_NAME + " AS n ON i." + INTAKE_TABLE_COLUMN_FOODNAME + " = n." + FOOD_TABLE_COLUMN_FOODNAME + " " +
+                "WHERE formatted_month = ? " +
+                "GROUP BY formatted_month;";
+
+        // 쿼리 실행
+        Cursor cursor = db.rawQuery(query, new String[]{targetDate});
+
+        if (cursor.moveToFirst()) {
+            int totalTransFatIndex = cursor.getColumnIndex("total_trans_fat");
+            totalTransFat = cursor.getInt(totalTransFatIndex);
+        }
+
+        cursor.close();
+        db.close();
+
+        return totalTransFat;
+    }
+
+    // 포화지방산 (Month)
+    public int getTotalSaturatedFatForMonth(String targetDate) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        int totalSaturatedFat = 0;
+
+        // 쿼리문 준비
+        String query = "SELECT strftime('%Y-%m', " + INTAKE_TABLE_COLUMN_DATE + ") AS formatted_month, SUM(" + NUTRITION_TABLE_COLUMN_SATURATED_FAT + ") AS total_saturated_fat " +
+                "FROM " + INTAKE_TABLE_NAME + " AS i " +
+                "JOIN " + FOOD_TABLE_NAME + " AS n ON i." + INTAKE_TABLE_COLUMN_FOODNAME + " = n." + FOOD_TABLE_COLUMN_FOODNAME + " " +
+                "WHERE formatted_month = ? " +
+                "GROUP BY formatted_month;";
+
+        // 쿼리 실행
+        Cursor cursor = db.rawQuery(query, new String[]{targetDate});
+
+        if (cursor.moveToFirst()) {
+            int totalSaturatedFatIndex = cursor.getColumnIndex("total_saturated_fat");
+            totalSaturatedFat = cursor.getInt(totalSaturatedFatIndex);
+        }
+
+        cursor.close();
+        db.close();
+
+        return totalSaturatedFat;
+    }
+
 
     // 테이블의 모든 행 삭제
     void deleteAllRows(String tableName) {
@@ -613,6 +1080,36 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         db.execSQL("delete from intake_table where intakeID = " + id);
         db.close();
+    }
+
+    public ArrayList<NutritionDto> getFoodNutrition(String foodName) {
+
+        SQLiteDatabase db = getReadableDatabase();
+        ArrayList<NutritionDto> foodNutriInfo = new ArrayList<>();
+        Cursor cursor = db.rawQuery("SELECT kcal, protein, province, carbohydrate, sugars, salt, cholesterol, saturated_fat, trans_fat\n"+
+                "from food_table\n"+
+                "where foodname='"+foodName + "';", null);
+
+        int recordCount = cursor.getCount();
+
+        for (int i = 0; i < recordCount; i++) {
+            cursor.moveToNext();
+            NutritionDto nutri = new NutritionDto();
+            nutri.setKcal(cursor.getInt(0));
+            nutri.setCarbohydrate(cursor.getFloat(1));
+            nutri.setProtein(cursor.getFloat(2));
+            nutri.setProvince(cursor.getFloat(3));
+            nutri.setSugars(cursor.getFloat(4));
+            nutri.setSalt(cursor.getFloat(5));
+            nutri.setCholesterol(cursor.getFloat(6));
+            nutri.setSaturated_fat(cursor.getFloat(7));
+            nutri.setTrans_fat(cursor.getFloat(8));
+            foodNutriInfo.add(nutri);
+        }
+
+        cursor.close();
+        db.close();
+        return foodNutriInfo;
     }
 
 }

@@ -9,16 +9,30 @@
         android:id="@+id/ingredientCheckButton_Month"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:text="팝업 메뉴 열기"
+        android:text="탄수화물"
         android:background="@android:color/transparent"
         android:textColor="#000000"
         />
 
 
-    <com.example.project_main.CombinedChartView
-        android:id="@+id/combinedChartView"
+    <com.example.project_main.LineChartView
+        android:id="@+id/lineChartView"
         android:layout_width="match_parent"
-        android:layout_height="300dp" />
+        android:layout_height="100dp" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="칼로리"
+        android:textSize="15dp"
+        android:gravity="center"
+        />
+
+    <com.example.project_main.BarChartView
+        android:id="@+id/barChartView"
+        android:layout_width="match_parent"
+        android:layout_marginBottom="30dp"
+        android:layout_height="200dp" />
+
 
 </LinearLayout>

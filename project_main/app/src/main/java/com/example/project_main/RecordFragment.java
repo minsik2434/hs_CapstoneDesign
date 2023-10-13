@@ -6,6 +6,7 @@ import static android.app.Activity.RESULT_OK;
 import static com.google.zxing.integration.android.IntentIntegrator.REQUEST_CODE;
 
 import android.Manifest;
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.Notification;
@@ -15,16 +16,26 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.content.res.AssetFileDescriptor;
+import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.graphics.ImageDecoder;
+import android.graphics.Matrix;
+import android.media.ExifInterface;
+import android.net.Uri;
+import android.os.Build;
+import android.os.Environment;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 import androidx.core.app.NotificationCompat;
 import androidx.core.content.ContextCompat;
+import androidx.core.content.FileProvider;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -32,6 +43,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Handler;
 import android.os.Looper;
+import android.provider.MediaStore;
 import android.text.SpannableString;
 import android.text.style.ForegroundColorSpan;
 import android.view.LayoutInflater;
@@ -49,7 +61,13 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.google.zxing.integration.android.IntentIntegrator;
+import org.tensorflow.lite.Interpreter;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.nio.MappedByteBuffer;
+import java.nio.channels.FileChannel;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -70,9 +88,8 @@ public class RecordFragment extends Fragment {
     TextView searchedFoodKcal;
     TextView searchedFoodNutriInfo;
     AllergyList allergyList = new AllergyList();
-    TextView todayRecordTextview;
-    TextView underFoodImageText;
     ArrayList<String> userAllergy = new ArrayList<>();
+    ArrayList<NutritionDto> foodNurition = new ArrayList<>();
 
     boolean morningImgBtn = false;
     boolean lunchImgBtn = false;
@@ -82,6 +99,9 @@ public class RecordFragment extends Fragment {
 
     private TextView dateTextView;
     private Calendar selectedDate = Calendar.getInstance();
+    static final int TAKE_PICTURE = 2;
+    static final int REQUEST_TAKE_PHOTO = 2;
+    String mCurrentPhotoPath;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -96,17 +116,9 @@ public class RecordFragment extends Fragment {
         recordFoodInfo = view.findViewById(R.id.recordFoodInfo);
         raw_mtrl = view.findViewById(R.id.raw_material_text);
         foodImg = view.findViewById(R.id.recordFoodImage);
-        todayRecordTextview = view.findViewById(R.id.todayRecordTextview);
         record_breakfast_btn = view.findViewById(R.id.record_breakfast_btn);
         record_lunch_btn = view.findViewById(R.id.record_lunch_btn);
         record_dinner_btn = view.findViewById(R.id.record_dinner_btn);
-
-        String year = "yyyy";
-        String month = "MM";
-        String day = "dd";
-
-        todayRecordTextview.setText(dateFormat(year)+"년 " + dateFormat(month)+"월 " + dateFormat(day)+"일");
-
         MyDatabaseHelper dbHelper = new MyDatabaseHelper(getActivity().getApplicationContext());
 
 
@@ -159,13 +171,19 @@ public class RecordFragment extends Fragment {
                     }
                 });
 
-                Button button3 = customLayout.findViewById(R.id.button3);
-                button3.setOnClickListener(new View.OnClickListener() {
+                Button picbtn = customLayout.findViewById(R.id.picbtn);
+                picbtn.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        // 팝업 닫기
-                        dialog.dismiss();
-                        Toast.makeText(getActivity(), "3번 버튼이 눌림", Toast.LENGTH_SHORT).show();
+                        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                        File photoFile = null;
+                        try{photoFile = createImageFile();}
+                        catch (IOException ex) { }
+                        if(photoFile != null){
+                            Uri photoURI = FileProvider.getUriForFile(getActivity(),"com.example.project_main.fileprovider",photoFile);
+                            takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT,photoURI);
+                            startActivityForResult(takePictureIntent,REQUEST_TAKE_PHOTO);
+                        }
                     }
                 });
 
@@ -289,6 +307,13 @@ public class RecordFragment extends Fragment {
 
     }
 
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults){
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if(grantResults[0] == PackageManager.PERMISSION_GRANTED && grantResults[1] == PackageManager.PERMISSION_GRANTED);
+
+    }
+
     private void startBarcodeScanner() {
         IntentIntegrator integrator = new IntentIntegrator(requireActivity());
         integrator.setOrientationLocked(false);
@@ -307,12 +332,67 @@ public class RecordFragment extends Fragment {
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-
-        Handler handler = new Handler(Looper.getMainLooper());
-//        사용자 알레르기 정보 가져오기
+        super.onActivityResult(requestCode, resultCode, data);
         MyDatabaseHelper dbHelper = new MyDatabaseHelper(getActivity().getApplicationContext());
-        ArrayList<Integer> userAllergyListNum = dbHelper.getUserAllergy(); //사용자 알레르기 번호 목록
-
+        ArrayList<Integer> userAllergyListNum = dbHelper.getUserAllergy();
+        if(requestCode == REQUEST_TAKE_PHOTO && resultCode == RESULT_OK){
+            File file = new File(mCurrentPhotoPath);
+            Bitmap bitmap;
+            ExifInterface exif = null;
+            try{
+                bitmap= MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), Uri.fromFile(file));
+                exif = new ExifInterface(mCurrentPhotoPath);
+                int exifOrientation;
+                int exifDegree;
+                if (exif != null) {
+                    exifOrientation = exif.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL);
+                    exifDegree = exifOrientationToDegrees(exifOrientation);
+                } else {
+                    exifDegree = 0;
+                }
+                Bitmap resized = Bitmap.createScaledBitmap(bitmap,1024 ,1024 , true);
+                foodImg.setImageBitmap(rotate(resized, exifDegree));
+                if(bitmap !=null){
+                    //foodImg.setImageBitmap(bitmap);
+                    Interpreter tflite = getTfliteInterpreter("food_model.tflite");
+                    int imageWidth = 224;
+                    int imageHeight = 224;
+                    float[][][][] inputData = new float[1][imageWidth][imageHeight][3];
+                    float[][] output = new float[1][150];
+                    Bitmap inputBitmap = Bitmap.createScaledBitmap(bitmap, imageWidth,imageHeight,true);
+                    for(int y=0; y<imageHeight; y++){
+                        for(int x=0; x<imageWidth; x++){
+                            int pixelValue = inputBitmap.getPixel(x,y);
+                            inputData[0][x][y][0] = (Color.red(pixelValue)/255.0f);
+                            inputData[0][x][y][1] = (Color.green(pixelValue)/255.0f);
+                            inputData[0][x][y][2] = (Color.blue(pixelValue)/255.0f);
+                        }
+                    }
+                    tflite.run(inputData,output);
+                    int foodindex=0;
+                    float max = output[0][0];
+                    int maxIndex = 0;
+                    for(int i=0; i<150; i++){
+                        if(output[0][i] > max){
+                            max = output[0][i];
+                            maxIndex = i;
+                        }
+                    }
+                    foodindex = maxIndex;
+                    Foodname f = new Foodname();
+                    recordFoodName.setText(f.getFoodName(foodindex));
+                    foodNurition = dbHelper.getFoodNutrition(f.getFoodName(foodindex));
+                    recordFoodKcal.setText(""+foodNurition.get(0).getKcal()+"kcal");
+                    recordFoodInfo.setText("탄수화물 "+ foodNurition.get(0).getCarbohydrate() + "g, 단백질 "+ foodNurition.get(0).getProtein() + "g, 지방 " + foodNurition.get(0).getProvince() + "g");
+                }
+            }
+            catch (IOException e){
+                e.printStackTrace();
+            }
+            return;
+        }
+        Handler handler = new Handler(Looper.getMainLooper());
+//        사용자 알레르기 정보 가져오
 //        //알레르기 정보 가져오기
         for(int i = 0; i < userAllergyListNum.size(); i++) {
 
@@ -412,4 +492,51 @@ public class RecordFragment extends Fragment {
         dateTextView.setText(currentDate);
     }
 
+    private Interpreter getTfliteInterpreter(String modelPath) {
+        try {
+            return new Interpreter(loadModelFile(getActivity(), modelPath));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    private MappedByteBuffer loadModelFile(Activity activity, String modelPath) throws IOException {
+        AssetFileDescriptor fileDescriptor = activity.getAssets().openFd(modelPath);
+        FileInputStream inputStream = new FileInputStream(fileDescriptor.getFileDescriptor());
+        FileChannel fileChannel = inputStream.getChannel();
+        long startOffset = fileDescriptor.getStartOffset();
+        long declaredLength = fileDescriptor.getDeclaredLength();
+        return fileChannel.map(FileChannel.MapMode.READ_ONLY, startOffset, declaredLength);
+    }
+
+    private File createImageFile() throws IOException{
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        String imageFileName = "JPEG_" + timeStamp + "_";
+        File storageDir = getContext().getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+        File image = File.createTempFile(
+                imageFileName,
+                ".jpg",
+                storageDir
+        );
+
+        mCurrentPhotoPath = image.getAbsolutePath();
+        return image;
+    }
+    private int exifOrientationToDegrees(int exifOrientation) {
+        if (exifOrientation == ExifInterface.ORIENTATION_ROTATE_90) {
+            return 90;
+        } else if (exifOrientation == ExifInterface.ORIENTATION_ROTATE_180) {
+            return 180;
+        } else if (exifOrientation == ExifInterface.ORIENTATION_ROTATE_270) {
+            return 270;
+        }
+        return 0;
+    }
+
+    private Bitmap rotate(Bitmap bitmap, float degree) {
+        Matrix matrix = new Matrix();
+        matrix.postRotate(degree);
+        return Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
+    }
 }

@@ -21,6 +21,8 @@ import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.media.Image;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.text.SpannableString;
 import android.text.style.ForegroundColorSpan;
 import android.util.Log;
@@ -60,7 +62,6 @@ public class MainActivity extends AppCompatActivity {
     MypageFragment fragment_mypage;
     NutritionFirst fragment_nutri1;
     NutritionSecond fragment_nutri2;
-
     //BottomAppBar barcodeBar;
     FloatingActionButton cameraBtn;
 
@@ -197,9 +198,8 @@ public class MainActivity extends AppCompatActivity {
         if (result != null) {
             if (result.getContents() != null) {
                 String barcode = result.getContents();
-                Toast.makeText(this, "Scanned: " + barcode, Toast.LENGTH_LONG).show();
                 MyDatabaseHelper dbHelper = new MyDatabaseHelper(this);
-
+                Handler handler = new Handler(Looper.getMainLooper());
                 Thread uThread = new Thread(new Runnable() {
                     public void run() {
                         try {
@@ -211,7 +211,15 @@ public class MainActivity extends AppCompatActivity {
                             String[] PrdNmAndPrdNoData = api_function.itemsByBarcodeJsonParser(dataBybarcode);
                             System.out.println("PrdNmAndPrdNoData : " + PrdNmAndPrdNoData[0] + PrdNmAndPrdNoData[1]);
                             foodName = PrdNmAndPrdNoData[0];
-
+                            if(PrdNmAndPrdNoData[1] == null) {
+                                handler.post(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        Toast.makeText(getApplicationContext(), "상품과 일치하는 바코드 정보가 없습니다 검색하기를 이용하세요", Toast.LENGTH_SHORT).show();
+                                    }
+                                });
+                                return;
+                            }
                             String dataByPrdNo = api_function.dataSearchByPrdNo(PrdNmAndPrdNoData[1]);
                             System.out.println("dataByPrdNo : " + dataByPrdNo);
                             String[] PrdRawmtrlAndPrdImgData = api_function.itemsByPrdNoJsonParser(dataByPrdNo);
@@ -219,9 +227,18 @@ public class MainActivity extends AppCompatActivity {
                             foodRaw_material = PrdRawmtrlAndPrdImgData[0];
                             foodImg = PrdRawmtrlAndPrdImgData[1];
 
-                            String sql_sentence = "select foodname, manufacturer, classification, kcal, carbohydrate, protein, province, sugars, salt, cholesterol, saturated_fat, trans_fat from food_table where foodname = '"+foodName+"';";
+                            String sql_sentence = "select foodname, manufacturer, classification, kcal, carbohydrate, protein, province, sugars, salt, cholesterol, saturated_fat, trans_fat from food_table where foodname = '" + foodName + "';";
                             ArrayList<RecodeSelectDto> recode_list = new ArrayList<RecodeSelectDto>();
                             recode_list = dbHelper.executeQuerySearchIntakeFoodToday(sql_sentence);
+                            if(recode_list.size() == 0){
+                                handler.post(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        Toast.makeText(getApplicationContext(), "상품과 일치하는 바코드 정보가 없습니다 검색하기를 이용하세요", Toast.LENGTH_SHORT).show();
+                                    }
+                                });
+                                return;
+                            }
                             foodKcal = (int) recode_list.get(0).getKcal();
                             foodCarbohydrate = recode_list.get(0).getCarbohydrate();
                             foodProtein = recode_list.get(0).getProtein();

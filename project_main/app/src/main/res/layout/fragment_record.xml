@@ -24,22 +24,9 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <TextView
-                android:id="@+id/todayRecordTextview"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="left"
-                android:paddingLeft="20dp"
-                android:paddingTop="15dp"
-                android:paddingBottom="15dp"
-                android:text="2023년 3월 1일"
-                android:textColor="#000000"
-                android:textSize="20dp"
-                android:textStyle="bold" />
-
 
             <androidx.cardview.widget.CardView
-                android:layout_width="match_parent"
+                android:layout_width="400dp"
                 android:layout_height="300dp"
                 android:layout_margin="20dp"
                 android:background="#FFFFFF"
@@ -75,7 +62,7 @@
 
 
             <androidx.cardview.widget.CardView
-                android:layout_width="match_parent"
+                android:layout_width="400dp"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="20dp"
                 android:layout_marginRight="20dp"
@@ -117,7 +104,7 @@
                         android:id="@+id/raw_material_text"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="10dp"
+                        android:layout_margin="15dp"
                         android:background="@android:color/transparent"
                         android:text="선택한 음식의 정보 출력\n...\n...\n...\n...\n...\n..." />
 
@@ -126,11 +113,11 @@
             </androidx.cardview.widget.CardView>
 
             <androidx.cardview.widget.CardView
-                android:layout_width="match_parent"
+                android:layout_width="400dp"
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
                 android:background="#FFFFFF"
-                app:cardCornerRadius="10dp"
+                app:cardCornerRadius="20dp"
                 app:cardElevation="4dp"
                 app:cardUseCompatPadding="true">
 
@@ -166,11 +153,11 @@
 
 
             <androidx.cardview.widget.CardView
-                android:layout_width="match_parent"
+                android:layout_width="400dp"
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
                 android:background="#FFFFFF"
-                app:cardCornerRadius="10dp"
+                app:cardCornerRadius="20dp"
                 app:cardElevation="4dp"
                 app:cardUseCompatPadding="true">
 
@@ -219,11 +206,11 @@
 
 
             <androidx.cardview.widget.CardView
-                android:layout_width="match_parent"
+                android:layout_width="400dp"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="100dp"
                 android:background="#FFFFFF"
-                app:cardCornerRadius="10dp"
+                app:cardCornerRadius="20dp"
                 app:cardElevation="4dp"
                 app:cardUseCompatPadding="true">
 
