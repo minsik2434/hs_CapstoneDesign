@@ -231,7 +231,8 @@ public class MainFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getActivity(), MainRecordManage.class);
-                startActivityForResult(intent, 100);
+                startActivity(intent);
+                getActivity().finish();
 
             }
         });
