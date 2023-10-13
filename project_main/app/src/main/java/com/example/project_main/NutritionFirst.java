@@ -133,7 +133,6 @@ public class NutritionFirst extends Fragment {
             progressbarProtein.setProgress( Math.round( (totalProtein/nutriInfo.get(0).getProtein())*100 ) );
             progressbarProvince.setProgress( Math.round( (totalProvince/nutriInfo.get(0).getProvince())*100 ) );
 
-
         //탄단지 총섭취량/권장섭취량 텍스트 설정. 권장섭취량은 임시값
         kcalPercentage.setText(String.format("%.0f",totalKcal) + "");
         carboPercentage.setText( String.format("%.2f",totalCarbohydrate) + " / " + String.format("%.2f",nutriInfo.get(0).getCarbohydrate()) + " g");
