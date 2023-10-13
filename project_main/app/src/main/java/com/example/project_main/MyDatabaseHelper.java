@@ -20,7 +20,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.lang.reflect.Array;
-import java.sql.PreparedStatement;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -91,9 +90,8 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
     private static final String DISEASE_USER_TABLE_COLUMN_DISEASEID = "diseaseID";
 
 
-    public MyDatabaseHelper(@Nullable Context context)
-    {
-        super(context,DB_NAME,null,1);
+    public MyDatabaseHelper(@Nullable Context context) {
+        super(context, DB_NAME, null, 1);
 
         DB_PATH = "/data/data/" + context.getPackageName() + "/databases/";
         this.mContext = context;
@@ -101,15 +99,16 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
     }
 
 
-    public void onCreate(SQLiteDatabase db){
+    public void onCreate(SQLiteDatabase db) {
         super.onOpen(db);
-        Log.d(TAG,"onOpen() : DB Opening!");
+        Log.d(TAG, "onOpen() : DB Opening!");
     }
+
     private void dataBaseCheck() {
         File dbFile = new File(DB_PATH + DB_NAME);
         if (!dbFile.exists()) {
             dbCopy();
-            Log.d(TAG,"Database is copied.");
+            Log.d(TAG, "Database is copied.");
         }
     }
 
@@ -134,9 +133,9 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
             ;
             outputStream.close();
             inputStream.close();
-        }catch (IOException e){
+        } catch (IOException e) {
             e.printStackTrace();
-            Log.d("dbcopy","IOException 발생");
+            Log.d("dbcopy", "IOException 발생");
         }
 
     }
@@ -144,13 +143,15 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
     public void onOpen(SQLiteDatabase db) {
         super.onOpen(db);
         //Toast.makeText(mContext,"onOpen()",Toast.LENGTH_SHORT).show();
-        Log.d(TAG,"onOpen() : DB Opening!");
+        Log.d(TAG, "onOpen() : DB Opening!");
     }
+
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         // 테이블 삭제하고 onCreate() 다시 로드시킨다.
-        Log.d(TAG,"onUpgrade() : DB Schema Modified and Excuting onCreate()");
+        Log.d(TAG, "onUpgrade() : DB Schema Modified and Excuting onCreate()");
     }
-    public synchronized void close(){
+
+    public synchronized void close() {
         if (mDataBase != null) {
             mDataBase.close();
         }
@@ -158,15 +159,48 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
     }
 
     //오늘 먹은 음식의 영양 정보
-    public ArrayList<RecodeSelectDto> executeQuerySearchIntakeFoodToday(String sql_sentence){
+    public ArrayList<RecodeSelectDto> executeQuerySearchIntakeFoodToday(String sql_sentence) {
         ArrayList<RecodeSelectDto> intake_food = new ArrayList<RecodeSelectDto>();
 
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor = db.rawQuery(sql_sentence,null);
+        Cursor cursor = db.rawQuery(sql_sentence, null);
 
         int recordCount = cursor.getCount();
 
-        for (int i = 0; i < recordCount; i++){
+        for (int i = 0; i < recordCount; i++) {
+            cursor.moveToNext();
+            RecodeSelectDto test = new RecodeSelectDto();
+
+            test.setFoodName(cursor.getString(0));
+            test.setManufacturer(cursor.getString(1));
+            test.setClassification(cursor.getString(2));
+            test.setKcal(cursor.getFloat(3));
+            test.setCarbohydrate(cursor.getFloat(4));
+            test.setProtein(cursor.getFloat(5));
+            test.setProvince(cursor.getFloat(6));
+            test.setSugars(cursor.getFloat(7));
+            test.setSalt(cursor.getFloat(8));
+            test.setCholesterol(cursor.getFloat(9));
+            test.setSaturated_fat(cursor.getFloat(10));
+            test.setTrans_fat(cursor.getFloat(11));
+            test.setIntakeTime(cursor.getString(12));
+            intake_food.add(test);
+        }
+        cursor.close();
+        db.close();
+        return intake_food;
+    }
+
+    //음식 정보 검색
+    public ArrayList<RecodeSelectDto> executeQuerySearchFood(String sql_sentence) {
+        ArrayList<RecodeSelectDto> intake_food = new ArrayList<RecodeSelectDto>();
+
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery(sql_sentence, null);
+
+        int recordCount = cursor.getCount();
+
+        for (int i = 0; i < recordCount; i++) {
             cursor.moveToNext();
             RecodeSelectDto test = new RecodeSelectDto();
 
@@ -189,16 +223,49 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
         return intake_food;
     }
 
-    //오늘의 타임라인 정보
-    public ArrayList<TimelineSelectDto> executeQuerySearchAlarmToday(String sql_sentence){
-        ArrayList<TimelineSelectDto> alarmAll = new ArrayList<TimelineSelectDto>();
+    //해당 날짜 음식 정보 가져오기
+    public ArrayList<RecodeSelectDto> executeQuerySearchIntakeFoodFromSelectedDate(String sql_sentence) {
+        ArrayList<RecodeSelectDto> intake_food = new ArrayList<RecodeSelectDto>();
 
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor = db.rawQuery(sql_sentence,null);
+        Cursor cursor = db.rawQuery(sql_sentence, null);
 
         int recordCount = cursor.getCount();
 
-        for (int i = 0; i < recordCount; i++){
+        for (int i = 0; i < recordCount; i++) {
+            cursor.moveToNext();
+            RecodeSelectDto test = new RecodeSelectDto();
+
+            test.setIntakeID(cursor.getInt(0));
+            test.setFoodName(cursor.getString(1));
+            test.setKcal(cursor.getFloat(2));
+            test.setCarbohydrate(cursor.getFloat(3));
+            test.setProtein(cursor.getFloat(4));
+            test.setProvince(cursor.getFloat(5));
+            test.setSugars(cursor.getFloat(6));
+            test.setSalt(cursor.getFloat(7));
+            test.setCholesterol(cursor.getFloat(8));
+            test.setSaturated_fat(cursor.getFloat(9));
+            test.setTrans_fat(cursor.getFloat(10));
+            test.setIntakeTime(cursor.getString(11));
+            intake_food.add(test);
+        }
+        cursor.close();
+        db.close();
+        return intake_food;
+    }
+
+
+    //오늘의 타임라인 정보
+    public ArrayList<TimelineSelectDto> executeQuerySearchAlarmToday(String sql_sentence) {
+        ArrayList<TimelineSelectDto> alarmAll = new ArrayList<TimelineSelectDto>();
+
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery(sql_sentence, null);
+
+        int recordCount = cursor.getCount();
+
+        for (int i = 0; i < recordCount; i++) {
             cursor.moveToNext();
             TimelineSelectDto test = new TimelineSelectDto();
 
@@ -221,7 +288,7 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
 
         Bitmap bitmap = ((BitmapDrawable) alarmIcon).getBitmap();
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.PNG,100,stream);
+        bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
         byte[] data = stream.toByteArray();
 
         cv.put("nickname", nickname);
@@ -229,19 +296,16 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
         cv.put("alarm_img", data);
 
         long result = db.insert("user_timeline", null, cv);
-        if (result == -1)
-        {
+        if (result == -1) {
             Toast.makeText(mContext, "Failed", Toast.LENGTH_SHORT).show();
-        }
-        else
-        {
+        } else {
             Toast.makeText(mContext, "데이터 추가 성공", Toast.LENGTH_SHORT).show();
         }
         db.close();
     }
 
     //칼로리 과다 섭취한 날짜
-    public ArrayList<CalendarDto> ExecuteQueryGetOvereatDay(int suitableKcal){
+    public ArrayList<CalendarDto> ExecuteQueryGetOvereatDay(int suitableKcal) {
         ArrayList<CalendarDto> overeatDay = new ArrayList<CalendarDto>();
 
         SQLiteDatabase db = this.getReadableDatabase();
@@ -249,11 +313,11 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
                 "                from intake_table, food_table\n" +
                 "                where intake_table.foodname = food_table.foodname\n" +
                 "                group by substr(date,1,10)\n" +
-                "                having sum(kcal) > "+suitableKcal+";",null);
+                "                having sum(kcal) > " + suitableKcal + ";", null);
 
         int count = cursor.getCount();
 
-        for (int i = 0; i < count; i++){
+        for (int i = 0; i < count; i++) {
             cursor.moveToNext();
             CalendarDto dto = new CalendarDto();
 
@@ -266,16 +330,16 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
 
         return overeatDay;
     }
-    
+
     //사용자 정보 가져오기
-    public ArrayList<UserDto> ExecuteQueryGetUserInfo(){
+    public ArrayList<UserDto> ExecuteQueryGetUserInfo() {
         ArrayList<UserDto> userInfo = new ArrayList<>();
         SQLiteDatabase db = this.getReadableDatabase();
 
-        Cursor cursor = db.rawQuery("select nickname, age, sex, height, weight, activity,recommended_kcal from user_table",null);
+        Cursor cursor = db.rawQuery("select nickname, age, sex, height, weight, activity,recommended_kcal from user_table", null);
         int recordCount = cursor.getCount();
 
-        for (int i = 0; i < recordCount; i++){
+        for (int i = 0; i < recordCount; i++) {
             cursor.moveToNext();
             UserDto user = new UserDto();
 
@@ -294,8 +358,7 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
         return userInfo;
     }
 
-    void addUser(String nickname, int age, String sex, int height, int weight, String activity, int recommended_kcal)
-    {
+    void addUser(String nickname, int age, String sex, int height, int weight, String activity, int recommended_kcal) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues cv = new ContentValues();
 
@@ -309,12 +372,9 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
 
         long result = db.insert(USER_TABLE_NAME, null, cv);
 
-        if (result == -1)
-        {
+        if (result == -1) {
             Toast.makeText(mContext, "Failed", Toast.LENGTH_SHORT).show();
-        }
-        else
-        {
+        } else {
             Toast.makeText(mContext, "데이터 추가 성공", Toast.LENGTH_SHORT).show();
         }
 
@@ -368,6 +428,7 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
         long result = db.insert(INTAKE_TABLE_NAME, null, cv);
         db.close();
     }
+
     // 가장 큰 intakeID 가져오기
     private int getMaxIntakeID() {
         SQLiteDatabase db = this.getReadableDatabase();
@@ -409,15 +470,15 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
     }
 
     // 사용자 알러지 가져오기
-    public ArrayList<Integer> getUserAllergy(){
+    public ArrayList<Integer> getUserAllergy() {
 
         SQLiteDatabase db = getReadableDatabase();
-        ArrayList<Integer> allergyNum= new ArrayList<>();
+        ArrayList<Integer> allergyNum = new ArrayList<>();
 
         Cursor cursor = db.rawQuery("SELECT allergyID FROM allergy_user", null);
         int recordCount = cursor.getCount();
 
-        for (int i = 0; i < recordCount; i++){
+        for (int i = 0; i < recordCount; i++) {
             cursor.moveToNext();
             allergyNum.add(cursor.getInt(0));
         }
@@ -429,17 +490,19 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
     }
 
     //사용자 지병 가져오기
-    public ArrayList<Integer> getUserDisease(){
+    public ArrayList<Integer> getUserDisease() {
+
         SQLiteDatabase db = getReadableDatabase();
-        ArrayList<Integer> diseaseNum= new ArrayList<>();
+        ArrayList<Integer> diseaseNum = new ArrayList<>();
 
         Cursor cursor = db.rawQuery("SELECT diseaseID FROM disease_user", null);
         int recordCount = cursor.getCount();
 
-        for (int i = 0; i < recordCount; i++){
+        for (int i = 0; i < recordCount; i++) {
             cursor.moveToNext();
             diseaseNum.add(cursor.getInt(0));
         }
+
         cursor.close();
         db.close();
 
@@ -496,7 +559,6 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
 
         return foodName;
     }
-
 
 
     // user_table이 비어있는지 확인하는 함수
@@ -988,30 +1050,38 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
         db.close();
     }
 
-    public String getResult(){
+    public String getResult() {
         SQLiteDatabase db = getReadableDatabase();
         String result = "";
 
-        Cursor cursor = db.rawQuery("SELECT * FROM food_table where foodname = '신라면'",null);
-        while(cursor.moveToNext()){
-            result += "foodname : " +cursor.getString(1);
+        Cursor cursor = db.rawQuery("SELECT * FROM food_table where foodname = '신라면'", null);
+        while (cursor.moveToNext()) {
+            result += "foodname : " + cursor.getString(1);
         }
 
         return result;
     }
 
-    void resetUserInfo(String name, int age, String sex, float height, float weight, String activity, int recommendKcal  ){
+    void resetUserInfo(String name, int age, String sex, float height, float weight, String activity, int recommendKcal) {
         SQLiteDatabase db = getWritableDatabase();
 
-                db.execSQL("UPDATE user_table " +
-                "SET nickname = '"+name+"'," +
-                "age = "+ age +",\n" +
-                "sex ='"+ sex +"',\n" +
-                "height = "+ height +",\n" +
-                "weight = "+ weight +",\n" +
-                "activity = '"+ activity +"',\n" +
-                "recommended_kcal = "+ recommendKcal+" ;");
+        db.execSQL("UPDATE user_table " +
+                "SET nickname = '" + name + "'," +
+                "age = " + age + ",\n" +
+                "sex ='" + sex + "',\n" +
+                "height = " + height + ",\n" +
+                "weight = " + weight + ",\n" +
+                "activity = '" + activity + "',\n" +
+                "recommended_kcal = " + recommendKcal + " ;");
     }
+
+    //해당 음식 섭취 정보 삭제
+    void deleteFoodIntake(int id){
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.execSQL("delete from intake_table where intakeID = " + id);
+        db.close();
+    }
+
     public ArrayList<NutritionDto> getFoodNutrition(String foodName) {
 
         SQLiteDatabase db = getReadableDatabase();

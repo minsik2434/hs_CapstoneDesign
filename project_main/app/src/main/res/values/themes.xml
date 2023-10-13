@@ -3,7 +3,7 @@
     <style name="Theme.Project_main" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <!-- Primary brand color. -->
         <item name="colorPrimary">#383838</item>
-        <item name="colorPrimaryVariant">#4BAA47</item>
+        <item name="colorPrimaryVariant">#6844A8</item>
         <item name="colorOnPrimary">@color/white</item>
         <!-- Secondary brand color. -->
         <item name="colorSecondary">@color/teal_200</item>

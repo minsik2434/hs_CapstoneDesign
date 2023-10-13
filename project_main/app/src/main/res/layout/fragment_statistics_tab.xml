@@ -12,22 +12,30 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal">
 
-        <Button
+        <android.widget.Button
             android:id="@+id/fragment_calender_btn"
             android:text="달력"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1" />
+            android:layout_weight="1"
+            android:background="@drawable/statics_btn_style1"
+            android:textColor="#ffffff"
+            android:textSize="18sp"
+            android:layout_margin="10sp"/>
 
-        <Button
+        <android.widget.Button
             android:id="@+id/fragment_statistics_btn"
             android:text="통계"
             android:layout_marginRight="10dp"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1" />
+            android:layout_weight="1"
+            android:background="@drawable/statics_btn_style2"
+            android:textColor="#6844A8"
+            android:textSize="18sp"
+            android:layout_margin="10sp"/>
 
     </LinearLayout>
 

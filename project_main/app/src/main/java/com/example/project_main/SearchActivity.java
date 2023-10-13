@@ -59,7 +59,7 @@ public class SearchActivity extends Activity {
                 adapter.clearItem();
                 String searchKeyword = textView.getText().toString();
                 String sql_sentence = "select foodname, manufacturer, classification, kcal, carbohydrate, protein, province, sugars, salt, cholesterol, saturated_fat, trans_fat from food_table where foodname like '%"+searchKeyword+"%' ORDER BY (CASE WHEN manufacturer = '전국(대표)' THEN 1 ELSE 2 end)";
-                search_foodList = dbHelper.executeQuerySearchIntakeFoodToday(sql_sentence);
+                search_foodList = dbHelper.executeQuerySearchFood(sql_sentence);
 
                 for(int j=0; j < search_foodList.toArray().length; j++)
                 {
@@ -69,7 +69,7 @@ public class SearchActivity extends Activity {
                     foodProtein = search_foodList.get(j).getProtein();
                     foodProvince = search_foodList.get(j).getProvince();
 
-                    adapter.addItem(foodname,  "Kcal " + foodKcal, "탄수화물 " + foodCarbohydrate + "g, 단백질 " + foodProtein + "g, 지방 " + foodProvince + "g");
+                    adapter.addItem(0, foodname,  "Kcal " + foodKcal, "탄수화물 " + foodCarbohydrate + "g, 단백질 " + foodProtein + "g, 지방 " + foodProvince + "g");
                 }
 
                 listView.setAdapter(adapter);

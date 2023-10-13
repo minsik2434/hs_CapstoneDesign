@@ -2,13 +2,17 @@ package com.example.project_main;
 
 
 import static android.app.Activity.RESULT_OK;
-import static android.content.ContentValues.TAG;
+
+import static com.google.zxing.integration.android.IntentIntegrator.REQUEST_CODE;
 
 import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
-import android.content.ContentResolver;
+import android.app.Notification;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -18,37 +22,48 @@ import android.graphics.Color;
 import android.graphics.ImageDecoder;
 import android.graphics.Matrix;
 import android.media.ExifInterface;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
+import android.graphics.drawable.Drawable;
 import android.graphics.drawable.ColorDrawable;
-import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
-import java.io.File;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
+import androidx.core.app.NotificationCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
+
 import android.os.Handler;
 import android.os.Looper;
 import android.provider.MediaStore;
 import android.text.SpannableString;
 import android.text.style.ForegroundColorSpan;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.DatePicker;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import com.bumptech.glide.Glide;
 import com.google.zxing.integration.android.IntentIntegrator;
 import org.tensorflow.lite.Interpreter;
+
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.nio.MappedByteBuffer;
@@ -56,6 +71,7 @@ import java.nio.channels.FileChannel;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
@@ -63,7 +79,6 @@ import java.util.Locale;
 public class RecordFragment extends Fragment {
 
     private static final int CAMERA_PERMISSION_REQUEST_CODE = 200;
-
     Button recordBtn;
     TextView recordFoodName, recordFoodKcal, recordFoodInfo;
     TextView raw_mtrl;
@@ -104,7 +119,6 @@ public class RecordFragment extends Fragment {
         record_breakfast_btn = view.findViewById(R.id.record_breakfast_btn);
         record_lunch_btn = view.findViewById(R.id.record_lunch_btn);
         record_dinner_btn = view.findViewById(R.id.record_dinner_btn);
-
         MyDatabaseHelper dbHelper = new MyDatabaseHelper(getActivity().getApplicationContext());
 
 
@@ -113,16 +127,6 @@ public class RecordFragment extends Fragment {
 
         SimpleDateFormat dateFormat = new SimpleDateFormat("yy년 MM월 dd일", Locale.KOREA);
         dateTextView.setText(dateFormat.format(selectedDate.getTime()));
-
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            if(ContextCompat.checkSelfPermission(getActivity(),Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(getActivity(),Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
-                Log.d(TAG, "권한 설정 완료");
-            }
-            else {
-                Log.d(TAG, "권한 설정 요청");
-                ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
-            }
-        }
 
         dateButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -170,7 +174,7 @@ public class RecordFragment extends Fragment {
                 Button picbtn = customLayout.findViewById(R.id.picbtn);
                 picbtn.setOnClickListener(new View.OnClickListener() {
                     @Override
-                    public void onClick(View view) {
+                    public void onClick(View v) {
                         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                         File photoFile = null;
                         try{photoFile = createImageFile();}
@@ -182,10 +186,14 @@ public class RecordFragment extends Fragment {
                         }
                     }
                 });
+
                 dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
                 dialog.show();
             }
         });
+
+
 
 
         record_breakfast_btn.setOnClickListener(new View.OnClickListener() {
@@ -224,6 +232,7 @@ public class RecordFragment extends Fragment {
                 }
             }
         });
+
 
 
         // 기록하기 버튼을 눌렀을 때
@@ -268,7 +277,7 @@ public class RecordFragment extends Fragment {
                 if (foodname.equals("음식 이름")) {
                     Toast.makeText(getActivity(), "음식을 선택해 주세요.", Toast.LENGTH_SHORT).show();
                 } else if (date.compareTo(currentDate) > 0) {
-                    Toast.makeText(getActivity(), "미래 날짜를 선택할 수 없습니다." + date, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), "미래 날짜를 선택할 수 없습니다."+date, Toast.LENGTH_SHORT).show();
                 } else {
                     if (count == 0) {
                         Toast.makeText(getActivity(), "아침, 점심, 저녁 중 하나를 선택하세요.", Toast.LENGTH_SHORT).show();
@@ -279,12 +288,12 @@ public class RecordFragment extends Fragment {
 
                         String mealTime = "";
 
-                        if (morningImgBtn)
-                            mealTime = "아침";
-                        else if (lunchImgBtn)
-                            mealTime = "점심";
+                        if(morningImgBtn)
+                            mealTime="아침";
+                        else if(lunchImgBtn)
+                            mealTime="점심";
                         else
-                            mealTime = "저녁";
+                            mealTime="저녁";
                         dbHelper.addIntake(nickname, foodname, dateTime, mealTime);
                         Intent intent = new Intent(getActivity(), MainActivity.class);
                         startActivity(intent);
@@ -295,6 +304,7 @@ public class RecordFragment extends Fragment {
         });
 
         return view;
+
     }
 
     @Override
@@ -330,7 +340,7 @@ public class RecordFragment extends Fragment {
             Bitmap bitmap;
             ExifInterface exif = null;
             try{
-                bitmap=MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), Uri.fromFile(file));
+                bitmap= MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), Uri.fromFile(file));
                 exif = new ExifInterface(mCurrentPhotoPath);
                 int exifOrientation;
                 int exifDegree;
@@ -381,28 +391,29 @@ public class RecordFragment extends Fragment {
             }
             return;
         }
-
-//        사용자 알레르기 정보 가져오기
+        Handler handler = new Handler(Looper.getMainLooper());
+//        사용자 알레르기 정보 가져오
 //        //알레르기 정보 가져오기
-        for (int i = 0; i < userAllergyListNum.size(); i++) {
+        for(int i = 0; i < userAllergyListNum.size(); i++) {
 
             for (int j = 0; j < allergyList.getAllergyArrayList(userAllergyListNum.get(i)).size(); j++) {
                 userAllergy.add(allergyList.getAllergyArrayList(userAllergyListNum.get(i)).get(j));
             }
         }
 
-        if (resultCode == RESULT_OK) {
+        if(resultCode == RESULT_OK) {
             String fn = data.getStringExtra("fname");
             String kcal = data.getStringExtra("kcal");
             String info = data.getStringExtra("foodinfo");
             String mtrl = data.getStringExtra("rawmtrl");
             String imgurl = data.getStringExtra("imgurl");
 
-            if (imgurl == null && mtrl == null) {
+            if(imgurl == null && mtrl == null){
                 foodImg.setImageResource(R.drawable.noimg);
                 raw_mtrl.setText("알 수 없음");
 
-            } else if (imgurl == null) {
+            }
+            else if (imgurl == null){
                 foodImg.setImageResource(R.drawable.noimg);
                 SpannableString spannableString = new SpannableString(mtrl);
                 for (int i = 0; i < userAllergy.size(); i++) {
@@ -415,10 +426,12 @@ public class RecordFragment extends Fragment {
                     }
                 }
                 raw_mtrl.setText(spannableString);
-            } else if (mtrl == null) {
+            }
+            else if(mtrl == null){
                 raw_mtrl.setText("알 수 없음");
                 Glide.with(this).load(imgurl).into(foodImg);
-            } else {
+            }
+            else{
                 SpannableString spannableString = new SpannableString(mtrl);
                 for (int i = 0; i < userAllergy.size(); i++) {
                     int startIndex = mtrl.indexOf(userAllergy.get(i));
@@ -434,10 +447,9 @@ public class RecordFragment extends Fragment {
             recordFoodName.setText(fn);
             recordFoodKcal.setText(kcal);
             recordFoodInfo.setText(info);
-            return;
         }
-
     }
+
 
 
     // DatePickerDialog를 표시하는 메서드
@@ -465,7 +477,7 @@ public class RecordFragment extends Fragment {
     }
 
 
-    private String dateFormat(String pattern) {
+    private String dateFormat(String pattern){
         Date date = new Date();
         return new SimpleDateFormat(pattern).format(date);
     }

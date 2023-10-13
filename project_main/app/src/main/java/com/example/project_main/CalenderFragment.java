@@ -98,7 +98,7 @@ public class CalenderFragment extends Fragment {
                 choice_date.setText(CalDate);
 
                 //DB get data
-                String sql_sentence = "select food_table.foodname, manufacturer, classification, kcal, carbohydrate, protein, province, sugars, salt, cholesterol, saturated_fat, trans_fat\n" +
+                String sql_sentence = "select food_table.foodname, manufacturer, classification, kcal, carbohydrate, protein, province, sugars, salt, cholesterol, saturated_fat, trans_fat, time\n" +
                         "from food_table, intake_table\n" +
                         "where food_table.foodname = intake_table.foodname\n" +
                         "and intakeID in (select intakeID from intake_table where substr(date,1,10) = '"+ dbDate +"');";
@@ -114,12 +114,24 @@ public class CalenderFragment extends Fragment {
                 listViewAdapter.clearItem();
                 //어뎁터에 아이템 추가
                 for (int i = 0; i < intake_food.size(); i++) {
-                    listViewAdapter.addItem(intake_food.get(i).getFoodName(), Math.round(intake_food.get(i).getKcal()) + " Kcal", foodNutriInfo.get(i));
+                    if (intake_food.get(i).getIntakeTime().equals("아침")) {
+                        listViewAdapter.addItem(R.drawable.breakfast_icon, intake_food.get(i).getFoodName(), Math.round(intake_food.get(i).getKcal()) + " Kcal", foodNutriInfo.get(i));
+                    }
+                    else if (intake_food.get(i).getIntakeTime().equals("점심")){
+                        listViewAdapter.addItem(R.drawable.lunch_icon, intake_food.get(i).getFoodName(), Math.round(intake_food.get(i).getKcal()) + " Kcal", foodNutriInfo.get(i));
+                    }
+                    else if (intake_food.get(i).getIntakeTime().equals("저녁")){
+                        listViewAdapter.addItem(R.drawable.dinner_icon,intake_food.get(i).getFoodName(), Math.round(intake_food.get(i).getKcal()) + " Kcal", foodNutriInfo.get(i));
+                    }
+                    else;
+
                 }
                 //리스트뷰에 어뎁터 set
                 schedule_list.setAdapter(listViewAdapter);
                 //ArrayList 초기화
-                    foodNutriInfo.clear();
+                foodNutriInfo.clear();
+
+
             }
         });
 

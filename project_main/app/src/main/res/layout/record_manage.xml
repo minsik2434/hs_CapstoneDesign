@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    tools:context=".MainRecordManage">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#6844A8"
+        android:padding="15sp"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="기록 관리"
+            android:textColor="#ffffff"
+            android:textSize="25sp" />
+
+        <ImageButton
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:background="@drawable/white_x"
+            android:layout_gravity="center"
+            android:id="@+id/manageXBtn"
+            android:layout_marginLeft="260sp"
+            />
+
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="15sp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="날짜를 선택하세요" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="10sp">
+
+            <ImageButton
+                android:id="@+id/manageSelectDateBtn"
+                android:layout_width="40sp"
+                android:layout_height="40sp"
+                android:background="@drawable/record_cal_image"
+                android:layout_gravity="center"/>
+
+            <TextView
+                android:id="@+id/manageSelectedDate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="00년 00월 00일"
+                android:layout_gravity="center"
+                android:layout_marginLeft="15sp"
+                android:textSize="20sp"/>
+
+        </LinearLayout>
+
+        <ListView
+            android:id="@+id/selectedDateListview"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+
+
+
+
+
+
+    </LinearLayout>
+
+</LinearLayout>

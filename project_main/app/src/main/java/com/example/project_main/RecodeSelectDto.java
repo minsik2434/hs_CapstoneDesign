@@ -2,9 +2,13 @@ package com.example.project_main;
 
 public class RecodeSelectDto {
 
+
+
+    private int intakeID;
     private String foodName;
     private String manufacturer;
     private String classification;
+    private String intakeTime;
     private float kcal;
     private float carbohydrate;
     private float protein;
@@ -14,6 +18,15 @@ public class RecodeSelectDto {
     private float cholesterol;
     private float saturated_fat;
     private float trans_fat;
+
+
+    public int getIntakeID() {
+        return intakeID;
+    }
+
+    public void setIntakeID(int intakeID) {
+        this.intakeID = intakeID;
+    }
 
     public String getFoodName() {
         return foodName;
@@ -37,6 +50,14 @@ public class RecodeSelectDto {
 
     public void setClassification(String classification) {
         this.classification = classification;
+    }
+
+    public String getIntakeTime() {
+        return intakeTime;
+    }
+
+    public void setIntakeTime(String intakeTime) {
+        this.intakeTime = intakeTime;
     }
 
     public float getKcal() {

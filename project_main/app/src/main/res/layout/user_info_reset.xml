@@ -197,9 +197,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginRight="80dp"
-                android:background="@drawable/green_btn"
+                android:background="@drawable/purple_btn"
                 android:text="취소"
-                android:textColor="#6AFF84"
+                android:textColor="#6844A8"
                 android:textSize="18sp"/>
 
 
@@ -207,9 +207,9 @@
                 android:id="@+id/resetSave"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="@drawable/green_btn"
+                android:background="@drawable/purple_btn"
                 android:text="저장"
-                android:textColor="#6AFF84"
+                android:textColor="#6844A8"
                 android:textSize="18sp"/>
 
         </LinearLayout>
