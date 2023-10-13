@@ -40,6 +40,7 @@
                 <EditText
                     android:id="@+id/resetName"
                     android:layout_width="200dp"
+                    android:textColor="#000000"
                     android:layout_height="wrap_content" />
 
             </LinearLayout>
@@ -60,6 +61,7 @@
                 <EditText
                     android:id="@+id/resetHeight"
                     android:layout_width="100dp"
+                    android:textColor="#000000"
                     android:layout_height="wrap_content" />
 
                 <TextView
@@ -86,6 +88,7 @@
                 <EditText
                     android:id="@+id/resetWeight"
                     android:layout_width="100dp"
+                    android:textColor="#000000"
                     android:layout_height="wrap_content" />
 
                 <TextView
@@ -112,6 +115,7 @@
                 <EditText
                     android:id="@+id/resetAge"
                     android:layout_width="50dp"
+                    android:textColor="#000000"
                     android:layout_height="wrap_content" />
 
                 <TextView
