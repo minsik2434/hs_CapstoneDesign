@@ -105,6 +105,7 @@ public class MainActivity extends AppCompatActivity {
 //        dbHelper.deleteAllRows("allergy_user");
 //        dbHelper.deleteAllRows("disease");
 //        dbHelper.deleteAllRows("disease_user");
+//        dbHelper.deleteAllRows("intake_table");
 
         if (isUserTableEmpty) {
             Intent intent = new Intent(MainActivity.this, init_setup1.class);

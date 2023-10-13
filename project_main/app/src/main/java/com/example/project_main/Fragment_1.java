@@ -14,7 +14,6 @@ import org.w3c.dom.Text;
 
 public class Fragment_1 extends Fragment {
 
-    TextView foodTop1, foodTop2, foodTop3, foodTop4, foodTop5, foodTop6, foodTop7, foodTop8, foodTop9, foodTop10;
 
     Integer[] foodTopId = {R.id.foodTop1,R.id.foodTop2,R.id.foodTop3,R.id.foodTop4,R.id.foodTop5,R.id.foodTop6,R.id.foodTop7,R.id.foodTop8,R.id.foodTop9,R.id.foodTop10};
     TextView[] foodTopTextView = new TextView[foodTopId.length];

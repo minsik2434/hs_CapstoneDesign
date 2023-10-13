@@ -4,7 +4,6 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.graphics.Path;
 import android.util.AttributeSet;
 import android.view.View;
 
@@ -13,15 +12,20 @@ import androidx.annotation.Nullable;
 public class LineChartView extends View {
 
     private Paint linePaint;
-    private Paint dotPaint;
     private Paint textPaint;
-    private int[] weightData;
-    private int maxWeightData;
+    private Paint dotPaint;
 
-    private int paddingStart = 60;
+    private int[] contentsData;
+    private int maxContentsData;
+
+    private int paddingStart = 70;
     private int paddingTop = 60;
     private int paddingEnd = 60;
-    private int paddingBottom = 0;
+    private int paddingBottom = 80;
+
+    private int alphaValue = 100;
+
+    private int lineColor = Color.GREEN;
 
     public LineChartView(Context context) {
         super(context);
@@ -35,23 +39,30 @@ public class LineChartView extends View {
 
     private void init() {
         linePaint = new Paint();
-        linePaint.setColor(Color.GREEN);
+        linePaint.setColor(lineColor); // 선의 색상을 기본 색상으로 설정
         linePaint.setStyle(Paint.Style.STROKE);
         linePaint.setStrokeWidth(3);
-
-        dotPaint = new Paint();
-        dotPaint.setColor(Color.GREEN);
-        dotPaint.setStyle(Paint.Style.FILL);
 
         textPaint = new Paint();
         textPaint.setColor(Color.BLACK);
         textPaint.setTextSize(30);
         textPaint.setTextAlign(Paint.Align.CENTER);
+
+        dotPaint = new Paint();
+        dotPaint.setColor(Color.BLACK); // 점의 색상을 검은색으로 설정
+        dotPaint.setStyle(Paint.Style.FILL);
     }
 
-    public void setWeightData(int[] weightData) {
-        this.weightData = weightData;
-        this.maxWeightData = findMax(weightData);
+    public void setData(int[] contentsData) {
+        this.contentsData = contentsData;
+        this.maxContentsData = findMax(contentsData);
+
+        invalidate();
+    }
+
+    public void setLineColor(int color) {
+        lineColor = color;
+        linePaint.setColor(lineColor);
         invalidate();
     }
 
@@ -59,31 +70,34 @@ public class LineChartView extends View {
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
 
-        if (weightData != null) {
+        if (contentsData != null) {
             float width = getWidth() - paddingStart - paddingEnd;
             float height = getHeight() - paddingTop - paddingBottom;
-            float barWidth = width / (weightData.length * 2);
-            float weightDataHeightRatio = height / maxWeightData * 0.8f;
+            int numPoints = contentsData.length;
 
-            float gapBetweenBars = barWidth * 2.0f;
+            float pointSpacing = width / (numPoints - 1) * 0.89f;
 
-            Path weightPath = new Path();
-            for (int i = 0; i < weightData.length; i++) {
-                float x = i * gapBetweenBars + barWidth / 2 + paddingStart;
-                float dotY = getHeight() - paddingBottom - weightData[i] * weightDataHeightRatio;
-                if (i == 0) {
-                    weightPath.moveTo(x, dotY);
+            float xOffset = 50f;
+
+            for (int i = 0; i < numPoints; i++) {
+                float x = i * pointSpacing + paddingStart + xOffset;
+                float y = getHeight() - paddingBottom - contentsData[i] * (height / maxContentsData);
+
+                canvas.drawCircle(x, y, 6, dotPaint);
+
+                if (i > 0) {
+                    float prevX = (i - 1) * pointSpacing + paddingStart + xOffset;
+                    float prevY = getHeight() - paddingBottom - contentsData[i - 1] * (height / maxContentsData);
+                    canvas.drawLine(prevX, prevY, x, y, linePaint);
                 } else {
-                    weightPath.lineTo(x, dotY);
+                    canvas.drawCircle(x, y, 6, dotPaint);
                 }
 
-                canvas.drawCircle(x, dotY, 6, dotPaint);
-
-                String valueText = String.valueOf(weightData[i]);
-                canvas.drawText(valueText, x, dotY - 10, textPaint);
+                String valueText = String.valueOf(contentsData[i]);
+                float valueX = x;
+                float valueY = y - 10;
+                canvas.drawText(valueText, valueX, valueY, textPaint);
             }
-
-            canvas.drawPath(weightPath, linePaint);
         }
     }
 
