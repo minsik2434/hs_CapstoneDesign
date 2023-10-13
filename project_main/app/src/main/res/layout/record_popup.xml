@@ -29,4 +29,5 @@
         android:id="@+id/picbtn"
         android:text="사진 인식"
         android:layout_weight="1" />
+
 </LinearLayout>

@@ -5,7 +5,6 @@
     android:orientation="vertical"
     android:padding="16dp">
 
-    <!-- Top TextView -->
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -14,13 +13,11 @@
         android:layout_gravity="center_horizontal"
         android:layout_marginBottom="10dp"/>
 
-    <!-- Horizontal LinearLayout for Left and Right Views -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="horizontal">
 
-        <!-- Left Layout - 5 TextViews -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"

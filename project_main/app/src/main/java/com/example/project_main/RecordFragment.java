@@ -73,7 +73,6 @@ public class RecordFragment extends Fragment {
     TextView searchedFoodKcal;
     TextView searchedFoodNutriInfo;
     AllergyList allergyList = new AllergyList();
-    TextView todayRecordTextview;
     ArrayList<String> userAllergy = new ArrayList<>();
     ArrayList<NutritionDto> foodNurition = new ArrayList<>();
 
@@ -102,16 +101,9 @@ public class RecordFragment extends Fragment {
         recordFoodInfo = view.findViewById(R.id.recordFoodInfo);
         raw_mtrl = view.findViewById(R.id.raw_material_text);
         foodImg = view.findViewById(R.id.recordFoodImage);
-        todayRecordTextview = view.findViewById(R.id.todayRecordTextview);
         record_breakfast_btn = view.findViewById(R.id.record_breakfast_btn);
         record_lunch_btn = view.findViewById(R.id.record_lunch_btn);
         record_dinner_btn = view.findViewById(R.id.record_dinner_btn);
-
-        String year = "yyyy";
-        String month = "MM";
-        String day = "dd";
-
-        todayRecordTextview.setText(dateFormat(year) + "년 " + dateFormat(month) + "월 " + dateFormat(day) + "일");
 
         MyDatabaseHelper dbHelper = new MyDatabaseHelper(getActivity().getApplicationContext());
 

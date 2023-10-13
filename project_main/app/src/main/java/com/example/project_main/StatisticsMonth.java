@@ -23,31 +23,44 @@ import java.util.Locale;
 public class StatisticsMonth extends Fragment {
 
     private Button ingredientCheckButton_Month;
-    private CombinedChartView combinedChartView;
+    private MyDatabaseHelper dbHelper;
+
+    private String[] dateArr;
+    private int[] data;
+    private int[] contentsData;
+
+    BarChartView barChartView;
+    LineChartView lineChartView;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.statistics_month, container, false);
 
         ingredientCheckButton_Month = view.findViewById(R.id.ingredientCheckButton_Month);
-        combinedChartView = view.findViewById(R.id.combinedChartView);
 
-        Calendar calendar = Calendar.getInstance();
-        calendar.set(Calendar.MONTH, Calendar.OCTOBER);
+        dbHelper = new MyDatabaseHelper(requireContext());
 
-        SimpleDateFormat sdf = new SimpleDateFormat("M월", Locale.getDefault());
+        barChartView = view.findViewById(R.id.barChartView);
+        lineChartView = view.findViewById(R.id.lineChartView);
 
-        String[] dateArr = new String[7];
+        dateArr = getThisMonthDateArray();
 
-        for (int i = 6; i >= 0; i--) {
-            dateArr[i] = sdf.format(calendar.getTime());
-            calendar.add(Calendar.MONTH, -1); // 이전 월로 이동
+        int[] data = new int[7];
+
+        for(int i=0;i<7;i++){
+            data[i] = dbHelper.getTotalCaloriesForMonth(dateArr[i]);
         }
 
-        int[] data = {10, 20, 30, 40, 50, 60, 70}; // 예시 데이터
-        int[] contentsData = {70, 72, 73, 71, 74, 75, 76}; // 예시 데이터
+        int[] contentsData = new int[7];
+        for(int i=0;i<7;i++){
+            contentsData[i] = dbHelper.getTotalCarbohydratesForMonth(dateArr[i]);
+        }
 
-        combinedChartView.setData(data, dateArr, contentsData);
+//        int[] data = {10, 20, 30, 40, 50, 60, 70}; // 예시 데이터
+//        int[] contentsData = {70, 72, 73, 71, 74, 75, 76}; // 예시 데이터
+
+        barChartView.setData(data, dateArr);
+        lineChartView.setData(contentsData);
 
         ingredientCheckButton_Month.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -72,36 +85,141 @@ public class StatisticsMonth extends Fragment {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
                 switch (item.getItemId()) {
+                    case R.id.carbohydrate_menu:
+                        ingredientCheckButton_Month.setText("탄수화물");
+                        dateArr = getThisMonthDateArray();
+                        data = new int[7];
+                        for (int i = 0; i < 7; i++) {
+                            data[i] = dbHelper.getTotalCaloriesForMonth(dateArr[i]);
+                        }
+                        contentsData = new int[7];
+                        for (int i = 0; i < 7; i++) {
+                            contentsData[i] = dbHelper.getTotalCarbohydratesForMonth(dateArr[i]);
+                        }
+                        barChartView.setData(data, dateArr);
+                        lineChartView.setData(contentsData);
+                        return true;
                     case R.id.protein_menu:
                         ingredientCheckButton_Month.setText("단백질");
+                        dateArr = getThisMonthDateArray();
+                        data = new int[7];
+                        for (int i = 0; i < 7; i++) {
+                            data[i] = dbHelper.getTotalCaloriesForMonth(dateArr[i]);
+                        }
+                        contentsData = new int[7];
+                        for (int i = 0; i < 7; i++) {
+                            contentsData[i] = dbHelper.getTotalProteinsForMonth(dateArr[i]);
+                        }
+                        barChartView.setData(data, dateArr);
+                        lineChartView.setData(contentsData);
                         return true;
                     case R.id.fat_menu:
                         ingredientCheckButton_Month.setText("지방");
-                        return true;
-                    case R.id.carbohydrate_menu:
-                        ingredientCheckButton_Month.setText("탄수화물");
+                        dateArr = getThisMonthDateArray();
+                        data = new int[7];
+                        for (int i = 0; i < 7; i++) {
+                            data[i] = dbHelper.getTotalCaloriesForMonth(dateArr[i]);
+                        }
+                        contentsData = new int[7];
+                        for (int i = 0; i < 7; i++) {
+                            contentsData[i] = dbHelper.getTotalFatForMonth(dateArr[i]);
+                        }
+                        barChartView.setData(data, dateArr);
+                        lineChartView.setData(contentsData);
                         return true;
                     case R.id.saccharides_menu:
                         ingredientCheckButton_Month.setText("당류");
+                        dateArr = getThisMonthDateArray();
+                        data = new int[7];
+                        for (int i = 0; i < 7; i++) {
+                            data[i] = dbHelper.getTotalCaloriesForMonth(dateArr[i]);
+                        }
+                        contentsData = new int[7];
+                        for (int i = 0; i < 7; i++) {
+                            contentsData[i] = dbHelper.getTotalSugarsForMonth(dateArr[i]);
+                        }
+                        barChartView.setData(data, dateArr);
+                        lineChartView.setData(contentsData);
                         return true;
                     case R.id.sodium_menu:
                         ingredientCheckButton_Month.setText("나트륨");
+                        dateArr = getThisMonthDateArray();
+                        data = new int[7];
+                        for (int i = 0; i < 7; i++) {
+                            data[i] = dbHelper.getTotalCaloriesForMonth(dateArr[i]);
+                        }
+                        contentsData = new int[7];
+                        for (int i = 0; i < 7; i++) {
+                            contentsData[i] = dbHelper.getTotalSaltForMonth(dateArr[i]);
+                        }
+                        barChartView.setData(data, dateArr);
+                        lineChartView.setData(contentsData);
                         return true;
                     case R.id.cholesterol_menu:
                         ingredientCheckButton_Month.setText("콜레스테롤");
+                        dateArr = getThisMonthDateArray();
+                        data = new int[7];
+                        for (int i = 0; i < 7; i++) {
+                            data[i] = dbHelper.getTotalCaloriesForMonth(dateArr[i]);
+                        }
+                        contentsData = new int[7];
+                        for (int i = 0; i < 7; i++) {
+                            contentsData[i] = dbHelper.getTotalCholesterolForMonth(dateArr[i]);
+                        }
+                        barChartView.setData(data, dateArr);
+                        lineChartView.setData(contentsData);
                         return true;
                     case R.id.transfat_menu:
                         ingredientCheckButton_Month.setText("트랜스지방");
+                        dateArr = getThisMonthDateArray();
+                        data = new int[7];
+                        for (int i = 0; i < 7; i++) {
+                            data[i] = dbHelper.getTotalCaloriesForMonth(dateArr[i]);
+                        }
+                        contentsData = new int[7];
+                        for (int i = 0; i < 7; i++) {
+                            contentsData[i] = dbHelper.getTotalTransFatForMonth(dateArr[i]);
+                        }
+                        barChartView.setData(data, dateArr);
+                        lineChartView.setData(contentsData);
                         return true;
                     case R.id.fattyacid_menu:
                         ingredientCheckButton_Month.setText("포화지방산");
+                        dateArr = getThisMonthDateArray();
+                        data = new int[7];
+                        for (int i = 0; i < 7; i++) {
+                            data[i] = dbHelper.getTotalCaloriesForMonth(dateArr[i]);
+                        }
+                        contentsData = new int[7];
+                        for (int i = 0; i < 7; i++) {
+                            contentsData[i] = dbHelper.getTotalSaturatedFatForMonth(dateArr[i]);
+                        }
+                        barChartView.setData(data, dateArr);
+                        lineChartView.setData(contentsData);
                         return true;
                     default:
                         return false;
                 }
             }
         });
-
         popupMenu.show();
     }
+
+
+    private String[] getThisMonthDateArray() {
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.MONTH, Calendar.OCTOBER);
+
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM", Locale.getDefault());
+
+        String[] dateArr = new String[7];
+
+        for (int i = 6; i >= 0; i--) {
+            dateArr[i] = sdf.format(calendar.getTime());
+            calendar.add(Calendar.MONTH, -1); // 이전 월로 이동
+        }
+
+        return dateArr;
+    }
+
 }

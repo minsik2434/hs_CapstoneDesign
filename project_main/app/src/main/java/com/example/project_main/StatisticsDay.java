@@ -20,10 +20,9 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
-public class StatisticsWeek extends Fragment {
+public class StatisticsDay extends Fragment {
 
     private Button ingredientCheckButton_Week;
-    private CombinedChartView combinedChartView;
     private MyDatabaseHelper dbHelper;
 
     private String[] dateArr;
@@ -50,7 +49,6 @@ public class StatisticsWeek extends Fragment {
 
         String[] dateArr = new String[7];
 
-        int dayOfMonth = calendar.get(Calendar.DAY_OF_MONTH);
         int dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK);
 
         barChartView = view.findViewById(R.id.barChartView);
