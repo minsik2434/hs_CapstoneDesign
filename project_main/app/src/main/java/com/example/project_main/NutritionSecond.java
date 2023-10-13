@@ -49,7 +49,7 @@ public class NutritionSecond extends Fragment {
     private ArrayList<Integer> userDisease = new ArrayList<>();
     private ArrayList<Integer> userDiseaseListNum = new ArrayList<>();
 
-    String sql_sentence = "select food_table.foodname, manufacturer, classification, kcal, carbohydrate, protein, province, sugars, salt, cholesterol, saturated_fat, trans_fat\n" +
+    String sql_sentence = "select food_table.foodname, manufacturer, classification, kcal, carbohydrate, protein, province, sugars, salt, cholesterol, saturated_fat, trans_fat, time\n" +
             "from food_table, intake_table\n" +
             "where food_table.foodname = intake_table.foodname\n" +
             "and intakeID in (select intakeID from intake_table where substr(date,1,10) = date('now'));";

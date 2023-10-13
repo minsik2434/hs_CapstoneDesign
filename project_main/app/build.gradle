@@ -4,9 +4,7 @@ plugins {
 
 android {
     compileSdk 33
-    aaptOptions{
-        noCompress 'tflite'
-    }
+
     defaultConfig {
         applicationId "com.example.project_main"
         minSdk 26
@@ -60,6 +58,4 @@ dependencies {
     //url 이미지 관련
     implementation 'com.github.bumptech.glide:glide:4.13.0'
     annotationProcessor 'com.github.bumptech.glide:compiler:4.13.0'
-    //tensorflowlite 사용
-    implementation 'org.tensorflow:tensorflow-lite:+'
 }

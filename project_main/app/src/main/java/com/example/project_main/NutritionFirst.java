@@ -42,9 +42,10 @@ public class NutritionFirst extends Fragment {
     private ArrayList<Integer> userDiseaseListNum = new ArrayList<>();
 
     private String sql_sentence = "SELECT intake_table.foodname, manufacturer, classification," +
-            "kcal, carbohydrate, protein, province, sugars, salt, cholesterol, saturated_fat, trans_fat " +
+            "kcal, carbohydrate, protein, province, sugars, salt, cholesterol, saturated_fat, trans_fat, time " +
             "from intake_table join food_table on intake_table.foodname = food_table.foodname where substr(date,1,10) = date('now','localtime');";
 
+    private TextView kcalRecommend;
     private TextView kcalPercentage;
     private TextView carboPercentage;
     private TextView proteinPercentage;
@@ -64,6 +65,7 @@ public class NutritionFirst extends Fragment {
         progressbarProtein = view.findViewById(R.id.progressProtein);
         progressbarProvince = view.findViewById(R.id.progressProvince);
 
+        kcalRecommend = view.findViewById(R.id.mainRecommendKcal);
         kcalPercentage = view.findViewById(R.id.kcalNutri1Text);
         carboPercentage = view.findViewById(R.id.carboNutri1Text);
         proteinPercentage = view.findViewById(R.id.proteinNutri1Text);
@@ -121,7 +123,9 @@ public class NutritionFirst extends Fragment {
             totalProtein += intake_food.get(i).getProtein();
             totalProvince += intake_food.get(i).getProvince();
         }
-
+        
+        //권장 칼로리 표시
+        kcalRecommend.setText("/ "+ nutriInfo.get(0).getKcal() + " kcal");
 
         //프로그레스 바 설정. 2200.0f 는 임시값. (총 먹은 칼로리/권장 칼로리)
             mainCircleProgressbar.setProgress( Math.round( (totalKcal/nutriInfo.get(0).getKcal())*100) ) ;

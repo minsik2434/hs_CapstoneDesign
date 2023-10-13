@@ -26,7 +26,7 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/picbtn"
+        android:id="@+id/button3"
         android:text="사진 인식"
         android:layout_weight="1" />
 </LinearLayout>

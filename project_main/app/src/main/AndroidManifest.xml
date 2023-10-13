@@ -2,14 +2,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     package="com.example.project_main">
-    <uses-feature
-        android:name="android.hardware.camera"
-        android:required="true"/>
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"></uses-permission>
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+
     <uses-permission android:name="android.permission.CAMERA"/>
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
-<!--    <uses-feature android:name="android.hardware.camera"/>-->
+    <uses-feature android:name="android.hardware.camera"/>
     <uses-feature android:name="android.hardware.camera.autofocus"/>
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
@@ -43,6 +38,7 @@
         <activity android:name=".UserInfoReset" android:label="user_info_reset"/>
         <activity android:name=".UserInfoResetResult" android:label="user_info_reset_result"/>
         <activity android:name=".UserAllergyReset" android:label="user_info_reset_allergy"/>
+        <activity android:name=".MainRecordManage" android:label="main_record_manage"/>
         <receiver
             android:name=".AlarmReceiver"
             android:enabled="true"
@@ -51,15 +47,7 @@
                 <action android:name="android.intent.action.MAIN"></action>
             </intent-filter>
         </receiver>
-        <provider
-            android:authorities="com.example.project_main.fileprovider"
-            android:name="androidx.core.content.FileProvider"
-            android:exported="false"
-            android:grantUriPermissions="true">
-            <meta-data
-                android:name="android.support.FILE_PROVIDER_PATHS"
-                android:resource="@xml/file_paths"></meta-data>
-        </provider>
+       
     </application>
 
 </manifest>

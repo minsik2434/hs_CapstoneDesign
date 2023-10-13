@@ -160,9 +160,9 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_margin="20dp"
-                android:background="@drawable/green_btn"
+                android:background="@drawable/purple_btn"
                 android:text="확인"
-                android:textColor="#6AFF84"
+                android:textColor="#6844A8"
                 android:textSize="18sp" />
 
             <android.widget.Button
@@ -171,9 +171,9 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_margin="20dp"
-                android:background="@drawable/green_btn"
+                android:background="@drawable/purple_btn"
                 android:text="알레르기 재설정"
-                android:textColor="#6AFF84"
+                android:textColor="#6844A8"
                 android:textSize="12sp" />
 
         </LinearLayout>

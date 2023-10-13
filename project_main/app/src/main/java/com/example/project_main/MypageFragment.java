@@ -10,6 +10,7 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -64,12 +65,11 @@ public class MypageFragment extends Fragment {
         ArrayList<TimelineSelectDto> timelineSelectDto = new ArrayList<TimelineSelectDto>();
         timelineSelectDto = dbHelper.executeQuerySearchAlarmToday(sql_sentence);
 
-        System.out.println("timelineSelectDto.size() :"+timelineSelectDto.size());
-        for(int i =0; i<timelineSelectDto.size();i++)
-        {
+        System.out.println("timelineSelectDto.size() :" + timelineSelectDto.size());
+        for (int i = 0; i < timelineSelectDto.size(); i++) {
             Alert_Data data = new Alert_Data();
             String alarmTime = timelineSelectDto.get(i).getDate();
-            data.setTimeline_text(alarmTime.substring(5,16));
+            data.setTimeline_text(alarmTime.substring(5, 16));
             data.setTimeline_resId(getIcon(timelineSelectDto.get(i).getAlarm_ing()));
             data.setTimeline_cardview(timelineSelectDto.get(i).getContext());
             // 각 값이 들어간 data를 adapter에 추가합니다.
@@ -84,7 +84,7 @@ public class MypageFragment extends Fragment {
         dbHelper = new MyDatabaseHelper(getActivity().getApplicationContext());
         userInfo = dbHelper.ExecuteQueryGetUserInfo();
 
-        if(userInfo.size()!= 0) {
+        if (userInfo.size() != 0) {
             userProfileName.setText(userInfo.get(0).getNickname());
             userProfileAgeSex.setText(userInfo.get(0).getAge() + "세 (" + userInfo.get(0).getSex() + ")");
             userProfileHeight.setText(userInfo.get(0).getHeight() + "");
@@ -106,8 +106,8 @@ public class MypageFragment extends Fragment {
     }
 
     private Bitmap getIcon(byte[] bytes) {
-        Bitmap bitmap = BitmapFactory.decodeByteArray(bytes,0, bytes.length);
-        return  bitmap;
+        Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+        return bitmap;
     }
 
 }
