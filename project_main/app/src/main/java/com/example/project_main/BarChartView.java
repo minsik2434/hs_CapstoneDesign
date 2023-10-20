@@ -18,6 +18,7 @@ public class BarChartView extends View {
 
     private static final int NUM_OF_DAYS = 7;
     private static final DateFormat DATE_FORMAT = new SimpleDateFormat("MM/dd", Locale.getDefault());
+    private static final int DEFAULT_TEXT_SIZE = 30; // Default text size
 
     private Paint weightPaint;
     private Paint textPaint;
@@ -52,7 +53,7 @@ public class BarChartView extends View {
 
         textPaint = new Paint();
         textPaint.setColor(Color.BLACK);
-        textPaint.setTextSize(30);
+        textPaint.setTextSize(DEFAULT_TEXT_SIZE); // Default text size
         textPaint.setTextAlign(Paint.Align.CENTER);
 
         linePaint = new Paint();
@@ -74,6 +75,11 @@ public class BarChartView extends View {
 
         this.maxData = findMax(data);
 
+        invalidate();
+    }
+
+    public void setTextSize(int textSize) {
+        textPaint.setTextSize(textSize);
         invalidate();
     }
 
@@ -101,9 +107,9 @@ public class BarChartView extends View {
             float xAxisCenter = (paddingStart + width + paddingEnd) / 2;
             float yAxisCenter = (paddingTop + height + paddingBottom) / 2.4f;
 
-            float barSpacing = 70; // 바 간격 추가
+            float barSpacing = 70; // Bar spacing
 
-            // Draw the bar chart (막대 그래프 그리기)
+            // Draw the bar chart
             for (int i = 0; i < numBars; i++) {
                 float x = i * (barWidth * 2 + barSpacing) + paddingStart + barSpacing / 2;
                 float cornerRadius = 20;

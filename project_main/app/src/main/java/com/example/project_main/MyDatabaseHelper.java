@@ -808,6 +808,452 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
         return totalTransFat;
     }
 
+
+    // 칼로리 (Week)
+    public int getTotalCaloriesForDateRange(String dateRange) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        int totalCalories = 0;
+
+        // 입력된 날짜 범위를 분리
+        String[] dateParts = dateRange.split("~");
+        if (dateParts.length != 2) {
+            // 유효한 날짜 범위가 아닌 경우
+            return 0;
+        }
+
+        String startDate = dateParts[0].trim();
+        String endDate = dateParts[1].trim();
+
+        // 시작 날짜와 끝 날짜를 "MM/DD" 형식으로 분리
+        String[] startDateParts = startDate.split("/");
+        String[] endDateParts = endDate.split("/");
+
+        if (startDateParts.length != 2 || endDateParts.length != 2) {
+            // 유효한 날짜 형식이 아닌 경우
+            return 0;
+        }
+
+        String startMonth = startDateParts[0].trim();
+        String startDay = startDateParts[1].trim();
+        String endMonth = endDateParts[0].trim();
+        String endDay = endDateParts[1].trim();
+
+        // 쿼리문 준비
+        String query = "SELECT SUM(" + NUTRITION_TABLE_COLUMN_KCAL + ") AS total_kcal " +
+                "FROM " + INTAKE_TABLE_NAME + " AS i " +
+                "JOIN " + FOOD_TABLE_NAME + " AS n ON i." + INTAKE_TABLE_COLUMN_FOODNAME + " = n." + FOOD_TABLE_COLUMN_FOODNAME + " " +
+                "WHERE strftime('%m/%d', " + INTAKE_TABLE_COLUMN_DATE + ") BETWEEN ? AND ?;";
+
+        // 쿼리 실행
+        Cursor cursor = db.rawQuery(query, new String[]{startMonth + "/" + startDay, endMonth + "/" + endDay});
+
+        if (cursor.moveToFirst()) {
+            int totalKcalIndex = cursor.getColumnIndex("total_kcal");
+            totalCalories = cursor.getInt(totalKcalIndex);
+        }
+
+        cursor.close();
+        db.close();
+
+        return totalCalories;
+    }
+
+
+
+    // 탄수화물 (Week)
+    public int getTotalCarbohydratesForDateRange(String dateRange) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        int totalCarbohydrates = 0;
+
+        // 입력된 날짜 범위를 분리
+        String[] dateParts = dateRange.split("~");
+        if (dateParts.length != 2) {
+            // 유효한 날짜 범위가 아닌 경우
+            return 0;
+        }
+
+        String startDate = dateParts[0].trim();
+        String endDate = dateParts[1].trim();
+
+        // 시작 날짜와 끝 날짜를 "MM/DD" 형식으로 분리
+        String[] startDateParts = startDate.split("/");
+        String[] endDateParts = endDate.split("/");
+
+        if (startDateParts.length != 2 || endDateParts.length != 2) {
+            // 유효한 날짜 형식이 아닌 경우
+            return 0;
+        }
+
+        String startMonth = startDateParts[0].trim();
+        String startDay = startDateParts[1].trim();
+        String endMonth = endDateParts[0].trim();
+        String endDay = endDateParts[1].trim();
+
+        // 쿼리문 준비
+        String query = "SELECT SUM(" + NUTRITION_TABLE_COLUMN_CARBOHYDRATE + ") AS total_carbohydrates " +
+                "FROM " + INTAKE_TABLE_NAME + " AS i " +
+                "JOIN " + FOOD_TABLE_NAME + " AS n ON i." + INTAKE_TABLE_COLUMN_FOODNAME + " = n." + FOOD_TABLE_COLUMN_FOODNAME + " " +
+                "WHERE strftime('%m/%d', " + INTAKE_TABLE_COLUMN_DATE + ") BETWEEN ? AND ?;";
+
+        // 쿼리 실행
+        Cursor cursor = db.rawQuery(query, new String[]{startMonth + "/" + startDay, endMonth + "/" + endDay});
+
+        if (cursor.moveToFirst()) {
+            int totalCarbohydratesIndex = cursor.getColumnIndex("total_carbohydrates");
+            totalCarbohydrates = cursor.getInt(totalCarbohydratesIndex);
+        }
+
+        cursor.close();
+        db.close();
+
+        return totalCarbohydrates;
+    }
+
+    // 단백질 (Week)
+    public int getTotalProteinForDateRange(String dateRange) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        int totalProtein = 0;
+
+        // 입력된 날짜 범위를 분리
+        String[] dateParts = dateRange.split("~");
+        if (dateParts.length != 2) {
+            // 유효한 날짜 범위가 아닌 경우
+            return 0;
+        }
+
+        String startDate = dateParts[0].trim();
+        String endDate = dateParts[1].trim();
+
+        // 시작 날짜와 끝 날짜를 "MM/DD" 형식으로 분리
+        String[] startDateParts = startDate.split("/");
+        String[] endDateParts = endDate.split("/");
+
+        if (startDateParts.length != 2 || endDateParts.length != 2) {
+            // 유효한 날짜 형식이 아닌 경우
+            return 0;
+        }
+
+        String startMonth = startDateParts[0].trim();
+        String startDay = startDateParts[1].trim();
+        String endMonth = endDateParts[0].trim();
+        String endDay = endDateParts[1].trim();
+
+        // 쿼리문 준비
+        String query = "SELECT SUM(" + NUTRITION_TABLE_COLUMN_PROTEIN + ") AS total_protein " +
+                "FROM " + INTAKE_TABLE_NAME + " AS i " +
+                "JOIN " + FOOD_TABLE_NAME + " AS n ON i." + INTAKE_TABLE_COLUMN_FOODNAME + " = n." + FOOD_TABLE_COLUMN_FOODNAME + " " +
+                "WHERE strftime('%m/%d', " + INTAKE_TABLE_COLUMN_DATE + ") BETWEEN ? AND ?;";
+
+        // 쿼리 실행
+        Cursor cursor = db.rawQuery(query, new String[]{startMonth + "/" + startDay, endMonth + "/" + endDay});
+
+        if (cursor.moveToFirst()) {
+            int totalProteinIndex = cursor.getColumnIndex("total_protein");
+            totalProtein = cursor.getInt(totalProteinIndex);
+        }
+
+        cursor.close();
+        db.close();
+
+        return totalProtein;
+    }
+
+    // 지방 (Week)
+    public int getTotalFatForDateRange(String dateRange) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        int totalFat = 0;
+
+        // 입력된 날짜 범위를 분리
+        String[] dateParts = dateRange.split("~");
+        if (dateParts.length != 2) {
+            // 유효한 날짜 범위가 아닌 경우
+            return 0;
+        }
+
+        String startDate = dateParts[0].trim();
+        String endDate = dateParts[1].trim();
+
+        // 시작 날짜와 끝 날짜를 "MM/DD" 형식으로 분리
+        String[] startDateParts = startDate.split("/");
+        String[] endDateParts = endDate.split("/");
+
+        if (startDateParts.length != 2 || endDateParts.length != 2) {
+            // 유효한 날짜 형식이 아닌 경우
+            return 0;
+        }
+
+        String startMonth = startDateParts[0].trim();
+        String startDay = startDateParts[1].trim();
+        String endMonth = endDateParts[0].trim();
+        String endDay = endDateParts[1].trim();
+
+        // 쿼리문 준비
+        String query = "SELECT SUM(" + NUTRITION_TABLE_COLUMN_PROVINCE + ") AS total_fat " +
+                "FROM " + INTAKE_TABLE_NAME + " AS i " +
+                "JOIN " + FOOD_TABLE_NAME + " AS n ON i." + INTAKE_TABLE_COLUMN_FOODNAME + " = n." + FOOD_TABLE_COLUMN_FOODNAME + " " +
+                "WHERE strftime('%m/%d', " + INTAKE_TABLE_COLUMN_DATE + ") BETWEEN ? AND ?;";
+
+        // 쿼리 실행
+        Cursor cursor = db.rawQuery(query, new String[]{startMonth + "/" + startDay, endMonth + "/" + endDay});
+
+        if (cursor.moveToFirst()) {
+            int totalFatIndex = cursor.getColumnIndex("total_fat");
+            totalFat = cursor.getInt(totalFatIndex);
+        }
+
+        cursor.close();
+        db.close();
+
+        return totalFat;
+    }
+
+    // 당류 (Week)
+    public int getTotalSugarsForDateRange(String dateRange) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        int totalSugars = 0;
+
+        // 입력된 날짜 범위를 분리
+        String[] dateParts = dateRange.split("~");
+        if (dateParts.length != 2) {
+            // 유효한 날짜 범위가 아닌 경우
+            return 0;
+        }
+
+        String startDate = dateParts[0].trim();
+        String endDate = dateParts[1].trim();
+
+        // 시작 날짜와 끝 날짜를 "MM/DD" 형식으로 분리
+        String[] startDateParts = startDate.split("/");
+        String[] endDateParts = endDate.split("/");
+
+        if (startDateParts.length != 2 || endDateParts.length != 2) {
+            // 유효한 날짜 형식이 아닌 경우
+            return 0;
+        }
+
+        String startMonth = startDateParts[0].trim();
+        String startDay = startDateParts[1].trim();
+        String endMonth = endDateParts[0].trim();
+        String endDay = endDateParts[1].trim();
+
+        // 쿼리문 준비
+        String query = "SELECT SUM(" + NUTRITION_TABLE_COLUMN_SUGARS + ") AS total_sugars " +
+                "FROM " + INTAKE_TABLE_NAME + " AS i " +
+                "JOIN " + FOOD_TABLE_NAME + " AS n ON i." + INTAKE_TABLE_COLUMN_FOODNAME + " = n." + FOOD_TABLE_COLUMN_FOODNAME + " " +
+                "WHERE strftime('%m/%d', " + INTAKE_TABLE_COLUMN_DATE + ") BETWEEN ? AND ?;";
+
+        // 쿼리 실행
+        Cursor cursor = db.rawQuery(query, new String[]{startMonth + "/" + startDay, endMonth + "/" + endDay});
+
+        if (cursor.moveToFirst()) {
+            int totalSugarsIndex = cursor.getColumnIndex("total_sugars");
+            totalSugars = cursor.getInt(totalSugarsIndex);
+        }
+
+        cursor.close();
+        db.close();
+
+        return totalSugars;
+    }
+
+    // 나트륨 (Week)
+    public int getTotalSodiumForDateRange(String dateRange) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        int totalSodium = 0;
+
+        // 입력된 날짜 범위를 분리
+        String[] dateParts = dateRange.split("~");
+        if (dateParts.length != 2) {
+            // 유효한 날짜 범위가 아닌 경우
+            return 0;
+        }
+
+        String startDate = dateParts[0].trim();
+        String endDate = dateParts[1].trim();
+
+        // 시작 날짜와 끝 날짜를 "MM/DD" 형식으로 분리
+        String[] startDateParts = startDate.split("/");
+        String[] endDateParts = endDate.split("/");
+
+        if (startDateParts.length != 2 || endDateParts.length != 2) {
+            // 유효한 날짜 형식이 아닌 경우
+            return 0;
+        }
+
+        String startMonth = startDateParts[0].trim();
+        String startDay = startDateParts[1].trim();
+        String endMonth = endDateParts[0].trim();
+        String endDay = endDateParts[1].trim();
+
+        // 쿼리문 준비
+        String query = "SELECT SUM(" + NUTRITION_TABLE_COLUMN_SALT + ") AS total_sodium " +
+                "FROM " + INTAKE_TABLE_NAME + " AS i " +
+                "JOIN " + FOOD_TABLE_NAME + " AS n ON i." + INTAKE_TABLE_COLUMN_FOODNAME + " = n." + FOOD_TABLE_COLUMN_FOODNAME + " " +
+                "WHERE strftime('%m/%d', " + INTAKE_TABLE_COLUMN_DATE + ") BETWEEN ? AND ?;";
+
+        // 쿼리 실행
+        Cursor cursor = db.rawQuery(query, new String[]{startMonth + "/" + startDay, endMonth + "/" + endDay});
+
+        if (cursor.moveToFirst()) {
+            int totalSodiumIndex = cursor.getColumnIndex("total_sodium");
+            totalSodium = cursor.getInt(totalSodiumIndex);
+        }
+
+        cursor.close();
+        db.close();
+
+        return totalSodium;
+    }
+
+
+    // 콜레스테롤 (Week)
+    public int getTotalCholesterolForDateRange(String dateRange) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        int totalCholesterol = 0;
+
+        // 입력된 날짜 범위를 분리
+        String[] dateParts = dateRange.split("~");
+        if (dateParts.length != 2) {
+            // 유효한 날짜 범위가 아닌 경우
+            return 0;
+        }
+
+        String startDate = dateParts[0].trim();
+        String endDate = dateParts[1].trim();
+
+        // 시작 날짜와 끝 날짜를 "MM/DD" 형식으로 분리
+        String[] startDateParts = startDate.split("/");
+        String[] endDateParts = endDate.split("/");
+
+        if (startDateParts.length != 2 || endDateParts.length != 2) {
+            // 유효한 날짜 형식이 아닌 경우
+            return 0;
+        }
+
+        String startMonth = startDateParts[0].trim();
+        String startDay = startDateParts[1].trim();
+        String endMonth = endDateParts[0].trim();
+        String endDay = endDateParts[1].trim();
+
+        // 쿼리문 준비
+        String query = "SELECT SUM(" + NUTRITION_TABLE_COLUMN_CHOLESTEROL + ") AS total_cholesterol " +
+                "FROM " + INTAKE_TABLE_NAME + " AS i " +
+                "JOIN " + FOOD_TABLE_NAME + " AS n ON i." + INTAKE_TABLE_COLUMN_FOODNAME + " = n." + FOOD_TABLE_COLUMN_FOODNAME + " " +
+                "WHERE strftime('%m/%d', " + INTAKE_TABLE_COLUMN_DATE + ") BETWEEN ? AND ?;";
+
+        // 쿼리 실행
+        Cursor cursor = db.rawQuery(query, new String[]{startMonth + "/" + startDay, endMonth + "/" + endDay});
+
+        if (cursor.moveToFirst()) {
+            int totalCholesterolIndex = cursor.getColumnIndex("total_cholesterol");
+            totalCholesterol = cursor.getInt(totalCholesterolIndex);
+        }
+
+        cursor.close();
+        db.close();
+
+        return totalCholesterol;
+    }
+
+    // 트랜스지방 (Week)
+    public int getTotalTransFatForDateRange(String dateRange) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        int totalTransFat = 0;
+
+        // 입력된 날짜 범위를 분리
+        String[] dateParts = dateRange.split("~");
+        if (dateParts.length != 2) {
+            // 유효한 날짜 범위가 아닌 경우
+            return 0;
+        }
+
+        String startDate = dateParts[0].trim();
+        String endDate = dateParts[1].trim();
+
+        // 시작 날짜와 끝 날짜를 "MM/DD" 형식으로 분리
+        String[] startDateParts = startDate.split("/");
+        String[] endDateParts = endDate.split("/");
+
+        if (startDateParts.length != 2 || endDateParts.length != 2) {
+            // 유효한 날짜 형식이 아닌 경우
+            return 0;
+        }
+
+        String startMonth = startDateParts[0].trim();
+        String startDay = startDateParts[1].trim();
+        String endMonth = endDateParts[0].trim();
+        String endDay = endDateParts[1].trim();
+
+        // 쿼리문 준비
+        String query = "SELECT SUM(" + NUTRITION_TABLE_COLUMN_TRANS_FAT + ") AS total_trans_fat " +
+                "FROM " + INTAKE_TABLE_NAME + " AS i " +
+                "JOIN " + FOOD_TABLE_NAME + " AS n ON i." + INTAKE_TABLE_COLUMN_FOODNAME + " = n." + FOOD_TABLE_COLUMN_FOODNAME + " " +
+                "WHERE strftime('%m/%d', " + INTAKE_TABLE_COLUMN_DATE + ") BETWEEN ? AND ?;";
+
+        // 쿼리 실행
+        Cursor cursor = db.rawQuery(query, new String[]{startMonth + "/" + startDay, endMonth + "/" + endDay});
+
+        if (cursor.moveToFirst()) {
+            int totalTransFatIndex = cursor.getColumnIndex("total_trans_fat");
+            totalTransFat = cursor.getInt(totalTransFatIndex);
+        }
+
+        cursor.close();
+        db.close();
+
+        return totalTransFat;
+    }
+
+    // 포화지방산 (Week)
+    public int getTotalSaturatedFatForDateRange(String dateRange) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        int totalSaturatedFat = 0;
+
+        // 입력된 날짜 범위를 분리
+        String[] dateParts = dateRange.split("~");
+        if (dateParts.length != 2) {
+            // 유효한 날짜 범위가 아닌 경우
+            return 0;
+        }
+
+        String startDate = dateParts[0].trim();
+        String endDate = dateParts[1].trim();
+
+        // 시작 날짜와 끝 날짜를 "MM/DD" 형식으로 분리
+        String[] startDateParts = startDate.split("/");
+        String[] endDateParts = endDate.split("/");
+
+        if (startDateParts.length != 2 || endDateParts.length != 2) {
+            // 유효한 날짜 형식이 아닌 경우
+            return 0;
+        }
+
+        String startMonth = startDateParts[0].trim();
+        String startDay = startDateParts[1].trim();
+        String endMonth = endDateParts[0].trim();
+        String endDay = endDateParts[1].trim();
+
+        // 쿼리문 준비
+        String query = "SELECT SUM(" + NUTRITION_TABLE_COLUMN_SATURATED_FAT + ") AS total_saturated_fat " +
+                "FROM " + INTAKE_TABLE_NAME + " AS i " +
+                "JOIN " + FOOD_TABLE_NAME + " AS n ON i." + INTAKE_TABLE_COLUMN_FOODNAME + " = n." + FOOD_TABLE_COLUMN_FOODNAME + " " +
+                "WHERE strftime('%m/%d', " + INTAKE_TABLE_COLUMN_DATE + ") BETWEEN ? AND ?;";
+
+        // 쿼리 실행
+        Cursor cursor = db.rawQuery(query, new String[]{startMonth + "/" + startDay, endMonth + "/" + endDay});
+
+        if (cursor.moveToFirst()) {
+            int totalSaturatedFatIndex = cursor.getColumnIndex("total_saturated_fat");
+            totalSaturatedFat = cursor.getInt(totalSaturatedFatIndex);
+        }
+
+        cursor.close();
+        db.close();
+
+        return totalSaturatedFat;
+    }
+
+
     // 칼로리(Month)
     public int getTotalCaloriesForMonth(String targetDate) {
         SQLiteDatabase db = this.getReadableDatabase();
