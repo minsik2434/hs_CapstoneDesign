@@ -44,6 +44,7 @@ public class init_setup1 extends AppCompatActivity {
                         Intent intent = new Intent(getApplicationContext(), init_setup2.class);
                         intent.putExtra("nickname", nickname);
                         startActivity(intent);
+                        finish();
                     }
                     return true;
                 }

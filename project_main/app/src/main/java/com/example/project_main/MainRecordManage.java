@@ -29,6 +29,7 @@ public class MainRecordManage extends Activity {
     private Calendar selectedDate = Calendar.getInstance();
     private TextView selectedDateText;
     MyDatabaseHelper dbHelper;
+    private ArrayList<UserDto> userInfo = new ArrayList<UserDto>();
     private ListView selectedDateListview;
     private ListViewAdapter listViewAdapter;
     private ArrayList<RecodeSelectDto> intake_food = new ArrayList<RecodeSelectDto>();
@@ -53,21 +54,23 @@ public class MainRecordManage extends Activity {
         selectedDateListview = (ListView) findViewById(R.id.selectedDateListview);
         getFoodListFromSelectedDate();
 
-
+        userInfo = dbHelper.ExecuteQueryGetUserInfo();
         //리스트뷰 길게 터치 시 이벤트
         selectedDateListview.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
 
+                String intake_foodName = intake_food.get(i).getFoodName();
                 AlertDialog.Builder builder = new AlertDialog.Builder(MainRecordManage.this);
                 builder.setTitle("음식 기록 삭제");
-                builder.setMessage("[" + intake_food.get(i).getFoodName() + "] 을/를 삭제하시겠습니까?");
+                builder.setMessage("[" + intake_foodName + "] 을/를 삭제하시겠습니까?");
 
                 //삭제
                 builder.setPositiveButton("삭제", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         dbHelper.deleteFoodIntake(intake_food.get(i).getIntakeID());
+                        dbHelper.addUserTimeline(userInfo.get(0).getNickname(), "[" + intake_foodName + "] 이/가 섭취목록에서 삭제됬습니다.", getResources().getDrawable(R.drawable.warning_icon));
                         Toast.makeText(MainRecordManage.this, intake_food.get(i).getFoodName() +" 이/가 삭제되었습니다.", Toast.LENGTH_SHORT).show();
 
                         getFoodListFromSelectedDate();

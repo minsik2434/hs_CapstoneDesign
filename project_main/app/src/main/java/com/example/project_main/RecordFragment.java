@@ -2,6 +2,7 @@ package com.example.project_main;
 
 
 import static android.app.Activity.RESULT_OK;
+import static android.content.ContentValues.TAG;
 
 import static com.google.zxing.integration.android.IntentIntegrator.REQUEST_CODE;
 
@@ -46,6 +47,7 @@ import android.os.Looper;
 import android.provider.MediaStore;
 import android.text.SpannableString;
 import android.text.style.ForegroundColorSpan;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -125,6 +127,22 @@ public class RecordFragment extends Fragment {
         dateButton = view.findViewById(R.id.dateButton);
         dateTextView = view.findViewById(R.id.dateTextView);
 
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if(ContextCompat.checkSelfPermission(getActivity(),Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(getActivity(),Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
+                Log.d(TAG, "권한 설정 완료");
+            }
+            else {
+                Log.d(TAG, "권한 설정 요청");
+                ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
+            }
+        }
+
+        dateButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showDatePickerDialog();
+            }
+        });
         SimpleDateFormat dateFormat = new SimpleDateFormat("yy년 MM월 dd일", Locale.KOREA);
         dateTextView.setText(dateFormat.format(selectedDate.getTime()));
 
