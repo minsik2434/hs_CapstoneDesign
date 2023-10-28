@@ -194,8 +194,6 @@ public class API_function {
 
         } catch (JSONException e) {
             e.printStackTrace();
-            arraysum[0] = "error";
-            arraysum[1] = "error";
         }
         return arraysum;
     }
