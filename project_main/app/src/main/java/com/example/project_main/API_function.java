@@ -81,7 +81,7 @@ public class API_function {
     }
 
     String dataSearchByPrdNo(String PrdNo) throws IOException {
-        StringBuilder urlBuilder = new StringBuilder("http://apis.data.go.kr/B553748/CertImgListService/getCertImgListService"); /*URL*/
+        StringBuilder urlBuilder = new StringBuilder("http://apis.data.go.kr/B553748/CertImgListServiceV2/getCertImgListServiceV2"); /*URL*/
         urlBuilder.append("?" + URLEncoder.encode("serviceKey","UTF-8") + "="+HACCPKEY); /*Service Key*/
         urlBuilder.append("&" + URLEncoder.encode("prdlstReportNo","UTF-8") + "=" + URLEncoder.encode(PrdNo, "UTF-8")); /*제품에 부여되는 고유식별번호*/
         urlBuilder.append("&" + URLEncoder.encode("returnType","UTF-8") + "=" + URLEncoder.encode("json", "UTF-8")); /*결과 응답 형식*/
@@ -141,7 +141,7 @@ public class API_function {
 
     // 음식 이름으로 해썹 api 검색해 데이터 가져오기
     String dataSearchByPrdNm(String PrdNm) throws IOException {
-        StringBuilder urlBuilder = new StringBuilder("http://apis.data.go.kr/B553748/CertImgListService/getCertImgListService"); /*URL*/
+        StringBuilder urlBuilder = new StringBuilder("http://apis.data.go.kr/B553748/CertImgListServiceV2/getCertImgListServiceV2"); /*URL*/
         urlBuilder.append("?" + URLEncoder.encode("serviceKey","UTF-8") + "="+HACCPKEY); /*Service Key*/
         urlBuilder.append("&" + URLEncoder.encode("prdlstNm","UTF-8") + "=" + URLEncoder.encode(PrdNm, "UTF-8")); /*제품에 부여되는 고유식별번호*/
         urlBuilder.append("&" + URLEncoder.encode("returnType","UTF-8") + "=" + URLEncoder.encode("json", "UTF-8")); /*결과 응답 형식*/
