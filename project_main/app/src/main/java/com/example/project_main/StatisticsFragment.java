@@ -97,43 +97,37 @@ public class StatisticsFragment extends Fragment {
 
         compareText = view.findViewById(R.id.compareText);
 
-        // Calculate the date range for the current week (Monday to Sunday)
-        SimpleDateFormat dateFormat = new SimpleDateFormat("MM/dd", Locale.getDefault());
+        Date currentDate = new Date();
+
         Calendar calendar = Calendar.getInstance();
+        calendar.setTime(currentDate);
 
-        // Set the calendar to the current date
-        calendar.setTime(new Date());
+        SimpleDateFormat dateFormat = new SimpleDateFormat("MM/dd");
 
-        // Find the current day of the week
         int dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK);
 
-        // Calculate the difference between the current day and Monday
-        int daysUntilMonday = (Calendar.MONDAY - dayOfWeek + 7) % 7;
+        calendar.add(Calendar.DAY_OF_WEEK, -dayOfWeek + 2);
+        Date thisWeekStart = calendar.getTime();
 
-        // Calculate the difference between the current day and Sunday
-        int daysUntilSunday = (Calendar.SUNDAY - dayOfWeek + 7) % 7;
+        calendar.add(Calendar.DAY_OF_WEEK, 6);
+        Date thisWeekEnd = calendar.getTime();
 
-        // Calculate the dates for the current week
-        calendar.add(Calendar.DAY_OF_YEAR, daysUntilMonday);
-        Date startDateThisWeek = calendar.getTime();
-        calendar.add(Calendar.DAY_OF_YEAR, daysUntilSunday - daysUntilMonday);
-        Date endDateThisWeek = calendar.getTime();
+        String thisWeekStartString = dateFormat.format(thisWeekStart);
+        String thisWeekEndString = dateFormat.format(thisWeekEnd);
 
-        // Calculate the dates for the previous week
-        calendar.setTime(startDateThisWeek); // Reset the calendar to the start of the current week
-        calendar.add(Calendar.DAY_OF_YEAR, -7); // Move the calendar 7 days back
-        Date startDateLastWeek = calendar.getTime();
-        calendar.add(Calendar.DAY_OF_YEAR, 6); // Move the calendar 6 days forward to get the end of the previous week
-        Date endDateLastWeek = calendar.getTime();
+        String thisWeekStr = thisWeekStartString+"~"+thisWeekEndString;
 
-        // Format the dates as "MM/DD" strings
-        String startDateThisWeekStr = dateFormat.format(startDateThisWeek);
-        String endDateThisWeekStr = dateFormat.format(endDateThisWeek);
-        String startDateLastWeekStr = dateFormat.format(startDateLastWeek);
-        String endDateLastWeekStr = dateFormat.format(endDateLastWeek);
+        calendar.setTime(thisWeekStart);
+        calendar.add(Calendar.DAY_OF_WEEK, -7);
+        Date lastWeekStart = calendar.getTime();
 
-        String thisWeekStr = startDateThisWeekStr+"~"+endDateThisWeekStr;
-        String lastWeekStr = startDateLastWeekStr+"~"+endDateLastWeekStr;
+        calendar.add(Calendar.DAY_OF_WEEK, 6);
+        Date lastWeekEnd = calendar.getTime();
+
+        String lastWeekStartString = dateFormat.format(lastWeekStart);
+        String lastWeekEndString = dateFormat.format(lastWeekEnd);
+
+        String lastWeekStr = lastWeekStartString+"~"+lastWeekEndString;
 
         int thisWeekInt = dbHelper.getTotalCaloriesForDateRange(thisWeekStr);
         int lastWeekInt = dbHelper.getTotalCaloriesForDateRange(lastWeekStr);
@@ -146,11 +140,6 @@ public class StatisticsFragment extends Fragment {
             String text = "저번 주보다 "+(lastWeekInt-thisWeekInt)+"kcal 덜 먹었습니다.";
             compareText.setText(text);
         }
-
-//        // Set the text in compareText
-//        String text = "이번 주: " + thisWeekInt + "\n"
-//                + "저번 주: " + lastWeekInt;
-//        compareText.setText(text);
 
         return view;
 

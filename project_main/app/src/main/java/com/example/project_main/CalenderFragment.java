@@ -135,10 +135,8 @@ public class CalenderFragment extends Fragment {
             }
         });
 
-        //달력 꾸미기
-        //권장 칼로리(500kcal) 이상 섭취한 날짜 불러오기
         dbHelper = new MyDatabaseHelper(getActivity().getApplicationContext());
-        overeat = dbHelper.ExecuteQueryGetOvereatDay(100);
+        overeat = dbHelper.ExecuteQueryGetOvereatDay(dbHelper.getRecommendedKcal());
 
         //날짜 색 빨강으로 변경
         for(int i =0;i<overeat.size();i++)

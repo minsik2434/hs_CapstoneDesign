@@ -1489,6 +1489,23 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
     }
 
 
+    public int getRecommendedKcal() {
+        SQLiteDatabase db = this.getReadableDatabase();
+        int recommendedKcal = 0;
+
+        Cursor cursor = db.rawQuery("SELECT " + USER_TABLE_COLUMN_RECOMMENDED_KCAL + " FROM " + USER_TABLE_NAME, null);
+        if (cursor.moveToFirst()) {
+            int columnIndex = cursor.getColumnIndex(USER_TABLE_COLUMN_RECOMMENDED_KCAL);
+            recommendedKcal = cursor.getInt(columnIndex);
+        }
+
+        cursor.close();
+        db.close();
+
+        return recommendedKcal;
+    }
+
+
     // 테이블의 모든 행 삭제
     void deleteAllRows(String tableName) {
         SQLiteDatabase db = this.getWritableDatabase();
