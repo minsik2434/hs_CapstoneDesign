@@ -1,6 +1,7 @@
 package com.example.project_main;
 
 import android.app.FragmentManager;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -109,6 +110,7 @@ public class StatisticsDay extends Fragment {
                         for (int i = 0; i < 7; i++) {
                             contentsData[i] = dbHelper.getTotalCarbohydratesConsumedOnDate(dateArr[i]);
                         }
+                        lineChartView.setLineColor(Color.GREEN);
                         barChartView.setData(data, dateArr);
                         lineChartView.setData(contentsData);
                         return true;
@@ -123,6 +125,7 @@ public class StatisticsDay extends Fragment {
                         for (int i = 0; i < 7; i++) {
                             contentsData[i] = dbHelper.getTotalProteinConsumedOnDate(dateArr[i]);
                         }
+                        lineChartView.setLineColor(Color.BLUE);
                         barChartView.setData(data, dateArr);
                         lineChartView.setData(contentsData);
                         return true;
@@ -137,6 +140,8 @@ public class StatisticsDay extends Fragment {
                         for (int i = 0; i < 7; i++) {
                             contentsData[i] = dbHelper.getTotalFatConsumedOnDate(dateArr[i]);
                         }
+                        int brownColor = Color.rgb(139, 69, 19); // 갈색 색상 코드
+                        lineChartView.setLineColor(brownColor);
                         barChartView.setData(data, dateArr);
                         lineChartView.setData(contentsData);
                         return true;
@@ -151,6 +156,7 @@ public class StatisticsDay extends Fragment {
                         for (int i = 0; i < 7; i++) {
                             contentsData[i] = dbHelper.getTotalSugarsConsumedOnDate(dateArr[i]);
                         }
+                        lineChartView.setLineColor(Color.RED);
                         barChartView.setData(data, dateArr);
                         lineChartView.setData(contentsData);
                         return true;
@@ -165,6 +171,7 @@ public class StatisticsDay extends Fragment {
                         for (int i = 0; i < 7; i++) {
                             contentsData[i] = dbHelper.getTotalSodiumConsumedOnDate(dateArr[i]);
                         }
+                        lineChartView.setLineColor(Color.LTGRAY);
                         barChartView.setData(data, dateArr);
                         lineChartView.setData(contentsData);
                         return true;
@@ -179,6 +186,7 @@ public class StatisticsDay extends Fragment {
                         for (int i = 0; i < 7; i++) {
                             contentsData[i] = dbHelper.getTotalCholesterolConsumedOnDate(dateArr[i]);
                         }
+                        lineChartView.setLineColor(Color.MAGENTA);
                         barChartView.setData(data, dateArr);
                         lineChartView.setData(contentsData);
                         return true;
@@ -193,6 +201,7 @@ public class StatisticsDay extends Fragment {
                         for (int i = 0; i < 7; i++) {
                             contentsData[i] = dbHelper.getTotalTransFatConsumedOnDate(dateArr[i]);
                         }
+                        lineChartView.setLineColor(Color.BLACK);
                         barChartView.setData(data, dateArr);
                         lineChartView.setData(contentsData);
                         return true;
@@ -207,6 +216,8 @@ public class StatisticsDay extends Fragment {
                         for (int i = 0; i < 7; i++) {
                             contentsData[i] = dbHelper.getTotalSaturatedFatConsumedOnDate(dateArr[i]);
                         }
+                        int orangeColor = Color.rgb(255, 165, 0); // 주황색 색상 코드
+                        lineChartView.setLineColor(orangeColor);
                         barChartView.setData(data, dateArr);
                         lineChartView.setData(contentsData);
                         return true;

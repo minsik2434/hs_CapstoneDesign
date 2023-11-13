@@ -229,7 +229,7 @@ public class MainActivity extends AppCompatActivity {
 
                             String sql_sentence = "select foodname, manufacturer, classification, kcal, carbohydrate, protein, province, sugars, salt, cholesterol, saturated_fat, trans_fat from food_table where foodname = '" + foodName + "';";
                             ArrayList<RecodeSelectDto> recode_list = new ArrayList<RecodeSelectDto>();
-                            recode_list = dbHelper.executeQuerySearchIntakeFoodToday(sql_sentence);
+                            recode_list = dbHelper.executeQuerySearchFood(sql_sentence);
                             if(recode_list.size() == 0){
                                 handler.post(new Runnable() {
                                     @Override

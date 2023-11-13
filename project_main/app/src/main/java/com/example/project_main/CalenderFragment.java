@@ -51,6 +51,12 @@ public class CalenderFragment extends Fragment {
     private ArrayList<RecodeSelectDto> intake_food = new ArrayList<RecodeSelectDto>();
     private ArrayList<CalendarDto> overeat = new ArrayList<CalendarDto>();
 
+    private String sql_sentence = "SELECT intake_table.foodname, manufacturer, classification," +
+            "kcal, carbohydrate, protein, province, sugars, salt, cholesterol, saturated_fat, trans_fat, time " +
+            "from intake_table join food_table on intake_table.foodname = food_table.foodname where substr(date,1,10) = date('now','localtime');";
+
+    ArrayList<UserDto> userInfo;
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -138,7 +144,7 @@ public class CalenderFragment extends Fragment {
         //달력 꾸미기
         //권장 칼로리(500kcal) 이상 섭취한 날짜 불러오기
         dbHelper = new MyDatabaseHelper(getActivity().getApplicationContext());
-        overeat = dbHelper.ExecuteQueryGetOvereatDay(100);
+        overeat = dbHelper.ExecuteQueryGetOvereatDay(1500);
 
         //날짜 색 빨강으로 변경
         for(int i =0;i<overeat.size();i++)
