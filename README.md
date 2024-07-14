@@ -151,6 +151,9 @@
 <details>
 <summary> 초기 설정 및 권장 칼로리 계산 </summary>
 
-
+![image](https://github.com/user-attachments/assets/917f990d-619a-4189-b118-14f34f7d2ab7)
+사용자가 이름, 키, 몸무게, 활동량, 지병 여부등 정보를 기입하면 "Harris Benedict" 공식을 이용하여 사용자의 영양 성분 섭취 권장량을 표시한다 <br/>
+지병이 있는 사용자는 여러 참고 문헌에서 가져온 계산식을 사용하여 권장량을 조절한다. 두 개 이상의 지병이 있는 경우 최솟값을 적용하였다<br/>
+(Harris Benedict : 건강한 사람의 연령, 성별, 신장과 체중을 기초로 한 기초 대사량 * 활동 계수 * 부상 계수의 값)
 </details>
 
