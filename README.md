@@ -176,9 +176,39 @@
 </details>
 
 <details>
-<summary> 기록하기 - 검색하기 </summary>
+<summary> 기록하기 - 바코드 </summary>
 
-![image](https://github.com/user-attachments/assets/a74f18ed-85e0-4c3d-a733-ae486f1fbd95)
+<img width="115" alt="스크린샷 2024-07-16 오전 12 03 54" src="https://github.com/user-attachments/assets/d4eb7f71-19bf-4d78-83f6-a48ceab93aa3">
 <br/>
-음식 이름으로 검색하면 해당 이름을 포함한 음식들을 리스트로 나열하고 선택시 음식의 이미지, 성분정보, 원재료를 표시한다. 사용자의 알레르기 보유 여부에 따라 해당 알레르기가 주의해야할 원재료를 빨간 글씨로 표시한다
+ 바코드 인식 버튼을 누른 후 기성 식품의 바코드를 인식하면 음식의 이미지, 성분 정보, 원재료를 표시한다. 사용자의 알레르기 보유 여부에 따라 해당 알레르기가 주의해야 할 원재료를 빨간 글씨로 표시한다.
+</details>
+
+<details>
+<summary> 기록하기 - 사진인식 </summary>
+
+<img width="113" alt="스크린샷 2024-07-16 오전 12 05 35" src="https://github.com/user-attachments/assets/bd8f4f61-84c9-4dc1-9c73-36acaf5c82fc">
+<br/>
+ 사진 인식 버튼 클릭 시 사진 촬영 후 jpg 이미지를 Bitmap으로 변환 후 전처리한 값을 훈련된 모델에 보내면 예측된 음식 이름을 받아오고, 데이터베이스에서 해당 음식의 영양 정보를 가져온다.
+</details>
+
+<details>
+<summary> 통계 </summary>
+  
+<img width="113" alt="스크린샷 2024-07-16 오전 12 06 49" src="https://github.com/user-attachments/assets/f8cbda2a-5837-4f8d-8e82-229613ed03ec">
+<br/>
+  달력 화면에서 사용자가 칼로리를 초과하여 먹은 날을 빨간 박스로 표시한다. 해당 날짜를 선택하면 그 날에 섭취한 음식 정보를 가져온다. <br/>
+  통계 화면에서 이번 주에 섭취한 음식 Top 5를 보여주고, 각종 성분의 섭취량을 그래프로 일간, 주간, 월간으로 보여준다.<br/>
+  주간 섭취량을 비교하여 차이를 표시한다.
+
+</details>
+
+
+<details>
+<summary> 타임라인 </summary>
+  
+  <img width="114" alt="스크린샷 2024-07-16 오전 12 09 08" src="https://github.com/user-attachments/assets/1d7b0852-483f-4add-b03b-b02f9255722c">
+  <br/>
+ 사용자의 개인 정보를 표시하고 타임라인을 통해 초과하여 섭취한 성분을 확인할 수 있다. <br/>
+ 설정 버튼 클릭 시 사용자의 정보 및 알레르기를 재설정한다. <br/>
+
 </details>
