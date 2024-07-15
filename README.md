@@ -158,3 +158,27 @@
 (Harris Benedict : 건강한 사람의 연령, 성별, 신장과 체중을 기초로 한 기초 대사량 * 활동 계수 * 부상 계수의 값)
 </details>
 
+<details>
+<summary> 메인화면 </summary>
+
+![image](https://github.com/user-attachments/assets/a5608929-d1aa-4060-b274-1a1c7426097c)
+<br/>
+사용자의 지병에 따른 권장 칼로리, 탄수화물, 단백질, 지방을 표시하고 전환 버튼을 누르면 권장 당, 콜레스테롤, 포화지방산, 트랜스지방 수치를 알려준다 초과하여 섭취한 경우 경고 아이콘을 표시한다<br/>
+하단에는 아침,점심,저녁 별 음식 섭취 정보를표시한다. 기록 관리에서 선택한 날짜의 섭취 정보를 확인하고 길게 터치시 섭취 정보를 삭제한다
+</details>
+
+<details>
+<summary> 기록하기 - 검색하기 </summary>
+
+![image](https://github.com/user-attachments/assets/a74f18ed-85e0-4c3d-a733-ae486f1fbd95)
+<br/>
+음식 이름으로 검색하면 해당 이름을 포함한 음식들을 리스트로 나열하고 선택시 음식의 이미지, 성분정보, 원재료를 표시한다. 사용자의 알레르기 보유 여부에 따라 해당 알레르기가 주의해야할 원재료를 빨간 글씨로 표시한다
+</details>
+
+<details>
+<summary> 기록하기 - 검색하기 </summary>
+
+![image](https://github.com/user-attachments/assets/a74f18ed-85e0-4c3d-a733-ae486f1fbd95)
+<br/>
+음식 이름으로 검색하면 해당 이름을 포함한 음식들을 리스트로 나열하고 선택시 음식의 이미지, 성분정보, 원재료를 표시한다. 사용자의 알레르기 보유 여부에 따라 해당 알레르기가 주의해야할 원재료를 빨간 글씨로 표시한다
+</details>
