@@ -212,3 +212,32 @@
  설정 버튼 클릭 시 사용자의 정보 및 알레르기를 재설정한다. <br/>
 
 </details>
+
+## 개발환경
+1. Android Studio
+2. Tensorflow
+3. Python
+4. git
+5. SQLite
+
+## 사용된 API 및 기술
+1. Zxing Library
+2. TensorFlow - MobileNetV2 Model
+3. 한국 식품 안전 관리 인증원_ HACCUP 제품 이미지 및 포장지 표기 정보
+4. 바코드 연계 제품 정보
+5. 식품의약품안전처 공공데이터
+6. 테스트 기기 - Galaxy S20 Ultra
+
+## 참고 문헌
+1. 보건 의료 빅데이터 개방 시스템. 국민 관심 질병 통계 2023.04.28
+   https://opendata.hira.or.kr/home.do
+2. 안드로이드 스튜디오를 활용한 안드로이드 프로그래밍 7판
+3. Do it 안드로이드 앱 프로그래밍
+4. Zxing
+   https://github.com/zxing/zxing
+5. 한국 식품 안전관리 인증원
+   https://www.data.go.kr/data/15033307/openapi.do
+6. 김정훈, 임경은, 강선영, 이가영, 박태진, 김진승 - '한국 성인의 하루 나트륨 섭취량과 비만의 연관성"
+   “ 「Korean J Health Promot Vol. 15, No. 4」
+7. 김종화 - 당뇨병 환자의 영양관리
+   「Hanyang Medical Reviews Vol. 31 No. 4」
